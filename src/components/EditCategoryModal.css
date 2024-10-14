@@ -1,0 +1,84 @@
+/* General Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background: rgba(0, 0, 0, 0.6); /* Darkens the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* Initially hidden */
+  z-index: 999; /* Layer above everything except the modal */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition */
+}
+
+.modal-overlay.show {
+  opacity: 1; /* Fully visible when the modal is open */
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it is above the overlay */
+  position: relative;
+}
+
+/* Modal Back Button */
+.modal-back-button {
+  background-color: #8a252c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.modal-back-button:hover {
+  background-color: #6f1c20;
+}
+
+/* Form Styles */
+.radio-group {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.readonly-input,
+.readonly-textarea,
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Confirm Button */
+.confirm-button {
+  background: #8a252c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.confirm-button:hover {
+  background-color: #6f1c20;
+}

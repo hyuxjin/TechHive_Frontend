@@ -1,0 +1,236 @@
+/* Main container styling */
+.entrymain-container {
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.entrysub-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 3%;
+}
+
+/* Card layout */
+.entrypost-card {
+  background-color: #fffdf5;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  transition: transform 0.3s ease;
+}
+
+.entrypost-card:hover {
+  transform: translateY(-5px);
+}
+
+.entrycard-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.entryname-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.entryname-container img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.entryname-container h5 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.entry-details {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.entry-details h5 {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.entry-details span {
+  font-weight: bold;
+  color: #8a252c;
+}
+
+.image-description-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.square-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.description-text {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  flex: 1;
+}
+
+.entryfooter-line {
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+/* Centering the buttons */
+.footer-actions {
+  display: flex;
+  justify-content: center; /* Center the button container */
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center; /* Center buttons within the container */
+}
+
+.respond-button, .edit-button {
+  background: #8a252c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.respond-button:hover, .edit-button:hover {
+  background-color: #6f1c20;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* Darkens the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Modal content is on top of the overlay */
+  position: relative;
+  border: 2px solid #b8860b; /* Gold border */
+  text-align: center;
+}
+
+/* Modal Title */
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #8a252c; /* Maroon */
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.confirm-button, .modal-back-button, .approve-button, .deny-button, .submit-button {
+  background: #8a252c; /* Maroon background */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover, .modal-back-button:hover, .approve-button:hover, .deny-button:hover, .submit-button:hover {
+  background-color: #b8860b; /* Gold hover effect */
+  color: #fff;
+}
+
+/* Input and Textarea Styles */
+.readonly-input, .readonly-textarea, .dropdown {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Readonly Input Styles */
+.readonly-input {
+  background-color: #fdfbc9; /* Light gold */
+}
+
+/* Textarea */
+.readonly-textarea {
+  background-color: #fffdf5; /* Slightly off white */
+  color: #333;
+  border: 1px solid #b8860b; /* Gold border */
+}
+
+/* Radio Group */
+.radio-group {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: left; /* Align radio group to left */
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.approve-button, .deny-button {
+  width: 48%; /* Equal width for approve and deny buttons */
+}
+
+/* Responsive for mobile */
+@media (max-width: 699px) {
+  .modal-content {
+    width: 90%;
+  }
+}

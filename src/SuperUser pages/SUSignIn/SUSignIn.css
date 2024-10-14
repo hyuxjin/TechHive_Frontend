@@ -1,0 +1,78 @@
+.SUbackground {
+    height: 100vh;
+  width: 100%;
+  background-image: url("../../../public/bg1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+    width: 1052px;
+    height: 637px;
+    border-radius: 10px;
+    display: flex;
+    position: relative;
+  }
+  
+  .container::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    opacity: 0.3;
+    position: absolute;
+  }
+  
+  .icon {
+    width: 50%;
+    height: 100%;
+    opacity: 1;
+    position: relative;
+    z-index: 1;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .login-container {
+    width: 50%;
+    height: 100%;
+    opacity: 1;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-design{
+    font-style: italic;
+    font-weight: bold;
+    font-size: 30px;
+    color: #8a252c;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 70px;
+  }
+  
+  .img1 {
+    width: 260px;
+    height: 205px;
+  }
+  
+  .img2 {
+    width: 260px;
+    height: 205px;
+    border-radius: 500px;
+  }
+  

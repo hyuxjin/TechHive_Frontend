@@ -1,0 +1,13 @@
+/* File: src/components/EditSuccessfulDialog.css */
+
+.edit-successful-dialog {
+    background-color: #4caf50; /* Green */
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+  }
+  
