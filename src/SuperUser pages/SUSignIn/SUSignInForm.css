@@ -45,8 +45,6 @@ form .forgot-password {
   margin-right: 10px; /* Move it slightly more to the right */
 }
 
-
-
 .forgot-password-popup {
   position: fixed;
   top: 0;
@@ -67,16 +65,6 @@ form .forgot-password {
   width: 300px;
   text-align: center;
   position: relative;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
 }
 
 .verification-popup {
@@ -150,14 +138,12 @@ form .forgot-password {
 }
 
 .reset-password-popup .popup-content button {
-  width: 120px;
-  height: 40px;
+  width: 180px;
+  height: 25px;
   border-radius: 20px;
-  background-color: #8A252C;
   color: #FFFFFF;
-  font-weight: bold;
-  font-size: 20px;
+  font-weight: 300;
+  font-size: 15px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
 }

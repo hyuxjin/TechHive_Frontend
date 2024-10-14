@@ -248,15 +248,15 @@
 /* Delete Icon */
 .delete-icon {
   margin-left: auto;
-  transition: opacity 0.2s, transform 0.3s;
+  transition: opacity 0.2s ease-in-out; /* Smooth transition for hover effects */
   width: 24px;
   height: 24px;
   cursor: pointer;
+  color: #8A252C; /* Ensure the color matches the theme */
 }
 
 .delete-icon:hover {
-  opacity: 0.7;
-  transform: rotate(360deg) scale(1.7);
+  opacity: 0.7; /* Slight transparency on hover */
 }
 
 /* Timestamp */
