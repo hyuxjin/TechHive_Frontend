@@ -98,12 +98,13 @@ export default function AdSignInForm() {
             <button className="close-button" onClick={handleCloseForgotPassword}>
               &times;
             </button>
+            <h2>Forgot Password</h2>
             <label>
-              <h3>Enter email address</h3>
-              <input type="email" name="email" class="form-input" required />
+              Enter email address
+              <input type="email" name="email" required />
             </label>
             <br />
-            <button class="form-button" onClick={handleSendCodeClick}>SEND CODE</button>
+            <button onClick={handleSendCodeClick}>Send Code</button>
           </div>
         </div>
       )}
@@ -114,14 +115,15 @@ export default function AdSignInForm() {
             <button className="close-button" onClick={handleCloseVerificationPopup}>
               &times;
             </button>
+            <h2>Enter Verification Code</h2>
             <label>
-            <h3>Enter Verification Code</h3> 
-              <input type="text" name="verificationCode" class="form-input" required />
+              Verification Code
+              <input type="text" name="verificationCode" required />
             </label>
             <br />
-            <button className="small-button">Resend code</button>
+            <button className="small-button">Resend Code</button>
             <br />
-            <button class="form-button" onClick={handleVerifyClick}>VERIFY</button>
+            <button onClick={handleVerifyClick}>Verify</button>
           </div>
         </div>
       )}
@@ -132,13 +134,15 @@ export default function AdSignInForm() {
             <button className="close-button" onClick={handleCloseResetPasswordPopup}>
               &times;
             </button>
+            <h2>Enter New Password</h2>
             <label>
-            <h3>Enter New Password</h3>
+              New Password
               <input type="password" name="newPassword" required />
             </label>
             <br />
+            <h2>Confirm Password</h2>
             <label>
-            <h3>Confirm Password</h3>
+              Confirm Password
               <input type="password" name="confirmPassword" required />
             </label>
             <br />

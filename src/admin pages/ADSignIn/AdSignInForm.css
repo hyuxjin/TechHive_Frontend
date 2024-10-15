@@ -9,24 +9,23 @@ form {
   color: #8A252C;
 }
 
-.form-input {
-  width: 280px;
+form input {
+  width: 350px;
   height: 35px;
   border-radius: 20px;
   border: 2px solid #8A252C;
   padding-left: 10px;
-  margin: 10px; /* Adds space outside the border */
   outline-style: none;
 }
 
-.form-button {
-  width: 180px;
-  height: 25px;
+form button {
+  width: 120px;
+  height: 40px;
   border-radius: 20px;
   background-color: #8A252C;
   color: #FFFFFF;
-  font-weight: 300;
-  font-size: 15px;
+  font-weight: bold;
+  font-size: 20px;
   border: none;
   cursor: pointer;
 }
@@ -67,18 +66,12 @@ form .forgot-password {
   position: relative;
 }
 
-.popup-content h3 {
-  margin: 5px; /* Adds space outside the border */
-  font-weight: 500;
-  color: #8A252C;
-}
-
 .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
   border: none;
-
+  background: transparent;
   font-size: 20px;
   cursor: pointer;
 }
@@ -106,16 +99,15 @@ form .forgot-password {
 }
 
 .verification-popup .popup-content .small-button {
-  position: absolute;
-  top: 115px; /* Adjust this to control vertical position */
-  right: 0;
-  font-size: 12px; /* Adjusted font size to match image */
-  font-weight: 500;
-  color: #FFC107; /* Yellow color */
+  width: 80px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 16px;
   border: none;
-  font-size: 14px;
-  margin-right: 10px;
-  text-align: center;
+  cursor: pointer;
 }
 
 .reset-password-popup {
@@ -155,12 +147,12 @@ form .forgot-password {
 }
 
 .reset-password-popup .popup-content button {
-  width: 170px;
-  height: 30px;
+  width: 120px;
+  height: 40px;
   border-radius: 20px;
   background-color: #8A252C;
   color: #FFFFFF;
-  font-weight: 260;
+  font-weight: bold;
   font-size: 20px;
   border: none;
   cursor: pointer;
