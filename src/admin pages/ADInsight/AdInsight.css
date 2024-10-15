@@ -1,0 +1,56 @@
+.ad-insight-container {
+    margin: 0 auto;
+    max-width: 1500px;
+    padding: 20px;
+    font-family: var(--font-montserrat);
+    min-height: 100vh;
+    color: #333;
+    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  }
+  
+  .insight-header-image {
+    width: 276px;
+    height: 270px;
+    display: block;
+    margin: 30px auto;
+  }
+  
+  .dropdown-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    margin: 20px 0;
+    padding: 0 20px;
+  }
+  
+  .dropdown {
+    width: 200px;
+    margin: 8px;
+  }
+
+  .dropdown .MuiInputBase-root {
+    width: 100%;
+  }
+  
+  .dropdown .MuiSelect-root {
+    width: 100%;
+  }
+  
+  .chart-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  

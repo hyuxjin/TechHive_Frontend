@@ -1,0 +1,12 @@
+/* src/components/NotificationPopup.css */
+.notification-popup {
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+  }
+  

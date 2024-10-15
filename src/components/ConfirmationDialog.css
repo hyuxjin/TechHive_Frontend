@@ -1,0 +1,76 @@
+.modal-container button {
+    font-size: 16px;
+    color: #8a252c;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+  }
+  .publish-btn button{
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #8A252C;
+      color: #FFFFFF;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .closebtn-design img {
+    cursor: pointer;
+    border-radius: 1000px;
+    background-color: #8a252c;
+  }
+  
+  .closebtn-design {
+    background: transparent;
+    border: none;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+  }
+  
+  .confirmation-container {
+    width: 586px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .confirmation-btn {
+    display: flex;
+    gap: 30px;
+    border-radius: 80px;
+    margin-top: 30px;
+  }
+  
+  .confirmation-btn button {
+    width: 127px;
+    height: 30px;
+    background-color: #8A252C;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 80px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .confirmation-container img {
+    width: 80px;
+    height: 80px;
+    border-radius: 450px;
+  }
+  
+  .confirmation-container h4 {
+    font-size: 20px;
+    font-weight: 600px;
+    color: #8a252c;
+  }
+  
+  .confirmation-container p {
+    padding-left: 30px;
+    font-size: 16px;
+    font-weight: 600px;
+    color: #8a252c;
+    margin-right: 50px;
+  }
+  
