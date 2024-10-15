@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import reportsTitle from '../../assets/image/reportsTitle.png'; // Ensure correct path to reportsTitle.png
+import React, { useState, useEffect } from "react";
 import AdNavBar from '../../components/AdNavBar'; // Ensure correct path to AdNavBar
+import reportsTitle from '../../assets/image/reportsTitle.png'; // Ensure correct path to reportsTitle.png
 import './AdEntry.css';
 
 // Placeholder images
@@ -40,49 +40,49 @@ export default function AdEntry() {
   }, []);
 
   return (
-<div className="entrymain-container">
-  <header>
-    <AdNavBar />
-  </header>
-  <main className="entrysub-container">
-    <img src={reportsTitle} alt="Incoming Reports" className="report-header-image" />
-    <div className="entrypost-card">
-      <div className="entrycard-container">
-        <div className="entryname-container">
-          <img src={CitLogo} alt="Cit Logo" className="logo" />
-          <h5>Richard Molina</h5>
-        </div>
-        <div className="entry-details">
-          <h5>
-            Category: <span>Critical Emergency</span>
-          </h5>
-          <h5>
-            Incident Location: <span>NGE Building</span>
-          </h5>
-          <h5>
-            Office: <span>Clinic Office</span>
-          </h5>
-        </div>
-        <div className="image-description-container">
-          <img src={ExampleImage} alt="Example" className="square-image" />
-          <p className="description-text">
-            A 45-year-old male was brought to the emergency department by ambulance after collapsing at work. He was
-            found unresponsive by coworkers, who immediately called 911.
-          </p>
-        </div>
-        <div className="entryfooter-line" />
-        <div className="footer-actions">
-          <div className="button-container">
-            <button className="respond-button" onClick={handleOpenRespondModal}>
-              Respond
-            </button>
-            <button className="edit-button" onClick={handleOpenEditCategoryModal}>
-              Edit
-            </button>
+    <div className="entrymain-container">
+      <header>
+        <AdNavBar />
+      </header>
+      <main className="entrysub-container">
+        <img src={reportsTitle} alt="Incoming Reports" className="report-header-image" />
+        <div className="entrypost-card">
+          <div className="entrycard-container">
+            <div className="entryname-container">
+              <img src={CitLogo} alt="Cit Logo" className="logo" />
+              <h5>Richard Molina</h5>
+            </div>
+            <div className="entry-details">
+              <h5>
+                Category: <span>Critical Emergency</span>
+              </h5>
+              <h5>
+                Incident Location: <span>NGE Building</span>
+              </h5>
+              <h5>
+                Office: <span>Clinic Office</span>
+              </h5>
+            </div>
+            <div className="image-description-container">
+              <img src={ExampleImage} alt="Example" className="square-image" />
+              <p className="description-text">
+                A 45-year-old male was brought to the emergency department by ambulance after collapsing at work. He was
+                found unresponsive by coworkers, who immediately called 911.
+              </p>
+            </div>
+            <div className="entryfooter-line" />
+            <div className="footer-actions">
+              <div className="button-container">
+                <button className="respond-button" onClick={handleOpenRespondModal}>
+                  Respond
+                </button>
+                <button className="edit-button" onClick={handleOpenEditCategoryModal}>
+                  Edit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
         {/* Respond Modal */}
         {isRespondModalOpen && (
@@ -121,7 +121,7 @@ export default function AdEntry() {
           <div className="modal-overlay">
             <div className="modal-content">
               <button className="modal-close-button" onClick={handleCloseEditCategoryModal}>
-                <img src="/back.png" alt="Back" />
+                Back
               </button>
               <h2 className="modal-title">Category</h2>
               <div className="radio-group">
@@ -139,11 +139,11 @@ export default function AdEntry() {
                 </label>
               </div>
               <div className="form-group">
-              <h2 className="modal-title">Incident Location</h2>
+                <label>Incident Location:</label>
                 <input type="text" value="NGE Building" readOnly className="readonly-input" />
               </div>
               <div className="form-group">
-              <h2 className="modal-title">Office</h2>
+                <label>Office:</label>
                 <select
                   className="dropdown"
                   value={selectedOffice}
@@ -161,7 +161,7 @@ export default function AdEntry() {
                 </select>
               </div>
               <div className="form-group">
-              <h2 className="modal-title">Description</h2>
+                <label>Description:</label>
                 <textarea
                   value="A 45-year-old male is brought to the emergency department by ambulance after collapsing at work."
                   readOnly
@@ -169,7 +169,7 @@ export default function AdEntry() {
                 />
               </div>
               <button className="confirm-button" onClick={handleCloseEditCategoryModal}>
-                CONFIRM
+                Confirm
               </button>
             </div>
           </div>
