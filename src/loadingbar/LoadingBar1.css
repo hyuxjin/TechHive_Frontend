@@ -1,0 +1,132 @@
+.loadingbarpage2 {
+    width: 100%;
+    position: relative;
+    height: 729px;
+    overflow: hidden;
+    text-align: left;
+    font-size: 20px;
+    color: #8a252c;
+    font-family: var(--font-montserrat);
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  .bg1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 832px;
+    object-fit: cover;
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  .bar-gray {
+    position: absolute;
+    top: calc(50% + 75px);
+    left: 41.8%;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12) inset;
+    border-radius: 50px;
+    background-color: #d9d9d9;
+    width: 296px; /* Initially, the bar is full */
+    height: 18px;
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  .bar-red {
+    position: absolute;
+    top: calc(50% + 78px);
+    left: 42%;
+    box-shadow: 0 4px 4px rgba(255, 255, 255, 0.25) inset;
+    border-radius: 50px;
+    background-color: #8a252c;
+    height: 12px;
+    transition: width 0.1s linear; /* Smooth animation for width change */
+  }
+  
+  .wildcat-icon {
+    position: absolute;
+    top: 130px;
+    left: 43%;
+    /* transform: translateX(-50%); */
+    width: 274px;
+    height: 245px;
+    object-fit: cover;
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  .intro-line {
+    position: absolute;
+    top: 400px;
+    left: 46%;
+    display: inline-block;
+    font-weight: 500;
+    width: 172px;
+    height: 23px;
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  .intro-line,
+  .wildcat-icon,
+  .bar-gray {
+    transition: all 0.5s ease; /* Smooth transition */
+  }
+  
+  @media (max-width: 768px) {
+    /* .loadingbarpage2 {
+      height: auto;
+    } */
+  
+    .bar-gray {
+      top: calc(50% + 35px);
+      width: 296px;
+      left: 32%;
+    }
+  
+    .bar-red {
+      top: calc(50% + 38px);
+      width: 296px;
+      left: 32%;
+    }
+  
+    .wildcat-icon {
+      top: 100px;
+      width: 250px;
+      height: 220px;
+      left: 35%;
+    }
+  
+    .intro-line {
+      top: 350px;
+      font-size: 18px;
+      left: 41%;
+    }
+  }
+  
+  @media (max-width: 500px) {
+    .bar-gray{
+      top: calc(50% + 25px);
+      width: 296px;
+      left: 20%;
+    }
+  
+    .bar-red {
+      top: calc(50% + 28px);
+      width: 296px;
+      left: 20.5%;
+    }
+  
+    .wildcat-icon {
+      top: 150px !important;
+      width: 190px !important;
+      height: 170px !important;
+      left: 30% !important;
+    }
+  
+    .intro-line {
+      top: 340px !important;
+      font-size: 16px !important;
+      left: 35% !important;
+    }
+  }
+  
+  

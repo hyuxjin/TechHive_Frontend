@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoadingBar1 from './loadingbar/LoadingBar1';
 import ADSignIn from './admin pages/ADSignIn/SignIn';
 import AdHome from './admin pages/ADHome/AdHome';
 import AdEntry from './admin pages/ADEntry/AdEntry';
@@ -23,6 +24,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/loadingbar1" />} />
+        <Route path="/loadingbar1" element={<LoadingBar1 />} />
         <Route path="/adsignin" element={<ADSignIn />} />
         <Route path="/adhome" element={<AdHome />} />
         <Route path="/adentry" element={<AdEntry />} />
