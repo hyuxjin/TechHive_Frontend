@@ -28,7 +28,7 @@ const App = () => {
         <Route path="/loadingbar1" element={<LoadingBar1 />} />
         <Route path="/adsignin" element={<ADSignIn />} />
         <Route path="/adhome" element={<AdHome />} />
-        <Route path="/adentry" element={<AdEntry />} />
+        <Route path="/adreport" element={<AdEntry />} />
         <Route path="/adleaderboard" element={<AdLeaderboard />} />
         <Route path="/adprofile" element={<AdProfile />} />
         <Route path="/adlogout" element={<AdLogout />} />
