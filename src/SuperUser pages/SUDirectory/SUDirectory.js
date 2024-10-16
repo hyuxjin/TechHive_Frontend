@@ -41,6 +41,25 @@ const SUDirectory = () => {
     services: '',
   });
 
+  const fetchPostData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/posts');
+      const data = await response.json();
+
+      const formattedData = data.map(post => ({
+        name: post.fullName,
+        idNumber: post.idNumber,
+        datePosted: post.timestamp,
+        content: post.content,
+        status: post.isVisible
+      }));
+
+      setTableData(formattedData);
+    } catch (error) {
+      console.error('Error fetching post data:', error);
+    }
+  };
+
   // Fetch Admin Data
   const fetchAdminData = async () => {
     try {
@@ -111,6 +130,8 @@ const SUDirectory = () => {
       fetchSuperUserData();
     } else if (category === 'Office') {
       fetchOfficeData();
+    } else if (category === 'Post') {
+      fetchPostData();
     }
   }, [category]);
 
@@ -148,6 +169,11 @@ const SUDirectory = () => {
         endpoint = `http://localhost:8080/office/updateStatus/${item.id}`;
         requestBody = { 
           status: newStatus 
+        };
+      } else if (category === 'Post') {
+        endpoint = `http://localhost:8080/posts/${item.idNumber}/visibility`;
+        requestBody = {
+          isVisible: newStatus
         };
       }
   
@@ -308,7 +334,7 @@ const SUDirectory = () => {
           Username: row.username,
           Status: row.status ? 'Enabled' : 'Disabled',
         };
-      }
+      } 
     });
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -336,9 +362,11 @@ const SUDirectory = () => {
             <MenuItem value="Admin">Admin</MenuItem>
             <MenuItem value="SuperUser">SuperUser</MenuItem>
             <MenuItem value="Office">Office</MenuItem>
+            <MenuItem value="Post">Post</MenuItem>
           </Select>
         </FormControl>
 
+        {category !== 'Post' && (
         <FormControl variant="outlined" className="dropdown">
           <InputLabel id="status-label">Status</InputLabel>
           <Select
@@ -353,6 +381,22 @@ const SUDirectory = () => {
             <MenuItem value="Disabled">Disabled</MenuItem>
           </Select>
         </FormControl>
+        )}
+
+        <FormControl variant="outlined" className="dropdown">
+          <InputLabel id="status-label">Visibility</InputLabel>
+          <Select
+            labelId="status-label"
+            id="status-select"
+            value={statusFilter}
+            onChange={handleStatusFilterChange}
+            label="Visibility"
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="Visible">Visible</MenuItem>
+            <MenuItem value="Hidden">Hidden</MenuItem>
+          </Select>
+        </FormControl>
 
         <Button
           variant="contained"
@@ -362,73 +406,99 @@ const SUDirectory = () => {
           Download Excel
         </Button>
 
+        {category !== 'Post' && (
         <Button variant="contained" color="primary" onClick={() => setShowForm(true)}>
           {category === 'Office' ? 'Add an Office' : `Create a ${category} Account`}
         </Button>
+        )}
       </div>
 
       <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {category === 'Office' ? (
-                <>
-                  <TableCell>Office</TableCell>
-                  <TableCell>Head</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Services</TableCell>
-                  <TableCell>Status</TableCell>
-                </>
-              ) : (
-                <>
-                  <TableCell>Name</TableCell>
-                  <TableCell>ID Number</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Username</TableCell>
-                  <TableCell>Status</TableCell>
-                </>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredTableData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No data available.
+  <Table>
+    <TableHead>
+      <TableRow>
+        {category === 'Office' ? (
+          <>
+            <TableCell>Office</TableCell>
+            <TableCell>Head</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Services</TableCell>
+            <TableCell>Status</TableCell>
+          </>
+        ) : category === 'Post' ? (
+          <>
+            <TableCell>Name (Post Owner)</TableCell>
+            <TableCell>ID Number (Post Owner)</TableCell>
+            <TableCell>Date Posted</TableCell>
+            <TableCell>Content</TableCell>
+            <TableCell>Visibility Status</TableCell>
+          </>
+        ) : (
+          <>
+            <TableCell>Name</TableCell>
+            <TableCell>ID Number</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Username</TableCell>
+            <TableCell>Status</TableCell>
+          </>
+        )}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {filteredTableData.length === 0 ? (
+        <TableRow>
+          <TableCell colSpan={5} align="center">
+            No data available.
+          </TableCell>
+        </TableRow>
+      ) : (
+        filteredTableData.map((row, index) => (
+          <TableRow key={index}>
+            {category === 'Office' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.head}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.services}</TableCell>
+              </>
+            ) : category === 'Post' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.idNumber}</TableCell>
+                <TableCell>{row.datePosted}</TableCell>
+                <TableCell>{row.content}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.status}
+                    onChange={() => handleToggleStatus(index)}
+                    color="primary"
+                  />
+                  {row.status ? 'Visible' : 'Hidden'}
                 </TableCell>
-              </TableRow>
+              </>
             ) : (
-              filteredTableData.map((row, index) => (
-                <TableRow key={index}>
-                  {category === 'Office' ? (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.head}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.services}</TableCell>
-                    </>
-                  ) : (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.idNumber}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.username}</TableCell>
-                    </>
-                  )}
-                  <TableCell>
-                    <Switch
-                      checked={row.status}
-                      onChange={() => handleToggleStatus(index)}
-                      color="primary"
-                    />
-                    {row.status ? 'Enabled' : 'Disabled'}
-                  </TableCell>
-                </TableRow>
-              ))
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.idNumber}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.status}
+                    onChange={() => handleToggleStatus(index)}
+                    color="primary"
+                  />
+                  {row.status ? 'Enabled' : 'Disabled'}
+                </TableCell>
+              </>
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          </TableRow>
+        ))
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
+
 
       {/* Account/Office Creation Modal */}
       <Modal
