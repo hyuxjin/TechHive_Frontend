@@ -450,15 +450,14 @@ const AdHome = () => {
               <div className="card-container">
                 <div className="logo-container">
                   <img
-  src={
-    post.adminId
-      ? adminProfilePictures[post.adminId] || defaultProfile
-      : superUserProfilePictures[post.superuserId] || defaultProfile
-  }
-  alt="Profile Avatar"
-  className="admins-dp"
-/>
-
+                    src={
+                      post.adminId
+                        ? adminProfilePictures[post.adminId] || defaultProfile
+                        : superUserProfilePictures[post.superuserId] || defaultProfile
+                    }
+                    alt="Profile Avatar"
+                    className="admins-dp"
+                  />
                 </div>
                 <div className="name-container">
                   <h5>{post.fullName} ({post.idNumber})</h5>
