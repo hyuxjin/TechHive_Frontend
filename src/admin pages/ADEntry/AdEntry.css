@@ -11,6 +11,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .entrysub-container {
@@ -23,264 +24,224 @@
   margin-top: 3%;
 }
 
-/* Card layout */
-.entrypost-card {
-  background-color: rgba(255, 255, 255, 0.25); /* White with 25% opacity */
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle drop shadow */
+.flagged-reports-section, .incoming-reports-section {
   width: 100%;
   max-width: 600px;
-  margin: 20px auto;
+  margin-bottom: 30px;
+}
+
+.flagged-reports-section h3, .incoming-reports-section h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Report card styling */
+.entrypost-card {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  margin: 20px 0;
   transition: transform 0.3s ease;
+  position: relative;
+  cursor: pointer;
 }
 
 .entrypost-card:hover {
   transform: translateY(-5px);
 }
 
-.entrycard-container {
+.card-header {
   display: flex;
-  flex-direction: column;
-}
-
-.entryname-container {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
-.entryname-container img {
-  width: 50px;
-  height: 50px;
+/* Smaller traffic lights styling for main report containers */
+.report-container .traffic-lights {
+  display: flex;
+  gap: 3px; /* Reduced space between the lights */
+}
+
+.report-container .traffic-circle {
+  width: 10px; /* Smaller width for the traffic lights */
+  height: 10px; /* Smaller height for the traffic lights */
   border-radius: 50%;
-}
-
-.entryname-container h5 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-.entry-details {
-  margin-bottom: 15px;
-  line-height: 1.6;
-}
-
-.entry-details h5 {
-  margin: 5px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.entry-details span {
-  font-weight: bold;
-  color: #8a252c;
-}
-
-.image-description-container {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 15px 0;
-}
-
-.square-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.description-text {
-  font-size: 14px;
-  color: #555;
-  margin: 0;
-  flex: 1;
-}
-
-.entryfooter-line {
-  border-top: 1px solid #ddd;
-  margin: 20px 0;
-}
-
-/* Centering the buttons */
-.footer-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.button-container {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.respond-button, .edit-button {
-  background: #8a252c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  background-color: transparent;
+  border: 1px solid black;
+  opacity: 0.5;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.respond-button:hover, .edit-button:hover {
-  background-color: #6f1c20;
+.report-container .traffic-circle.active {
+  opacity: 1;
 }
 
-/* Modal Overlay */
+.report-container .maroon.active {
+  background-color: #800000;
+}
+
+.report-container .gray.active {
+  background-color: #808080;
+}
+
+.report-container .yellow.active {
+  background-color: #f8d825;
+}
+
+.report-container .green.active {
+  background-color: #4CAF50;
+}
+
+/* Traffic lights styling for the pop-up (no size changes) */
+.modal-content .traffic-lights {
+  display: flex;
+  gap: 10px; /* Larger space between the lights in the pop-up */
+}
+
+.modal-content .traffic-circle {
+  width: 15px; /* Larger width for the traffic lights in the pop-up */
+  height: 15px; /* Larger height for the traffic lights in the pop-up */
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid black;
+  opacity: 0.5;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.modal-content .traffic-circle.active {
+  opacity: 1;
+}
+
+.modal-content .maroon.active {
+  background-color: #800000;
+}
+
+.modal-content .gray.active {
+  background-color: #808080;
+}
+
+.modal-content .yellow.active {
+  background-color: #f8d825;
+}
+
+.modal-content .green.active {
+  background-color: #4CAF50;
+}
+
+.flag-icon, .flag-icon-modal {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-left: 10px; /* Add space between the flag and traffic lights */
+}
+
+.flag-icon img, .flag-icon-modal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Pop-up modal */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
 
-/* Modal Content */
 .modal-content {
-  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b); /* Solid light gradient */
-  padding: 30px;
+  background-color: #fff;
+  padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 500px;
+  max-width: 90%;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   position: relative;
-  border: 2px solid #b8860b; /* Gold border */
-  text-align: center;
 }
 
-/* Modal Title */
-.modal-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #8A252C;
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-/* Buttons */
-.confirm-button, .modal-back-button, .approve-button, .deny-button, .submit-button {
-  background: #8a252c;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
-  width: 125px;
-  height: 35px;
-}
-
-.confirm-button:hover, .modal-back-button:hover, .approve-button:hover, .deny-button:hover, .submit-button:hover {
-  background-color: #ceb679;
-}
-
-/* Input and Textarea Styles */
-.readonly-input, .readonly-textarea, .dropdown {
-  width: 100%;
-  padding: 10px;
-  text-align: left;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  color: #555;
-  font-size: 14px;
-}
-
-/* Readonly Input */
-.readonly-input {
-  background-color: #fdfbc9;
-}
-
-/* Textarea */
-.readonly-textarea {
-  background-color: #fffdf5;
-  color: #333;
-  border: 1px solid #b8860b;
-}
-
-/* Radio Group */
-.radio-group {
-  margin-bottom: 20px;
-  color: #333;
-  text-align: left;
-  display: flex;
-  gap: 10px;
-}
-
-/* Button Group */
-.button-group {
+.modal-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-.approve-button, .deny-button {
-  width: 48%;
+/* Adjust the layout of traffic lights and flag */
+.modal-header .traffic-lights-and-flag {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px; /* Spacing between traffic lights and the flag */
 }
 
-/* Responsive for mobile */
+/* Back button styling */
+.back-button {
+  background-color: #800000; /* Maroon background for the circle */
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Makes the background circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: adds shadow */
+}
+
+.back-button-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Modal image styling for the three images */
+.modal-image-container {
+  display: flex;
+  gap: 10px; /* Space between the images */
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.modal-image-small {
+  width: 100px; /* Adjust width */
+  height: 100px; /* Adjust height */
+  border-radius: 10px;
+  background-color: #f0f0f0; /* Placeholder color */
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+}
+
+.collapsed-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media (max-width: 699px) {
   .modal-content {
     width: 90%;
   }
-}
 
-/* Modal Close Button */
-.modal-close-button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #8A252C;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
+  .back-button {
+    font-size: 14px;
+  }
 
-.modal-close-button img {
-  width: 20px;
-  height: 20px;
-  object-fit: cover;
-}
-
-/* Form Group Container */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  margin-bottom: 0px;
-  margin-top: auto;
-}
-
-/* Select Dropdown */
-.dropdown {
-  appearance: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #555;
-  width: 100%;
+  .modal-image-small {
+    width: 100px;
+  }
 }
