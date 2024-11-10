@@ -6,9 +6,14 @@ import { GiHamburgerMenu } from "react-icons/gi";
 const SUNavBar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [dateTime, setDateTime] = useState(new Date().toLocaleString());
+  const [selected, setSelected] = useState(window.location.pathname); // Set default selected to current path
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
+  };
+
+  const handleNavClick = (path) => {
+    setSelected(path); // Update selected state
   };
 
   useEffect(() => {
@@ -16,7 +21,9 @@ const SUNavBar = () => {
       setDateTime(new Date().toLocaleString());
     }, 1000);
 
-    // Cleanup interval on component unmount
+    // Sync selected path with current URL on component mount
+    setSelected(window.location.pathname);
+
     return () => clearInterval(intervalId);
   }, []);
 
@@ -31,19 +38,49 @@ const SUNavBar = () => {
       <div className={`nav-elements ${showNavbar ? "active" : ""}`}>
         <ul>
           <li>
-            <a href="/suhome">Home</a>
+            <a
+              href="/suhome"
+              onClick={() => handleNavClick("/suhome")}
+              className={selected === "/suhome" ? "active" : ""}
+            >
+              Home
+            </a>
           </li>
           <li>
-            <a href="/suleaderboard">Leaderboard</a>
+            <a
+              href="/suleaderboard"
+              onClick={() => handleNavClick("/suleaderboard")}
+              className={selected === "/suleaderboard" ? "active" : ""}
+            >
+              Leaderboard
+            </a>
           </li>
           <li>
-            <a href="/suinsight">Insight</a>
+            <a
+              href="/suinsight"
+              onClick={() => handleNavClick("/suinsight")}
+              className={selected === "/suinsight" ? "active" : ""}
+            >
+              Insight
+            </a>
           </li>
           <li>
-            <a href="/sudirectory">Directory</a>
+            <a
+              href="/sudirectory"
+              onClick={() => handleNavClick("/sudirectory")}
+              className={selected === "/sudirectory" ? "active" : ""}
+            >
+              Directory
+            </a>
           </li>
           <li>
-            <a href="/suprofile">Profile</a>
+            <a
+              href="/suprofile"
+              onClick={() => handleNavClick("/suprofile")}
+              className={selected === "/suprofile" ? "active" : ""}
+            >
+              Profile
+            </a>
           </li>
         </ul>
       </div>

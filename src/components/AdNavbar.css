@@ -5,6 +5,26 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+/* General link styling */
+.nav-elements ul li a {
+  text-decoration: none; /* Ensure no underline */
+  border-bottom: none;   /* Remove any border styling */
+  box-shadow: none;      /* Remove any shadow */
+}
+
+/* Active link styling */
+.nav-elements ul li a.active {
+  font-weight: bold;      /* Make bold */
+  text-decoration: none;  /* No underline */
+  border-bottom: none;    /* No border-bottom */
+  box-shadow: none;       /* No shadow */
+}
+
+/* Remove any possible pseudo-element (like ::after) */
+.nav-elements ul li a::after {
+  content: none !important;
+}
+
 .navbar {
   height: 60px;
   width: 100%;
