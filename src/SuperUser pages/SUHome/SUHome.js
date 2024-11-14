@@ -342,14 +342,15 @@ const handleAddComment = async () => {
 
 
 
-    const handleDeletePost = (postId) => {
-        if (!loggedInSuperUser) {
-            alert("Please log in to delete posts.");
-            return;
-        }
-        setItemToDelete(postId);
-        setIsDeletePostDialogOpen(true);
-    };
+const handleDeletePost = (postId) => {
+    if (!loggedInSuperUser) {
+        alert("Please log in to delete posts.");
+        return;
+    }
+    setItemToDelete(postId); // Set the ID of the post to delete
+    setIsDeletePostDialogOpen(true); // Open confirmation dialog
+};
+
 
     const handleDeleteComment = (commentId, commentSuperUserId) => {
         if (!loggedInSuperUser) {
@@ -367,12 +368,14 @@ const handleAddComment = async () => {
     const confirmDeletePost = async () => {
         try {
             await axios.delete(`http://localhost:8080/posts/${itemToDelete}`);
+            // Update frontend to remove the deleted post
             setPosts(posts.filter(post => post.postId !== itemToDelete));
             setIsDeletePostDialogOpen(false);
         } catch (error) {
             console.error("Error deleting post:", error);
         }
     };
+    
 
     const confirmDeleteComment = async () => {
         try {
@@ -482,19 +485,21 @@ const handleAddComment = async () => {
                     {posts.map((post) => (
                         <div key={post.postId} className="post-card">
                             <div className="card-container">
-                                <div className="name-container">
-                                    <img src={superuserProfilePictures[post.superuserId] || defaultProfile} alt="SuperUser Avatar" />
-                                    <h5>{post.fullName} ({post.superuseridNumber})</h5>
-                                    {loggedInSuperUser && loggedInSuperUser.superuserId === post.superuserId && (
-                                        <img
-                                            src="/delete.png"
-                                            alt="Delete"
-                                            className="delete-icon"
-                                            onClick={() => handleDeletePost(post.postId)}
-                                            style={{ cursor: 'pointer', width: '20px', height: '20px', marginLeft: 'auto' }}
-                                        />
-                                    )}
-                                </div>
+                            <div className="name-container">
+    <img src={superuserProfilePictures[post.superUserId] || defaultProfile} alt="SuperUser Avatar" />
+    <h5>{post.fullName} ({post.superuseridNumber})</h5>
+    {/* Remove ownership check here, allowing all SuperUsers to see delete icon */}
+    {loggedInSuperUser && (
+        <img
+            src="/delete.png"
+            alt="Delete"
+            className="delete-icon"
+            onClick={() => handleDeletePost(post.postId)}
+            style={{ cursor: 'pointer', width: '20px', height: '20px', marginLeft: 'auto' }}
+        />
+    )}
+</div>
+
                                 <div className="timestamp">
                                     <span className="formatted-date">{formatTimestamp(post.timestamp)}</span>
                                     <br />
