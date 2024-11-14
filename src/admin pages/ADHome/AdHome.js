@@ -117,7 +117,7 @@ const AdHome = () => {
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/posts");
+        const response = await axios.get("http://localhost:8080/posts/visible");
         const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         setPosts(sortedPosts);
 

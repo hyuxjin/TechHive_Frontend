@@ -76,12 +76,13 @@ const SUHome = () => {
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/posts");
-            console.log("Fetched posts data:", response.data);
+            const response = await axios.get("http://localhost:8080/posts/visible");
+            console.log("Fetched visible posts data:", response.data);  // Log fetched data
             const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            console.log("Sorted posts:", sortedPosts);  // Log sorted data
             setPosts(sortedPosts);
 
-            const superuserIds = new Set(sortedPosts.map(post => post.superuserId));
+            const superuserIds = new Set(sortedPosts.map(post => post.superUserId));
             superuserIds.forEach(superuserId => fetchSuperUserProfilePicture(superuserId));
         } catch (error) {
             console.error("Error fetching posts:", error);
@@ -89,6 +90,8 @@ const SUHome = () => {
     };
     fetchPostsAndPictures();
 }, [fetchSuperUserProfilePicture]);
+
+
 
     useEffect(() => {
         if (currentPostId) {
