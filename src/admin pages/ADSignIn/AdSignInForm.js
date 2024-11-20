@@ -1,46 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdSignInForm.css";
 
 export default function AdSignInForm() {
   const navigate = useNavigate();
+  const [idNumber, setIdNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [showResetPasswordPopup, setShowResetPasswordPopup] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState(""); // "success" or "error"
+
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
+  const showModal = (message, type) => {
+    setModalMessage(message);
+    setModalType(type);
+    setTimeout(() => setModalMessage(""), 3000); // Auto-hide modal
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const idNumber = event.target.idNumber.value;
-    const password = event.target.password.value;
-
     try {
-      const response = await fetch('http://localhost:8080/admin/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("http://localhost:8080/admin/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idNumber, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('loggedInAdmin', JSON.stringify({
-          adminId: data.adminId,
-          adminname: data.adminname,
-          fullName: data.fullName,
-          email: data.email,
-          idNumber: data.idNumber,
-          profilePicture: data.profilePicture, // Store the profile picture URL
-        }));
+        localStorage.setItem("adminToken", data.token);
+        localStorage.setItem(
+          "loggedInAdmin",
+          JSON.stringify({
+            adminId: data.adminId,
+            adminname: data.adminname,
+            fullName: data.fullName,
+            email: data.email,
+            idNumber: data.idNumber,
+            profilePicture: data.profilePicture, // Store the profile picture URL
+          })
+        );
         navigate("/adhome");
       } else {
         const message = await response.text();
-        alert(`Login failed: ${message}`);
+        showModal(`Login failed: ${message}`, "error");
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      console.error("Error:", error);
+      showModal("An error occurred. Please try again.", "error");
     }
   };
 
@@ -50,24 +71,87 @@ export default function AdSignInForm() {
 
   const handleCloseForgotPassword = () => {
     setShowForgotPassword(false);
+    setEmail("");
   };
 
-  const handleSendCodeClick = () => {
-    setShowForgotPassword(false);
-    setShowVerificationPopup(true);
+  const handleSendCode = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/admin/requestPasswordReset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setShowForgotPassword(false);
+        setShowVerificationPopup(true);
+        setCountdown(30);
+        showModal("Reset code sent to your email.", "success");
+      } else {
+        const message = await response.text();
+        showModal(`Failed to send reset code: ${message}`, "error");
+      }
+    } catch (error) {
+      console.error("Error sending reset code:", error);
+      showModal("An error occurred while sending the reset code.", "error");
+    }
   };
 
-  const handleCloseVerificationPopup = () => {
-    setShowVerificationPopup(false);
+  const handleResendCode = async () => {
+    if (countdown === 0) {
+      await handleSendCode();
+    }
   };
 
-  const handleVerifyClick = () => {
-    setShowVerificationPopup(false);
-    setShowResetPasswordPopup(true);
+  const handleVerifyCode = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/admin/verifyResetCode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, resetCode: verificationCode }),
+      });
+
+      if (response.ok) {
+        setShowVerificationPopup(false);
+        setShowResetPasswordPopup(true);
+        showModal("Code verified. Enter your new password.", "success");
+      } else {
+        const message = await response.text();
+        showModal(`Verification failed: ${message}`, "error");
+      }
+    } catch (error) {
+      console.error("Error verifying code:", error);
+      showModal("An error occurred during verification.", "error");
+    }
   };
 
-  const handleCloseResetPasswordPopup = () => {
-    setShowResetPasswordPopup(false);
+  const handleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      showModal("Passwords do not match.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/admin/resetPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newPassword }),
+      });
+
+      if (response.ok) {
+        setShowResetPasswordPopup(false);
+        setEmail("");
+        setNewPassword("");
+        setConfirmPassword("");
+        showModal("Password reset successfully!", "success");
+      } else {
+        const message = await response.text();
+        showModal(`Failed to reset password: ${message}`, "error");
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      showModal("An error occurred while resetting the password.", "error");
+    }
   };
 
   return (
@@ -75,19 +159,27 @@ export default function AdSignInForm() {
       <form onSubmit={handleSubmit} className="signin-form">
         <label>
           ID Number <br />
-          <input type="text" name="idNumber" required />
+          <input
+            type="text"
+            value={idNumber}
+            onChange={(e) => setIdNumber(e.target.value)}
+            required
+          />
         </label>
         <br />
         <label>
           Password <br />
-          <input type="password" name="password" required />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </label>
         <br />
         <button type="submit">SIGN IN</button>
         <br />
-        <span 
-          className="forgot-password" 
-          onClick={handleForgotPasswordClick}>
+        <span className="forgot-password" onClick={handleForgotPasswordClick}>
           Forgot Password?
         </span>
       </form>
@@ -99,11 +191,16 @@ export default function AdSignInForm() {
               &times;
             </button>
             <label>
-              <h3>Enter email address</h3>
-              <input type="email" name="email" class="form-input" required />
+              Enter email address
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </label>
             <br />
-            <button class="form-button" onClick={handleSendCodeClick}>SEND CODE</button>
+            <button onClick={handleSendCode}>Send Code</button>
           </div>
         </div>
       )}
@@ -111,17 +208,21 @@ export default function AdSignInForm() {
       {showVerificationPopup && (
         <div className="verification-popup">
           <div className="popup-content">
-            <button className="close-button" onClick={handleCloseVerificationPopup}>
-              &times;
-            </button>
             <label>
-            <h3>Enter Verification Code</h3> 
-              <input type="text" name="verificationCode" class="form-input" required />
+              Verification Code
+              <input
+                type="text"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                required
+              />
             </label>
             <br />
-            <button className="small-button">Resend code</button>
+            <button onClick={handleResendCode} disabled={countdown > 0}>
+              Resend Code {countdown > 0 && `(${countdown}s)`}
+            </button>
             <br />
-            <button class="form-button" onClick={handleVerifyClick}>VERIFY</button>
+            <button onClick={handleVerifyCode}>Verify</button>
           </div>
         </div>
       )}
@@ -129,21 +230,34 @@ export default function AdSignInForm() {
       {showResetPasswordPopup && (
         <div className="reset-password-popup">
           <div className="popup-content">
-            <button className="close-button" onClick={handleCloseResetPasswordPopup}>
-              &times;
-            </button>
             <label>
-            <h3>Enter New Password</h3>
-              <input type="password" name="newPassword" required />
+              New Password
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
             </label>
             <br />
             <label>
-            <h3>Confirm Password</h3>
-              <input type="password" name="confirmPassword" required />
+              Confirm Password
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </label>
             <br />
-            <button onClick={handleCloseResetPasswordPopup}>Reset Password</button>
+            <button onClick={handleResetPassword}>Reset Password</button>
           </div>
+        </div>
+      )}
+
+      {modalMessage && (
+        <div className={`modal ${modalType}`}>
+          <p>{modalMessage}</p>
         </div>
       )}
     </>

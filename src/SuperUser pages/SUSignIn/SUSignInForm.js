@@ -1,58 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SUSignInForm.css";
 
 export default function SUSignInForm() {
     const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [verificationCode, setVerificationCode] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [showVerificationPopup, setShowVerificationPopup] = useState(false);
     const [showResetPasswordPopup, setShowResetPasswordPopup] = useState(false);
+    const [countdown, setCountdown] = useState(0);
+    const [modalMessage, setModalMessage] = useState("");
+    const [modalType, setModalType] = useState(""); // "success" or "error"
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const superuseridNumber = event.target.superuseridNumber.value;
-        const superuserpassword = event.target.superuserpassword.value;
+    const [idNumber, setIdNumber] = useState("");
+    const [password, setPassword] = useState("");
 
-        try {
-            const response = await fetch('http://localhost:8080/superuser/signin', { 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    superUserIdNumber: superuseridNumber, // Correct case for backend
-                    superUserPassword: superuserpassword, // Correct case for backend
-                }),
-            });
-
-            console.log('Response:', response); // Debugging: check the raw response
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Data:', data); // Debugging: check the parsed data
-
-                // Store the correct user data in local storage
-                localStorage.setItem('superuserToken', data.token);
-                localStorage.setItem('loggedInSuperUser', JSON.stringify({
-                    superuserId: data.superuserId, // Consistent lowercase 'superuserId'
-                    superusername: data.superusername,
-                    fullName: data.fullName,
-                    email: data.email,
-                    superuseridNumber: data.superUserIdNumber, // Correct key reference
-                    profilePicture: data.profilePicture || null, // Added null fallback in case profilePicture is missing
-                }));
-
-                // Navigate to the super user home page after login
-                navigate("/SUhome");
-            } else {
-                const message = await response.text();
-                console.log('Login failed:', message); // Debugging: log the failure message
-                alert(`Login failed: ${message}`);
-            }
-        } catch (error) {
-            console.error('Error during login:', error); // Debugging: log any errors
-            alert('An error occurred. Please try again.');
+    useEffect(() => {
+        let timer;
+        if (countdown > 0) {
+            timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         }
+        return () => clearTimeout(timer);
+    }, [countdown]);
+
+    const showModal = (message, type) => {
+        setModalMessage(message);
+        setModalType(type);
+        setTimeout(() => setModalMessage(""), 3000); // Auto-hide modal
     };
 
     const handleForgotPasswordClick = () => {
@@ -61,24 +38,113 @@ export default function SUSignInForm() {
 
     const handleCloseForgotPassword = () => {
         setShowForgotPassword(false);
+        setEmail("");
     };
 
-    const handleSendCodeClick = () => {
-        setShowForgotPassword(false);
-        setShowVerificationPopup(true);
+    const handleSendCode = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/superuser/requestPasswordReset', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            if (response.ok) {
+                setShowForgotPassword(false);
+                setShowVerificationPopup(true);
+                setCountdown(30);
+                showModal("Reset code sent to your email.", "success");
+            } else {
+                const message = await response.text();
+                showModal(`Failed to send reset code: ${message}`, "error");
+            }
+        } catch (error) {
+            console.error("Error sending reset code:", error);
+            showModal("An error occurred while sending the reset code.", "error");
+        }
     };
 
-    const handleCloseVerificationPopup = () => {
-        setShowVerificationPopup(false);
+    const handleResendCode = async () => {
+        if (countdown === 0) {
+            await handleSendCode();
+        }
     };
 
-    const handleVerifyClick = () => {
-        setShowVerificationPopup(false);
-        setShowResetPasswordPopup(true);
+    const handleVerifyCode = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/superuser/verifyResetCode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, resetCode: verificationCode }), // Match backend field
+            });
+
+            if (response.ok) {
+                setShowVerificationPopup(false);
+                setShowResetPasswordPopup(true);
+                showModal("Code verified. Enter your new password.", "success");
+            } else {
+                const message = await response.text();
+                showModal(`Verification failed: ${message}`, "error");
+            }
+        } catch (error) {
+            console.error("Error verifying code:", error);
+            showModal("An error occurred during verification.", "error");
+        }
     };
 
-    const handleCloseResetPasswordPopup = () => {
-        setShowResetPasswordPopup(false);
+    const handleResetPassword = async () => {
+        if (newPassword !== confirmPassword) {
+            showModal("Passwords do not match.", "error");
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:8080/superuser/resetPassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, newPassword }),
+            });
+            if (response.ok) {
+                setShowResetPasswordPopup(false);
+                setEmail("");
+                setNewPassword("");
+                setConfirmPassword("");
+                showModal("Password reset successfully!", "success");
+            } else {
+                const message = await response.text();
+                showModal(`Failed to reset password: ${message}`, "error");
+            }
+        } catch (error) {
+            console.error("Error resetting password:", error);
+            showModal("An error occurred while resetting the password.", "error");
+        }
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/superuser/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    superUserIdNumber: idNumber,
+                    superUserPassword: password,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('superuserToken', data.token);
+                localStorage.setItem('loggedInSuperUser', JSON.stringify(data));
+                navigate("/SUhome");
+            } else {
+                const message = await response.text();
+                showModal(`Login failed: ${message}`, "error");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            showModal("An error occurred. Please try again.", "error");
+        }
     };
 
     return (
@@ -86,12 +152,22 @@ export default function SUSignInForm() {
             <form onSubmit={handleSubmit} className="SUsignin-form">
                 <label>
                     ID Number <br />
-                    <input type="text" name="superuseridNumber" required />
+                    <input
+                        type="text"
+                        value={idNumber}
+                        onChange={(e) => setIdNumber(e.target.value)}
+                        required
+                    />
                 </label>
                 <br />
                 <label>
                     Password <br />
-                    <input type="password" name="superuserpassword" required />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                 </label>
                 <button type="button" onClick={handleForgotPasswordClick} className="forgot-password">
                     Forgot Password?
@@ -109,10 +185,15 @@ export default function SUSignInForm() {
                         <h2>Forgot Password</h2>
                         <label>
                             Enter email address
-                            <input type="email" name="email" required />
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
                         </label>
                         <br />
-                        <button onClick={handleSendCodeClick}>Send Code</button>
+                        <button onClick={handleSendCode}>Send Code</button>
                     </div>
                 </div>
             )}
@@ -120,18 +201,26 @@ export default function SUSignInForm() {
             {showVerificationPopup && (
                 <div className="verification-popup">
                     <div className="popup-content">
-                        <button className="close-button" onClick={handleCloseVerificationPopup}>
-                            &times;
-                        </button>
                         <h2>Enter Verification Code</h2>
                         <label>
                             Verification Code
-                            <input type="text" name="verificationCode" required />
+                            <input
+                                type="text"
+                                value={verificationCode}
+                                onChange={(e) => setVerificationCode(e.target.value)}
+                                required
+                            />
                         </label>
                         <br />
-                        <button className="small-button">Resend Code</button>
+                        <button
+                            className={`resend-code ${countdown > 0 ? "disabled" : ""}`}
+                            onClick={handleResendCode}
+                        >
+                            Resend Code
+                        </button>
+                        {countdown > 0 && <span className="countdown"> ({countdown}s)</span>}
                         <br />
-                        <button onClick={handleVerifyClick}>Verify</button>
+                        <button onClick={handleVerifyCode}>Verify</button>
                     </div>
                 </div>
             )}
@@ -139,23 +228,35 @@ export default function SUSignInForm() {
             {showResetPasswordPopup && (
                 <div className="reset-password-popup">
                     <div className="popup-content">
-                        <button className="close-button" onClick={handleCloseResetPasswordPopup}>
-                            &times;
-                        </button>
                         <h2>Enter New Password</h2>
                         <label>
                             New Password
-                            <input type="password" name="newPassword" required />
+                            <input
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
                         </label>
                         <br />
-                        <h2>Confirm Password</h2>
                         <label>
                             Confirm Password
-                            <input type="password" name="confirmPassword" required />
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
                         </label>
                         <br />
-                        <button onClick={handleCloseResetPasswordPopup}>Reset Password</button>
+                        <button onClick={handleResetPassword}>Reset Password</button>
                     </div>
+                </div>
+            )}
+
+            {modalMessage && (
+                <div className={`modal ${modalType}`}>
+                    <p>{modalMessage}</p>
                 </div>
             )}
         </>
