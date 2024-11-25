@@ -9,7 +9,6 @@
   background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   position: relative;
 }
@@ -17,36 +16,42 @@
 .entrysub-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 3%;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 80px;
 }
 
-.flagged-reports-section, .incoming-reports-section {
+.dashboard-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.reports-section {
   width: 100%;
-  max-width: 600px;
   margin-bottom: 30px;
 }
 
-.flagged-reports-section h3, .incoming-reports-section h3 {
+.section-title {
   font-size: 20px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 /* Report card styling */
 .entrypost-card {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  margin: 20px 0;
+  margin: 15px 0;
   transition: transform 0.3s ease;
-  position: relative;
   cursor: pointer;
 }
 
@@ -58,97 +63,126 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-/* Smaller traffic lights styling for main report containers */
-.report-container .traffic-lights {
+/* Traffic Lights */
+.traffic-lights {
   display: flex;
-  gap: 3px; /* Reduced space between the lights */
+  gap: 5px;
 }
 
-.report-container .traffic-circle {
-  width: 10px; /* Smaller width for the traffic lights */
-  height: 10px; /* Smaller height for the traffic lights */
+.traffic-circle {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: transparent;
-  border: 1px solid black;
-  opacity: 0.5;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
+  border: 1px solid #444;
+  opacity: 0.3;
+  transition: all 0.3s ease;
 }
 
-.report-container .traffic-circle.active {
+.traffic-circle.active {
   opacity: 1;
 }
 
-.report-container .maroon.active {
+.traffic-circle.maroon.active {
   background-color: #800000;
+  border-color: #800000;
 }
 
-.report-container .gray.active {
+.traffic-circle.gray.active {
   background-color: #808080;
+  border-color: #808080;
 }
 
-.report-container .yellow.active {
+.traffic-circle.yellow.active {
   background-color: #f8d825;
+  border-color: #f8d825;
 }
 
-.report-container .green.active {
+.traffic-circle.green.active {
   background-color: #4CAF50;
+  border-color: #4CAF50;
 }
 
-/* Traffic lights styling for the pop-up (no size changes) */
-.modal-content .traffic-lights {
+/* Flag Icon */
+.flag-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px 10px;
+}
+
+.flag-icon:hover {
+  opacity: 0.8;
+}
+
+/* Profile and Details */
+.collapsed-details {
+  cursor: pointer;
+}
+
+.entry-profile-container {
   display: flex;
-  gap: 10px; /* Larger space between the lights in the pop-up */
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.modal-content .traffic-circle {
-  width: 15px; /* Larger width for the traffic lights in the pop-up */
-  height: 15px; /* Larger height for the traffic lights in the pop-up */
+.profile-picture {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: transparent;
-  border: 1px solid black;
-  opacity: 0.5;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
+  object-fit: cover;
 }
 
-.modal-content .traffic-circle.active {
-  opacity: 1;
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
 }
 
-.modal-content .maroon.active {
-  background-color: #800000;
+.entry-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.modal-content .gray.active {
-  background-color: #808080;
+.entry-details h5 {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
 }
 
-.modal-content .yellow.active {
-  background-color: #f8d825;
+.entry-details span {
+  font-weight: normal;
 }
 
-.modal-content .green.active {
-  background-color: #4CAF50;
+.description {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 10px;
 }
 
-.flag-icon, .flag-icon-modal {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-left: 10px; /* Add space between the flag and traffic lights */
+/* Images */
+.entry-images {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  overflow-x: auto;
+  padding-bottom: 5px;
 }
 
-.flag-icon img, .flag-icon-modal img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.report-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Pop-up modal */
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -159,89 +193,119 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .modal-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  position: relative;
+  padding: 25px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-/* Adjust the layout of traffic lights and flag */
-.modal-header .traffic-lights-and-flag {
+.traffic-lights-and-flag {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 10px; /* Spacing between traffic lights and the flag */
+  gap: 15px;
 }
 
-/* Back button styling */
 .back-button {
-  background-color: #800000; /* Maroon background for the circle */
+  background-color: #800000;
+  color: white;
   border: none;
-  cursor: pointer;
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Makes the background circular */
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: adds shadow */
+  cursor: pointer;
+  font-size: 20px;
 }
 
-.back-button-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
+.modal-body {
+  padding: 0 10px;
 }
 
-/* Modal image styling for the three images */
-.modal-image-container {
-  display: flex;
-  gap: 10px; /* Space between the images */
-  justify-content: center;
-  align-items: center;
+.report-details {
   margin-top: 15px;
 }
 
-.modal-image-small {
-  width: 100px; /* Adjust width */
-  height: 100px; /* Adjust height */
-  border-radius: 10px;
-  background-color: #f0f0f0; /* Placeholder color */
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  object-fit: cover;
-}
-
-.collapsed-details {
+.modal-image-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-@media (max-width: 699px) {
-  .modal-content {
-    width: 90%;
+.modal-image-small {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading and Error States */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #800000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  text-align: center;
+  color: #800000;
+  padding: 20px;
+  background-color: rgba(128, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .entrysub-container {
+    padding: 15px;
+    margin-top: 60px;
   }
 
-  .back-button {
-    font-size: 14px;
+  .modal-content {
+    padding: 15px;
   }
 
   .modal-image-small {
-    width: 100px;
+    width: 120px;
+    height: 120px;
+  }
+
+  .entry-details h5 {
+    font-size: 13px;
   }
 }

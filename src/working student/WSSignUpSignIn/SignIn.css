@@ -1,0 +1,791 @@
+.ws-sign-in {
+    width: 100%;
+    position: relative;
+    height: 800px;
+    overflow: hidden;
+    text-align: left;
+    color: #8a252c;
+    font-family: var(--font-montserrat);
+}
+
+.back-bgSI {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 100%;
+    height: 100%;
+}
+
+.back-iconSI {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 35px;
+    height: 41px;
+    overflow: hidden;
+}
+
+.back-button-container {
+    position: absolute;
+    top: 65px;
+    left: 290px;
+    width: 64px;
+    height: 60px;
+    cursor: pointer;
+}
+
+.back-button-container:hover {
+    transform: scale(1.1);
+}
+
+.main-boxSI {
+    position: absolute;
+    top: 35px;
+    left: 240px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    width: 1070px;
+    height: 730px;
+    transition: all 0.5s ease;
+}
+
+.main-bgSI {
+    position: absolute;
+    top: 105px;
+    left: 390px;
+    border-radius: 100px;
+    width: 372px;
+    height: 526px;
+    object-fit: cover;
+    opacity: 0.9;
+    mix-blend-mode: normal;
+}
+
+.main-titleSI {
+    position: absolute;
+    top: 180px;
+    left: 455px;
+    width: 261px;
+    height: 206px;
+    object-fit: cover;
+}
+
+.welcomeSI {
+    position: absolute;
+    top: 190px;
+    left: 975px;
+    font-size: 30px;
+    display: inline-block;
+    font-weight: 700;
+    width: 178px;
+    height: 33px;
+}
+
+.sub-title2 {
+    position: absolute;
+    display: inline-block;
+    top: 230px;
+    left: 945px;
+    font-weight: 400;
+    font-size: 20px;
+    width: 231px;
+    height: 21px;
+}
+
+.id-number-in,
+.P-name {
+    position: absolute;
+    font-weight: 500;
+    font-size: 20px;
+    display: inline-block;
+    width: 120px;
+    height: 21px;
+}
+
+.id-number-in {
+    left: 870px;
+    top: 305px;
+}
+
+.P-name {
+    top: 410px;
+    left: 870px;
+}
+
+.id-number-b,
+.P-box {
+    position: absolute;
+    left: 865px;
+    background-color: white;
+    border: 2px solid #8a252c;
+    box-sizing: border-box;
+    width: 347px;
+    height: 39px;
+    border-radius: 20px;
+    padding-left: 10px;
+}
+
+.id-number-b {
+    top: 335px;
+}
+
+.P-box {
+    top: 440px;
+}
+
+.forgot-password {
+    position: absolute;
+    top: 490px;
+    left: 1085px;
+    color: #f6c301;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.SIContainer {
+    position: absolute;
+    top: 510px;
+    left: 980px;
+    width: 119px;
+    height: 39px;
+    cursor: pointer;
+    color: white;
+}
+
+.SIContainer:hover {
+    transform: scale(1.1);
+}
+
+.SIButton {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    border-radius: 20px;
+    background-color: #8a252c;
+    width: 115px;
+    height: 39px;
+}
+
+.SIName {
+    position: absolute;
+    top: 23px;
+    left: 20px;
+    font-weight: 600;
+    font-size: 20px;
+    display: inline-block;
+    width: 79px;
+    height: 23px;
+}
+
+.q4 {
+    position: absolute;
+    top: 585px;
+    left: 880px;
+    font-weight: 500;
+    font-size: 20px;
+    display: inline-block;
+    width: 240px;
+    height: 21px;
+}
+
+.q5 {
+    position: absolute;
+    top: 585px;
+    left: 1125px;
+    font-weight: 650;
+    font-size: 20px;
+    display: inline-block;
+    text-decoration: underline;
+    width: 240px;
+    height: 21px;
+    cursor: pointer;
+}
+
+/* Password reset components styles */
+.password-reset-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.password-reset-step {
+    background-color: #fdf6e3;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 300px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    padding-top: 40px;
+}
+
+.password-reset-step h2 {
+    color: #8a252c;
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.password-reset-step input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #8a252c;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.password-reset-step button {
+    background-color: #8a252c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.password-reset-step button:hover {
+    background-color: #6d1e23;
+}
+
+/* New styles for resend code and timer */
+.resend-code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.resend-code {
+    color: #f6c301;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.resend-code.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.countdown {
+    font-size: 14px;
+    color: #8a252c;
+}
+
+/* New styles for the password reset back button */
+.reset-back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.reset-back-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 100%;
+    height: 100%;
+}
+
+.reset-back-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.reset-back-button:hover {
+    transform: scale(1.1);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 300px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+}
+
+.modal-content.error {
+    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+}
+
+.modal-content.success {
+    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+}
+
+.modal-content p {
+    margin: 0 0 20px 0;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.modal-content.error p {
+    color: #8a252c;
+}
+
+.modal-content.success p {
+    color: black;
+}
+
+.modal-ok {
+    background-color: #8a252c;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s, color 0.3s;
+    font-family: "Montserrat", sans-serif;
+}
+
+.modal-ok:hover {
+    background-color: #f9d67b;
+    color: #8a252c;
+    transform: scale(1.05);
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .back-bgSI {
+        top: 10%;
+        left: 10px;
+        transform: translate(-550%);
+        width: 40px;
+        height: 40px;
+    }
+
+    .back-iconSI {
+        top: 20%;
+        left: 10px;
+        transform: translate(-885%);
+        width: 24px;
+        height: 30px;
+    }
+
+    .main-boxSI {
+        top: 6%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 87%;
+        height: 88%;
+    }
+
+    .main-bgSI {
+        display: none;
+    }
+
+    .main-titleSI {
+        display: none;
+    }
+
+    .welcomeSI {
+        top: 13%;
+        left: 54%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .sub-title2 {
+        top: 20%;
+        left: 53%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .id-number-in,
+    .P-name {
+        top: auto;
+        left: 61%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 18px;
+    }
+
+    .id-number-in {
+        top: 33%;
+    }
+
+    .P-name {
+        top: 49%;
+    }
+
+    .id-number-b,
+    .P-box {
+        top: auto;
+        left: 51%;
+        transform: translateX(-50%);
+        width: 53%;
+        height: 36px;
+    }
+
+    .id-number-b {
+        top: 38%;
+    }
+
+    .P-box {
+        top: 54%;
+    }
+
+    .SIContainer {
+        position: absolute;
+        top: 67%;
+        left: 52%;
+        transform: translateX(-50%);
+        width: 20%;
+        height: auto;
+        transition: none;
+    }
+
+    .SIContainer:hover {
+        transform: translateX(-50%) scale(1.05);
+        transition: transform 0.3s ease;
+    }
+
+    .SIButton {
+        width: 100%;
+        height: 40px;
+    }
+
+    .SIName {
+        top: 28px;
+        left: 54%;
+        transform: translateX(-50%);
+        font-size: 18px;
+    }
+
+    .q1,
+    .q2 {
+        top: auto;
+        left: 67%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 16px;
+    }
+
+    .q1 {
+        top: 91%;
+    }
+
+    .q2 {
+        top: 91%;
+        left: 98%;
+    }
+
+    .q4,
+    .q5 {
+        top: auto;
+        left: 68%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 18px;
+    }
+
+    .q4 {
+        top: 83%;
+    }
+
+    .q5 {
+        top: 83%;
+        left: 100%;
+    }
+
+    .forgot-password {
+        top: 60%;
+        left: 100%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 13px;
+    }
+
+    .password-reset-overlay {
+        padding: 15px;
+    }
+
+    .password-reset-step h2 {
+        font-size: 18px;
+    }
+
+    .password-reset-step input,
+    .password-reset-step button {
+        font-size: 14px;
+    }
+
+    .resend-code,
+    .countdown {
+        font-size: 12px;
+    }
+
+    .modal-overlay {
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        max-width: 80%;
+        width: calc(100% - 40px);
+        padding: 15px;
+        margin: 0 auto;
+    }
+
+    .modal-content p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .modal-ok {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 500px) {
+    .ws-sign-in {
+        width: 100%;
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        text-align: left;
+        color: #8a252c;
+        font-family: var(--font-montserrat);
+    }
+
+    .back-button-container {
+        top: 60px;
+        width: 50px;
+        height: 50px;
+        transform: translateX(-30%);
+    }
+
+    .back-iconSS {
+        width: 25px;
+        height: 30px;
+    }
+
+    .main-boxSI {
+        top: 5.5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 87%;
+        height: 90%;
+    }
+
+    .main-bgSI {
+        display: none;
+    }
+
+    .main-titleSI {
+        display: none;
+    }
+
+    .welcomeSI {
+        top: 13%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .sub-title2 {
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .id-number-in,
+    .P-name {
+        top: auto;
+        left: 61%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 18px;
+    }
+
+    .id-number-in {
+        top: 33%;
+    }
+
+    .P-name {
+        top: 49%;
+    }
+
+    .id-number-b,
+    .P-box {
+        top: auto;
+        left: 51%;
+        transform: translateX(-50%);
+        width: 53%;
+        height: 36px;
+    }
+
+    .id-number-b {
+        top: 38%;
+    }
+
+    .P-box {
+        top: 54%;
+    }
+
+    .SIContainer {
+        position: absolute;
+        top: 70%;
+        left: 52%;
+        transform: translateX(-50%);
+        width: 30%;
+        height: auto;
+        transition: none;
+    }
+
+    .SIContainer:hover {
+        transform: translateX(-50%);
+        transition: none;
+    }
+
+    .SIButton {
+        width: 100%;
+        height: 40px;
+    }
+
+    .SIName {
+        top: 28px;
+        left: 54%;
+        transform: translateX(-50%);
+        font-size: 18px;
+    }
+
+    .q1,
+    .q2 {
+        top: auto;
+        left: 58%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 16px;
+    }
+
+    .q1 {
+        top: 91%;
+    }
+
+    .q2 {
+        top: 91%;
+        left: 102%;
+    }
+
+    .q4,
+    .q5 {
+        top: auto;
+        left: 70%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 16px;
+    }
+
+    .q4 {
+        top: 85%;
+        left: 60%
+    }
+
+    .q5 {
+        top: 85%;
+        left: 105%;
+    }
+
+    .forgot-password {
+        top: 61%;
+        left: 93%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 13px;
+    }
+
+    .password-reset-overlay {
+        padding: 15px;
+    }
+
+    .password-reset-step h2 {
+        font-size: 18px;
+    }
+
+    .password-reset-step input,
+    .password-reset-step button {
+        font-size: 14px;
+    }
+
+    .modal-overlay {
+        padding-top: 40px;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        width: calc(100% - 30px);
+        padding: 12px;
+    }
+
+    .modal-content p {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .modal-ok {
+        font-size: 13px;
+        padding: 7px 14px;
+    }
+}

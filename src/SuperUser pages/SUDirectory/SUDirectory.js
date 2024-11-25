@@ -80,7 +80,55 @@ const SUDirectory = () => {
       console.error('Error fetching post data:', error);
     }
   };
-
+  
+  // Fetch User Data
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/user/getAllUsers');
+      const data = await response.json();
+  
+      const formattedData = data.map(user => ({
+        name: user.fullName,
+        idNumber: user.idNumber,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+        status: user.status // Make sure this is included
+      }));
+  
+      setTableData(formattedData);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
+  const handleToggleUserStatus = async (index) => {
+    const updatedData = [...tableData];
+    const user = updatedData[index];
+    const newStatus = !user.status;
+  
+    try {
+      const response = await fetch('http://localhost:8080/user/updateStatus', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idNumber: user.idNumber,
+          status: newStatus
+        }),
+      });
+  
+      if (response.ok) {
+        updatedData[index].status = newStatus;
+        setTableData(updatedData);
+      } else {
+        console.error('Failed to update user status on the backend.');
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+    }
+  };
 
   // Fetch Admin Data
   const fetchAdminData = async () => {
@@ -156,6 +204,8 @@ const SUDirectory = () => {
       fetchPostData();
     } else if (category === 'Comment') {
       fetchCommentData();
+    } else if (category === 'User') {
+      fetchUserData();
     }
   }, [category]);
 
@@ -431,50 +481,26 @@ const SUDirectory = () => {
       <img src={`${process.env.PUBLIC_URL}/DIR.png`} alt="Directory Header" className="directory-header-image" />
   
       <div className="dropdown-container">
-        <FormControl variant="outlined" className="dropdown">
-          <InputLabel id="category-label">Category</InputLabel>
-          <Select
-            labelId="category-label"
-            id="category-select"
-            value={category}
-            onChange={handleCategoryChange}
-            label="Category"
-          >
-            <MenuItem value="Admin">Admin</MenuItem>
-            <MenuItem value="SuperUser">SuperUser</MenuItem>
-            <MenuItem value="Office">Office</MenuItem>
-            <MenuItem value="Post">Post</MenuItem>
-            <MenuItem value="Comment">Comment</MenuItem>
-          </Select>
-        </FormControl>
-  
-        {/* Conditionally hide the "Status" dropdown for "Comment" */}
-        {category !== 'Comment' || category === 'Post' && (
-          <FormControl variant="outlined" className="dropdown">
-            <InputLabel id="status-label">Status</InputLabel>
-            <Select
-              labelId="status-label"
-              id="status-select"
-              value={statusFilter}
-              onChange={handleStatusFilterChange}
-              label="Status"
-            >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Enabled">Enabled</MenuItem>
-              <MenuItem value="Disabled">Disabled</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-  
-        {/* Conditionally hide "Create a Comment Account" button for "Comment" */}
-        {category !== 'Comment' || category === 'Post' && (
-          <Button variant="contained" color="primary" onClick={() => setShowForm(true)}>
-            {category === 'Office' ? 'Add an Office' : `Create a ${category} Account`}
-          </Button>
-        )}
+  <FormControl variant="outlined" className="dropdown">
+    <InputLabel id="category-label">Category</InputLabel>
+    <Select
+      labelId="category-label"
+      id="category-select"
+      value={category}
+      onChange={handleCategoryChange}
+      label="Category"
+    >
+      <MenuItem value="Admin">Admin</MenuItem>
+      <MenuItem value="SuperUser">SuperUser</MenuItem>
+      <MenuItem value="Office">Office</MenuItem>
+      <MenuItem value="Post">Post</MenuItem>
+      <MenuItem value="Comment">Comment</MenuItem>
+      <MenuItem value="User">User</MenuItem>
+    </Select>
+  </FormControl>
 
-         {/* Render Status dropdown when category is Admin, SuperUser, or Office */}
-  {(category === 'Admin' || category === 'SuperUser' || category === 'Office') && (
+  {/* Status dropdown for Admin, SuperUser, Office, and User */}
+  {(category === 'Admin' || category === 'SuperUser' || category === 'Office' || category === 'User') && (
     <FormControl variant="outlined" className="dropdown">
       <InputLabel id="status-label">Status</InputLabel>
       <Select
@@ -491,154 +517,179 @@ const SUDirectory = () => {
     </FormControl>
   )}
 
-        {/* Render Visibility dropdown when category is "Comment" or "Post" */}
-{(category === 'Comment' || category === 'Post') && (
-  <FormControl variant="outlined" className="dropdown">
-    <InputLabel id="visibility-label">Visibility</InputLabel>
-    <Select
-      labelId="visibility-label"
-      id="visibility-select"
-      value={statusFilter}
-      onChange={handleStatusFilterChange}
-      label="Visibility"
-    >
-      <MenuItem value="All">All</MenuItem>
-      <MenuItem value="Visible">Visible</MenuItem>
-      <MenuItem value="Hidden">Hidden</MenuItem>
-    </Select>
-  </FormControl>
-)}
+  {/* Visibility dropdown for Post and Comment */}
+  {(category === 'Post' || category === 'Comment') && (
+    <FormControl variant="outlined" className="dropdown">
+      <InputLabel id="visibility-label">Visibility</InputLabel>
+      <Select
+        labelId="visibility-label"
+        id="visibility-select"
+        value={statusFilter}
+        onChange={handleStatusFilterChange}
+        label="Visibility"
+      >
+        <MenuItem value="All">All</MenuItem>
+        <MenuItem value="Visible">Visible</MenuItem>
+        <MenuItem value="Hidden">Hidden</MenuItem>
+      </Select>
+    </FormControl>
+  )}
 
-  
-        <Button variant="contained" color="secondary" onClick={exportToExcel}>
-          Download Excel
-        </Button>
-      
-       {/* Render Create Account/Office buttons only for Admin, SuperUser, and Office */}
+  {/* Create Account/Office button */}
   {(category === 'Admin' || category === 'SuperUser' || category === 'Office') && (
     <Button variant="contained" color="primary" onClick={() => setShowForm(true)}>
       {category === 'Office' ? 'Add an Office' : `Create a ${category} Account`}
     </Button>
   )}
+
+  <Button variant="contained" color="secondary" onClick={exportToExcel}>
+    Download Excel
+  </Button>
 </div>
   
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {/* Conditionally render columns based on category */}
-              {category === 'Comment' ? (
-                <>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Comment ID</TableCell>
-                  <TableCell>Date Commented</TableCell>
-                  <TableCell>Comment</TableCell>
-                  <TableCell>Visibility</TableCell>
-                </>
-              ) : category === 'Office' ? (
-                <>
-                  <TableCell>Office</TableCell>
-                  <TableCell>Head</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Services</TableCell>
-                  <TableCell>Status</TableCell>
-                </>
-              ) : category === 'Post' ? (
-                <>
-                  <TableCell>Name (Post Owner)</TableCell>
-                  <TableCell>ID Number (Post Owner)</TableCell>
-                  <TableCell>Date Posted</TableCell>
-                  <TableCell>Content</TableCell>
-                  <TableCell>Visibility Status</TableCell>
-                </>
-              ) : (
-                <>
-                  <TableCell>Name</TableCell>
-                  <TableCell>ID Number</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Username</TableCell>
-                  <TableCell>Status</TableCell>
-                </>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredTableData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No data available.
+<TableContainer component={Paper}>
+  <Table>
+    <TableHead>
+      <TableRow>
+        {/* Conditionally render columns based on category */}
+        {category === 'Comment' ? (
+          <>
+            <TableCell>Name</TableCell>
+            <TableCell>Comment ID</TableCell>
+            <TableCell>Date Commented</TableCell>
+            <TableCell>Comment</TableCell>
+            <TableCell>Visibility</TableCell>
+          </>
+        ) : category === 'Office' ? (
+          <>
+            <TableCell>Office</TableCell>
+            <TableCell>Head</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Services</TableCell>
+            <TableCell>Status</TableCell>
+          </>
+        ) : category === 'Post' ? (
+          <>
+            <TableCell>Name (Post Owner)</TableCell>
+            <TableCell>ID Number (Post Owner)</TableCell>
+            <TableCell>Date Posted</TableCell>
+            <TableCell>Content</TableCell>
+            <TableCell>Visibility Status</TableCell>
+          </>
+        ) : category === 'User' ? (
+          <>
+            <TableCell>Full Name</TableCell>
+            <TableCell>ID Number</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Username</TableCell>
+            <TableCell>Role</TableCell>
+            <TableCell>Status</TableCell>
+          </>
+        ) : (
+          <>
+            <TableCell>Name</TableCell>
+            <TableCell>ID Number</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Username</TableCell>
+            <TableCell>Status</TableCell>
+          </>
+        )}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {filteredTableData.length === 0 ? (
+        <TableRow>
+          <TableCell colSpan={6} align="center">
+            No data available.
+          </TableCell>
+        </TableRow>
+      ) : (
+        filteredTableData.map((row, index) => (
+          <TableRow key={index}>
+            {category === 'Comment' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.commentId}</TableCell>
+                <TableCell>{row.timestamp}</TableCell>
+                <TableCell>{row.content}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.visible}
+                    onChange={() => handleToggleVisibility(index)}
+                    color="primary"
+                  />
+                  {row.visible ? 'Visible' : 'Hidden'}
                 </TableCell>
-              </TableRow>
+              </>
+            ) : category === 'Office' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.head}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.services}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.status}
+                    onChange={() => handleToggleStatus(index)}
+                    color="primary"
+                  />
+                  {row.status ? 'Enabled' : 'Disabled'}
+                </TableCell>
+              </>
+            ) : category === 'Post' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.idNumber}</TableCell>
+                <TableCell>{row.datePosted}</TableCell>
+                <TableCell>{row.content}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.visible}
+                    onChange={() => handleToggleStatus(index)}
+                    color="primary"
+                  />
+                  {row.visible ? 'Visible' : 'Hidden'}
+                </TableCell>
+              </>
+            ) : category === 'User' ? (
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.idNumber}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>{row.role}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.status}
+                    onChange={() => handleToggleUserStatus(index)}
+                    color="primary"
+                  />
+                  {row.status ? 'Enabled' : 'Disabled'}
+                </TableCell>
+              </>
             ) : (
-              filteredTableData.map((row, index) => (
-                <TableRow key={index}>
-                  {category === 'Comment' ? (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.commentId}</TableCell>
-                      <TableCell>{row.timestamp}</TableCell>
-                      <TableCell>{row.content}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={row.visible}
-                          onChange={() => handleToggleVisibility(index)}
-                          color="primary"
-                        />
-                        {row.visible ? 'Visible' : 'Hidden'}
-                      </TableCell>
-                    </>
-                  ) : category === 'Office' ? (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.head}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.services}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={row.status}
-                          onChange={() => handleToggleStatus(index)}
-                          color="primary"
-                        />
-                        {row.status ? 'Enabled' : 'Disabled'}
-                      </TableCell>
-                    </>
-                  ) : category === 'Post' ? (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.idNumber}</TableCell>
-                      <TableCell>{row.datePosted}</TableCell>
-                      <TableCell>{row.content}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={row.visible}
-                          onChange={() => handleToggleStatus(index)}
-                          color="primary"
-                        />
-                        {row.visible ? 'Visible' : 'Hidden'}
-                      </TableCell>
-                    </>
-                  ) : (
-                    <>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.idNumber}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                      <TableCell>{row.username}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={row.status}
-                          onChange={() => handleToggleStatus(index)}
-                          color="primary"
-                        />
-                        {row.status ? 'Enabled' : 'Disabled'}
-                      </TableCell>
-                    </>
-                  )}
-                </TableRow>
-              ))
+              <>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.idNumber}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={row.status}
+                    onChange={() => handleToggleStatus(index)}
+                    color="primary"
+                  />
+                  {row.status ? 'Enabled' : 'Disabled'}
+                </TableCell>
+              </>
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          </TableRow>
+        ))
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
+
 
 
       {/* Account/Office Creation Modal */}

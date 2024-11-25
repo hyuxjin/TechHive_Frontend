@@ -1,0 +1,575 @@
+.ws-about-us {
+  width: 100%;
+  position: relative;
+  height: 800px;
+  overflow: hidden;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.wildcat-cuteAU {
+  position: absolute;
+  top: 70px;
+  left: 280px;
+  width: 40px;
+  height: 40px;
+}
+
+.get-started2 {
+  position: absolute;
+  display: inline-block;
+  top: 70px;
+  left: 960px;
+  font-weight: 600;
+  font-size: 20px;
+  width: 144px;
+  height: 23px;
+  cursor: pointer;
+}
+
+.get-started2:hover {
+  transform: scale(1.1);
+}
+
+.half3,
+.get-started2,
+.contact-us2,
+.AboutUs-title {
+  transition: all 0.5s ease;
+  /* Smooth transition */
+}
+
+.half3 {
+  position: absolute;
+  top: 70px;
+  left: 1100px;
+  font-weight: 600;
+  font-size: 20px;
+  display: inline-block;
+  width: 81px;
+  height: 23px;
+}
+
+.contact-us2 {
+  position: absolute;
+  top: 70px;
+  display: inline-block;
+  height: 23px;
+  left: 1116px;
+  font-weight: 600;
+  font-size: 20px;
+  width: 136px;
+  cursor: pointer;
+}
+
+.contact-us2:hover {
+  transform: scale(1.1);
+}
+
+.AboutUs-title {
+  position: absolute;
+  left: 340px;
+  display: inline-block;
+  height: 30px;
+  top: 165px;
+  font-size: 25px;
+  font-weight: 600;
+  width: 140px;
+}
+
+
+.member-name {
+  position: absolute;
+  left: 340px;
+  display: inline-block;
+  height: 30px;
+  top: 205px;
+  font-size: 30px;
+  width: 400px;
+}
+
+.role-name {
+  position: absolute;
+  top: 311px;
+  left: 420px;
+  font-weight: 600;
+  font-size: 20px;
+  display: inline-block;
+  width: 48px;
+  height: 21px;
+}
+
+.role-info {
+  position: absolute;
+  top: 347px;
+  left: 420px;
+  font-size: 20px;
+  display: inline-block;
+  width: 266px;
+  height: 21px;
+}
+
+.role-bg {
+  position: absolute;
+  top: 308px;
+  left: 340px;
+  border-radius: 50%;
+  background-color: #8a252c;
+  width: 64px;
+  height: 60px;
+}
+
+.role-icon {
+  position: absolute;
+  top: 322px;
+  left: 357px;
+  width: 34px;
+  height: 31px;
+  overflow: hidden;
+}
+
+.motto-name {
+  position: absolute;
+  top: 413px;
+  left: 420px;
+  font-weight: 600;
+  font-size: 20px;
+  display: inline-block;
+  width: 48px;
+  height: 21px;
+}
+
+.motto-info {
+  position: absolute;
+  top: 449px;
+  left: 420px;
+  font-size: 20px;
+  display: inline-block;
+  width: 450px;
+  height: 21px;
+}
+
+.motto-bg {
+  position: absolute;
+  top: 410px;
+  left: 340px;
+  border-radius: 50%;
+  background-color: #8a252c;
+  width: 64px;
+  height: 60px;
+}
+
+.motto-icon {
+  position: absolute;
+  top: 427px;
+  left: 357px;
+  width: 30px;
+  height: 25px;
+}
+
+
+.hobbies-name {
+  position: absolute;
+  top: 520px;
+  left: 420px;
+  font-weight: 600;
+  font-size: 20px;
+  display: inline-block;
+  width: 48px;
+  height: 21px;
+}
+
+.hobbies-info {
+  position: absolute;
+  top: 557px;
+  left: 420px;
+  font-size: 20px;
+  display: inline-block;
+  width: 500px;
+  height: 21px;
+}
+
+.hobbies-bg {
+  position: absolute;
+  top: 520px;
+  left: 340px;
+  border-radius: 50%;
+  background-color: #8a252c;
+  width: 64px;
+  height: 60px;
+}
+
+.hobbies-icon {
+  position: absolute;
+  top: 533px;
+  left: 353px;
+  width: 38px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.members-dp {
+  position: absolute;
+  top: 175px;
+  left: 900px;
+  border-radius: 20px;
+  width: 308px;
+  height: 395px;
+  object-fit: cover;
+}
+
+.left-click {
+  position: absolute;
+  top: 600px;
+  left: 1015px;
+  border-radius: 2px;
+  width: 33px;
+  height: 33px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.left-click:hover {
+  transform: scale(1.2);
+}
+
+.right-click {
+  position: absolute;
+  top: 600px;
+  left: 1055px;
+  border-radius: 2px;
+  width: 33px;
+  height: 33px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.right-click:hover {
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .wildcat-cuteAU {
+    display: none;
+  }
+
+  .main-box {
+    top: 10px;
+    left: 10px;
+    width: 95%;
+    height: auto;
+  }
+
+  .half3 {
+    top: 50px;
+    left: 55%;
+    transform: translateX(-50%);
+  }
+
+  .contact-us2 {
+    top: 50px;
+    left: 25%;
+    transform: translateX(-50%);
+    width: auto;
+    font-size: 16px;
+  }
+
+  .get-started2 {
+    top: 50px;
+    left: 73%;
+    transform: translateX(-50%);
+    width: auto;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .AboutUs-title {
+    top: 20%;
+    left: 15%;
+    transform: translateX(-50%);
+    width: auto;
+    font-size: 16px;
+  }
+
+  .member-name {
+    top: 23%;
+    left: 10%;
+    /* transform: translateX(-50%) !important; */
+    /* width: 70% !important;
+    height: auto !important; */
+  }
+
+  .members-dp {
+    /* position: absolute; */
+    top: 32%;
+    width: 40%;
+    height: 35%;
+    left: 10%;
+  }
+
+  .left-click {
+    top: 70%;
+    left: 24%;
+    border-radius: 2px;
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+
+  .right-click {
+    top: 70%;
+    left: 31%;
+    border-radius: 2px;
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+
+  .role-bg {
+    top: 32%;
+    left: 55%;
+    height: 7%;
+    width: 7%;
+  }
+
+  .role-icon {
+    top: 33.5%;
+    left: 56.5%;
+    height: 4%;
+    width: 5%;
+  }
+
+  .role-name {
+    top: 32%;
+    left: 65%;
+  }
+
+  .role-info {
+    top: 37%;
+    left: 65%;
+    font-size: 17px;
+  }
+
+
+  .motto-bg {
+    top: 46%;
+    left: 55%;
+    height: 7%;
+    width: 7%;
+  }
+
+  .motto-icon {
+    top: 47.5%;
+    left: 56%;
+    height: 4%;
+    width: 5%;
+  }
+
+  .motto-name {
+    top: 46%;
+    left: 65%;
+  }
+
+  .motto-info {
+    top: 51%;
+    left: 65%;
+    width: 35%;
+    font-size: 16px;
+  }
+
+
+  .hobbies-bg {
+    top: 60%;
+    left: 55%;
+    height: 7%;
+    width: 7%;
+  }
+
+  .hobbies-icon {
+    top: 61%;
+    left: 56%;
+    height: 5%;
+    width: 5%;
+  }
+
+  .hobbies-name {
+    top: 60%;
+    left: 65%;
+  }
+
+  .hobbies-info {
+    top: 65%;
+    left: 65%;
+    width: 35%;
+    font-size: 16px;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+  .wildcat-cuteAU {
+    display: none;
+  }
+
+  .main-box {
+    top: 10px;
+    left: 10px;
+    width: 95%;
+    height: auto;
+  }
+
+  .half3 {
+    top: 40px;
+    left: 60%;
+    transform: translateX(-50%);
+  }
+
+  .wildcat-cute2 {
+    top: 3% !important;
+    width: 65px !important;
+    height: 60px !important;
+    left: 43% !important;
+  }
+
+  .contact-us2 {
+    top: 40px !important;
+    left: 25% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    font-size: 16px !important;
+  }
+
+  .get-started2 {
+    top: 40px;
+    left: 73%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 23px;
+  }
+
+  .AboutUs-title {
+    top: 20% !important;
+    left: 17% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    font-size: 16px !important;
+  }
+
+  .member-name {
+    top: 23% !important;
+    left: 7% !important;
+  }
+
+  .members-dp {
+    top: 32% !important;
+    width: 40% !important;
+    height: 30% !important;
+    left: 7% !important;
+  }
+
+  .left-click {
+    top: 65%;
+    left: 18%;
+    border-radius: 2px;
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+
+  .right-click {
+    top: 65%;
+    left: 29%;
+    border-radius: 2px;
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+
+  .role-bg {
+    top: 33%;
+    left: 49%;
+    height: 6%;
+    width: 8%;
+  }
+
+  .role-icon {
+    top: 34.5%;
+    left: 51.5%;
+    height: 2.5%;
+    width: auto;
+  }
+
+  .role-name {
+    top: 32.5%;
+    left: 59%;
+    font-size: 19px;
+  }
+
+  .role-info {
+    top: 36.5%;
+    left: 59%;
+    font-size: 13px;
+  }
+
+
+  .motto-bg {
+    top: 44%;
+    left: 49%;
+    height: 6%;
+    width: 8%;
+  }
+
+  .motto-icon {
+    top: 45.6%;
+    left: 51.3%;
+    height: 2.5%;
+    width: auto;
+  }
+
+  .motto-name {
+    top: 44.5%;
+    left: 59%;
+    font-size: 19px;
+  }
+
+  .motto-info {
+    top: 48.5%;
+    left: 59%;
+    font-size: 13px;
+  }
+
+
+  .hobbies-bg {
+    top: 57%;
+    left: 49%;
+    height: 6%;
+    width: 8%;
+  }
+
+  .hobbies-icon {
+    top: 58%;
+    left: 50.3%;
+    height: 4%;
+    width: auto;
+  }
+
+  .hobbies-name {
+    top: 57.5%;
+    left: 59%;
+    font-size: 19px;
+  }
+
+  .hobbies-info {
+    top: 61.5%;
+    left: 59%;
+    font-size: 13px;
+
+  }
+
+}

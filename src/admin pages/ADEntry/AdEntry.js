@@ -1,214 +1,345 @@
-import React, { useState } from "react";
-import reportsTitle from '../../assets/image/reportsTitle.png'; // Ensure correct path to reportsTitle.png
-import AdNavBar from '../../components/AdNavBar'; // Ensure correct path to AdNavBar
+import React, { useState, useEffect } from 'react';
+import AdNavBar from '../../components/AdNavBar';
 import './AdEntry.css';
 
-// Placeholder images
-const CitLogo = "https://via.placeholder.com/50";
-const ExampleImage = "https://via.placeholder.com/100";
-const FlagIcon = process.env.PUBLIC_URL + "/flag.png"; // Flag icon from the public folder
-const BackIcon = process.env.PUBLIC_URL + "/back.png"; // Back button icon from the public folder
+const BASE_URL = 'http://localhost:8080';
 
-export default function AdEntry() {
-  const [incomingReports, setIncomingReports] = useState([
-    {
-      id: 1,
-      name: "Richard Molina",
-      category: "Critical Emergency",
-      location: "NGE Building",
-      description: "A 45-year-old male was brought to the emergency department...",
-      image: ExampleImage,
-      date: new Date().toLocaleDateString(),
-      status: 'pending', // Maroon light active initially
-      isFlagged: false
-    },
-    {
-      id: 2,
-      name: "Jessica Santos",
-      category: "Urgent Situation",
-      location: "Main Hall",
-      description: "An urgent request for maintenance...",
-      image: ExampleImage,
-      date: new Date().toLocaleDateString(),
-      status: 'pending', // Maroon light active initially
-      isFlagged: false
-    }
-  ]);
-
+const AdEntry = () => {
+  const [reports, setReports] = useState([]);
   const [flaggedReports, setFlaggedReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Function to toggle flag status of a report
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      console.log('Fetching reports from:', `${BASE_URL}/api/user/reports`);
+      const response = await fetch(`${BASE_URL}/api/user/reports`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response not ok:', response.status, errorText);
+        throw new Error(`Failed to fetch reports: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Received data:', data);
+      
+      const transformedReports = data.map(report => ({
+        id: report.reportId,
+        name: report.userFullName || 'Anonymous',
+        category: report.reportType || 'General Report',
+        location: report.location || 'Unknown Location',
+        description: report.description,
+        images: [
+          report.image1Path,
+          report.image2Path,
+          report.image3Path
+        ].filter(Boolean),
+        date: new Date(report.submittedAt).toLocaleDateString(),
+        status: getStatusFromBackend(report.status),
+        isFlagged: false,
+        concernedOffice: report.concernedOffice
+      }));
+
+      console.log('Transformed reports:', transformedReports);
+      setReports(transformedReports);
+    } catch (err) {
+      setError('Failed to load reports. Please try again later.');
+      console.error('Error fetching reports:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusFromBackend = (status) => {
+    const statusMap = {
+      'PENDING': 'pending',
+      'IN_PROGRESS': 'ongoing',
+      'APPROVED': 'resolved',
+      'DENIED': 'acknowledged'
+    };
+    return statusMap[status] || 'pending';
+  };
+
+  const getBackendStatus = (frontendStatus) => {
+    const statusMap = {
+      'pending': 'PENDING',
+      'ongoing': 'IN_PROGRESS',
+      'resolved': 'APPROVED',
+      'acknowledged': 'DENIED'
+    };
+    return statusMap[frontendStatus] || 'PENDING';
+  };
+
   const toggleFlag = (reportId) => {
-    setIncomingReports((prevReports) => {
-      return prevReports.map((report) => {
+    setReports(prevReports => {
+      const updatedReports = prevReports.map(report => {
         if (report.id === reportId) {
-          const updatedFlaggedStatus = !report.isFlagged;
-          if (updatedFlaggedStatus) {
-            setFlaggedReports((prevFlagged) => [...prevFlagged, report]);
+          const updatedReport = { ...report, isFlagged: !report.isFlagged };
+          if (updatedReport.isFlagged) {
+            setFlaggedReports(prev => [...prev, updatedReport]);
           } else {
-            setFlaggedReports((prevFlagged) => prevFlagged.filter((r) => r.id !== reportId));
+            setFlaggedReports(prev => prev.filter(r => r.id !== reportId));
           }
-          return { ...report, isFlagged: updatedFlaggedStatus };
+          return updatedReport;
         }
         return report;
       });
+      return updatedReports;
     });
   };
 
-  // Function to handle report click and change traffic light to gray (acknowledged) only if still pending
   const handleReportClick = (report) => {
     if (report.status === 'pending') {
-      setIncomingReports((prevReports) =>
-        prevReports.map((r) =>
-          r.id === report.id ? { ...r, status: 'acknowledged' } : r
-        )
-      );
-      setSelectedReport({ ...report, status: 'acknowledged' }); // Open the pop-up modal with updated status
+      const updatedReport = { ...report, status: 'acknowledged' };
+      updateTrafficLight(report.id, 'acknowledged');
+      setSelectedReport(updatedReport);
     } else {
-      setSelectedReport(report); // Open the pop-up with the existing status
+      setSelectedReport(report);
     }
   };
 
-  // Function to close the report modal
-  const closeReportModal = () => {
-    setSelectedReport(null);
+  const closeReportModal = () => setSelectedReport(null);
+
+  const updateTrafficLight = async (reportId, newStatus) => {
+    try {
+      console.log('Updating status:', reportId, newStatus);
+      const response = await fetch(`${BASE_URL}/api/user/reports/${reportId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: getBackendStatus(newStatus) })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to update status:', response.status, errorText);
+        throw new Error('Failed to update status');
+      }
+
+      const updatedReport = await response.json();
+      console.log('Status updated successfully:', updatedReport);
+
+      setReports(prevReports =>
+        prevReports.map(report =>
+          report.id === reportId ? { ...report, status: newStatus } : report
+        )
+      );
+
+      setFlaggedReports(prevReports =>
+        prevReports.map(report =>
+          report.id === reportId ? { ...report, status: newStatus } : report
+        )
+      );
+
+      if (selectedReport?.id === reportId) {
+        setSelectedReport(prev => ({ ...prev, status: newStatus }));
+      }
+    } catch (err) {
+      setError('Failed to update report status. Please try again.');
+      console.error('Error updating status:', err);
+    }
   };
 
-  // Function to update the traffic light status inside the pop-up
-  const updateTrafficLight = (newStatus) => {
-    setIncomingReports((prevReports) =>
-      prevReports.map((r) =>
-        r.id === selectedReport.id ? { ...r, status: newStatus } : r
-      )
-    );
-    setFlaggedReports((prevFlagged) =>
-      prevFlagged.map((r) =>
-        r.id === selectedReport.id ? { ...r, status: newStatus } : r
-      )
-    );
-    setSelectedReport((prevSelectedReport) => ({
-      ...prevSelectedReport,
-      status: newStatus,
-    }));
-  };
-
-  // Render traffic lights for non-clickable in report card (smaller traffic lights)
-  const renderTrafficLightsNonClickable = (report) => (
+  const TrafficLights = ({ report, isClickable }) => (
     <div className="traffic-lights">
-      <div className={`traffic-circle maroon ${report.status === 'pending' ? 'active' : ''}`} />
-      <div className={`traffic-circle gray ${report.status === 'acknowledged' ? 'active' : ''}`} />
-      <div className={`traffic-circle yellow ${report.status === 'ongoing' ? 'active' : ''}`} />
-      <div className={`traffic-circle green ${report.status === 'resolved' ? 'active' : ''}`} />
-    </div>
-  );
-
-  // Render traffic lights for clickable inside the pop-up (full-size traffic lights)
-  const renderTrafficLightsClickable = (report) => (
-    <div className="traffic-lights">
-      <div className={`traffic-circle maroon ${report.status === 'pending' ? 'active' : ''}`} />
-      <div className={`traffic-circle gray ${report.status === 'acknowledged' ? 'active' : ''}`} />
-      <div
+      <div 
+        className={`traffic-circle maroon ${report.status === 'pending' ? 'active' : ''}`}
+      />
+      <div 
+        className={`traffic-circle gray ${report.status === 'acknowledged' ? 'active' : ''}`}
+      />
+      <div 
         className={`traffic-circle yellow ${report.status === 'ongoing' ? 'active' : ''}`}
-        onClick={() => updateTrafficLight('ongoing')}
+        onClick={isClickable ? () => updateTrafficLight(report.id, 'ongoing') : undefined}
+        style={isClickable ? { cursor: 'pointer' } : {}}
       />
-      <div
+      <div 
         className={`traffic-circle green ${report.status === 'resolved' ? 'active' : ''}`}
-        onClick={() => updateTrafficLight('resolved')}
+        onClick={isClickable ? () => updateTrafficLight(report.id, 'resolved') : undefined}
+        style={isClickable ? { cursor: 'pointer' } : {}}
       />
     </div>
   );
 
-  const renderReportCard = (report) => (
-    <div key={report.id} className="entrypost-card report-container"> {/* Added report-container class */}
+  const ReportCard = ({ report }) => (
+    <div className="entrypost-card" onClick={() => handleReportClick(report)}>
       <div className="card-header">
-        {renderTrafficLightsNonClickable(report)}
-        <div
+        <TrafficLights report={report} isClickable={false} />
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFlag(report.id);
+          }}
           className="flag-icon"
-          onClick={() => toggleFlag(report.id)}
         >
-          <img src={FlagIcon} alt="Flag Report" />
-        </div>
+          🚩
+        </button>
       </div>
 
-      {/* Updated profile picture and name layout */}
-      <div className="collapsed-details" onClick={() => handleReportClick(report)}>
-        <div className="entry-profile-container"> {/* New container for profile picture and name */}
-          <img src={CitLogo} alt="Cit Logo" className="profile-picture" />
-          <h5 className="profile-name">{report.name}</h5>
-        </div>
-        <div className="entry-details">
-          <h5>Date: <span>{report.date}</span></h5>
-          <h5>Location: <span>{report.location}</span></h5>
-        </div>
+      <div className="entry-profile-container">
+        <img
+          src="/api/placeholder/40/40"
+          alt="Profile"
+          className="profile-picture"
+        />
+        <h5 className="profile-name">{report.name}</h5>
       </div>
+
+      <div className="entry-details">
+        <h5>Date: <span>{report.date}</span></h5>
+        <h5>Location: <span>{report.location}</span></h5>
+        {report.concernedOffice && (
+          <h5>Office: <span>{report.concernedOffice}</span></h5>
+        )}
+        <p className="description">{report.description}</p>
+      </div>
+
+      {report.images?.length > 0 && (
+        <div className="entry-images">
+          {report.images.map((img, idx) => {
+            const imageUrl = img.startsWith('http') 
+              ? img 
+              : `${BASE_URL}${img}`;
+            return (
+              <img
+                key={idx}
+                src={imageUrl}
+                alt={`Report ${idx + 1}`}
+                className="report-image"
+                onError={(e) => {
+                  e.target.src = "/api/placeholder/80/80";
+                  console.error('Failed to load image:', imageUrl);
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="entrymain-container">
+        <header>
+          <AdNavBar />
+        </header>
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="entrymain-container">
+        <header>
+          <AdNavBar />
+        </header>
+        <div className="error-message">
+          ⚠️ {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="entrymain-container">
       <header>
         <AdNavBar />
       </header>
-      <main className="entrysub-container">
-        <img src={reportsTitle} alt="Incoming Reports" className="report-header-image" />
-
-        {/* Flagged Reports Section */}
-        <section className="flagged-reports-section">
-          <h3>Flagged Reports</h3>
+      <div className="entrysub-container">
+        <h1 className="dashboard-title">Reports Dashboard</h1>
+        
+        <section className="reports-section">
+          <h2 className="section-title">Flagged Reports</h2>
           {flaggedReports.length > 0 ? (
-            flaggedReports.map((report) => renderReportCard(report))
+            flaggedReports.map(report => (
+              <ReportCard key={report.id} report={report} />
+            ))
           ) : (
-            <p>No flagged reports.</p>
+            <p className="no-reports">No flagged reports</p>
           )}
         </section>
 
-        {/* Incoming Reports Section */}
-        <section className="incoming-reports-section">
-          <h3>Incoming Reports</h3>
-          {incomingReports
-            .filter((report) => !report.isFlagged)
-            .map((report) => renderReportCard(report))}
+        <section className="reports-section">
+          <h2 className="section-title">Incoming Reports</h2>
+          {reports
+            .filter(report => !report.isFlagged)
+            .map(report => (
+              <ReportCard key={report.id} report={report} />
+            ))}
         </section>
-      </main>
 
-      {/* Pop-up Modal for report details */}
-      {selectedReport && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            {/* Back button with back.png icon */}
-            <div className="modal-header">
-              <button className="back-button" onClick={closeReportModal}>
-                <img src={BackIcon} alt="Back" className="back-button-icon" />
-              </button>
-
-              {/* Traffic lights and flag icon with adjusted spacing */}
-              <div className="traffic-lights-and-flag">
-                {renderTrafficLightsClickable(selectedReport)}
-                <div
-                  className="flag-icon-modal"
-                  onClick={() => toggleFlag(selectedReport.id)}
+        {selectedReport && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  onClick={closeReportModal}
+                  className="back-button"
                 >
-                  <img src={FlagIcon} alt="Flag Report" />
+                  ←
+                </button>
+                <div className="traffic-lights-and-flag">
+                  <TrafficLights report={selectedReport} isClickable={true} />
+                  <button
+                    onClick={() => toggleFlag(selectedReport.id)}
+                    className="flag-icon"
+                  >
+                    🚩
+                  </button>
                 </div>
               </div>
-            </div>
 
-            <h2>{selectedReport.name}</h2>
-            <p><strong>Date:</strong> {selectedReport.date}</p>
-            <p><strong>Location:</strong> {selectedReport.location}</p>
-            <p><strong>Category:</strong> {selectedReport.category}</p>
-            <p>{selectedReport.description}</p>
+              <div className="modal-body">
+                <h2>{selectedReport.name}</h2>
+                <div className="report-details">
+                  <p><strong>Date:</strong> {selectedReport.date}</p>
+                  <p><strong>Location:</strong> {selectedReport.location}</p>
+                  <p><strong>Category:</strong> {selectedReport.category}</p>
+                  {selectedReport.concernedOffice && (
+                    <p><strong>Concerned Office:</strong> {selectedReport.concernedOffice}</p>
+                  )}
+                  <p className="description">{selectedReport.description}</p>
+                </div>
 
-            {/* Add three image placeholders */}
-            <div className="modal-image-container">
-              <img src={selectedReport.image} alt="Report Image 1" className="modal-image-small" />
-              <img src={selectedReport.image} alt="Report Image 2" className="modal-image-small" />
-              <img src={selectedReport.image} alt="Report Image 3" className="modal-image-small" />
+                {selectedReport.images?.length > 0 && (
+                  <div className="modal-image-container">
+                    {selectedReport.images.map((img, idx) => {
+                      const imageUrl = img.startsWith('http') 
+                        ? img 
+                        : `${BASE_URL}${img}`;
+                      return (
+                        <img
+                          key={idx}
+                          src={imageUrl}
+                          alt={`Report ${idx + 1}`}
+                          className="modal-image-small"
+                          onError={(e) => {
+                            e.target.src = "/api/placeholder/200/200";
+                            console.error('Failed to load image:', imageUrl);
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default AdEntry;

@@ -1,0 +1,156 @@
+.ws-report {
+  width: 100%;
+  position: relative;
+  height: 729px;
+  overflow: hidden;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.bg2-expanded {
+  position: absolute;
+  left: 0;
+  top: -582px;
+  height: 1414px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.IncidentReport-Pic {
+  position: absolute;
+  top: 90px;
+  left: 655px;
+  width: 267.8px;
+  height: 132px;
+  object-fit: cover;
+}
+
+.INTitle1 {
+  position: absolute;
+  display: inline-block;
+  top: 280px;
+  left: 500px;
+  font-size: 36px;
+  width: 600px;
+  height: 40px;
+}
+
+.INTitle2 {
+  position: absolute;
+  display: inline-block;
+  top: 360px;
+  left: 660px;
+  font-size: 36px;
+  width: 230px;
+  height: 40px;
+}
+
+.INReport {
+  position: absolute;
+  top: 460px;
+  left: 695px;
+  width: 167px;
+  height: 147px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 10px; /* Slightly round the edges */
+}
+
+.INReport:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+}
+
+.INReport:active {
+  transform: translateY(2px); /* Slight push down on click */
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3); /* Reduce shadow when clicked */
+}
+
+@media (max-width: 768px) {
+  .IncidentReport-Pic {
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 25%;
+    object-fit: cover;
+  }
+
+  .INTitle1 {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .INTitle2 {
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .INReport {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 33%;
+    height: 28%;
+    object-fit: cover;
+    transition: none;
+  }
+
+  .INReport:hover {
+    transform: translateX(-50%) scale(1.05);
+    transition: transform 0.3s ease;
+  }
+}
+
+@media (max-width: 500px) {
+  .IncidentReport-Pic {
+    top: 20% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48%;
+    height: 14%;
+    object-fit: cover;
+  }
+
+  .INTitle1 {
+    top: 50% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .INTitle2 {
+    top: 60% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .INReport {
+    top: 70% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 31%;
+    height: 20%;
+    padding: 0.3rem;
+    object-fit: cover;
+    text-align: center;
+    transition: none;
+    position: absolute;
+  }
+}

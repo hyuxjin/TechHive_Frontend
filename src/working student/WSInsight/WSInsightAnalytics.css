@@ -1,0 +1,1593 @@
+.WSInsightAnalytics_WSInsightAnalytics {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  overflow: hidden;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+  transition: height 0.3s ease-in-out;
+}
+
+.WSInsightAnalytics_WSInsightAnalytics.minimized {
+  height: 1750px;
+  /* Adjust this value as needed */
+}
+
+.WSInsightAnalytics_WSInsightAnalytics.expanded {
+  height: 2340px;
+}
+
+.FeedbackSection {
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.FeedbackSection.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.FeedbackSection.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ReportFeedbackContainer {
+  transition: top 0.3s ease-in-out;
+}
+
+.minimized .ReportFeedbackContainer {
+  top: 1700px;
+  /* Adjust this value as needed */
+}
+
+.expanded .ReportFeedbackContainer {
+  top: 1736px;
+}
+
+.InsightTitle {
+  position: absolute;
+  top: 71px;
+  left: 640px;
+  width: 276px;
+  height: 231px;
+  object-fit: cover;
+}
+
+.AnalyticsTitle {
+  position: absolute;
+  display: inline-block;
+  top: 345px;
+  left: 230px;
+  font-size: 24px;
+  width: 600px;
+  height: 40px;
+}
+
+.WSInsightBox {
+  position: absolute;
+  top: 420px;
+  left: 180px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 1100px;
+  height: 1230px;
+}
+
+.YearContainer {
+  position: absolute;
+  left: 244px;
+  top: 455px;
+  width: 282.5px;
+  height: 90px;
+}
+
+.YearBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 282.5px;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+}
+
+.Year {
+  position: absolute;
+  left: 19px;
+  top: 9px;
+  width: 50;
+  height: 23px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.Calendar {
+  position: absolute;
+  left: 19px;
+  top: 42px;
+  width: 36px;
+  height: 33px;
+}
+
+.arrow_left {
+  position: absolute;
+  left: 70px;
+  top: 45px;
+  width: 35px;
+  height: 30px;
+}
+
+.arrow_left:hover {
+  transform: scale(1.3);
+}
+
+._2024 {
+  position: absolute;
+  left: 105px;
+  top: 46px;
+  width: 56px;
+  height: 25px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.arrow_right {
+  position: absolute;
+  left: 160px;
+  top: 45px;
+  width: 35px;
+  height: 30px;
+}
+
+.arrow_right:hover {
+  transform: scale(1.3);
+}
+
+.BarGraphContainer {
+  position: absolute;
+  left: 244px;
+  top: 584px;
+  width: 961px;
+  height: 523px;
+}
+
+.BarBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 961px;
+  height: 523px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 15px;
+}
+
+.MonthlyAccidentEventStats {
+  position: absolute;
+  top: 40px;
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%);
+  width: auto; /* Let the width adjust automatically */
+  font-size: 18px; /* Adjust font size to fit */
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+
+.BarGraph {
+  position: absolute;
+  left: 45px;
+  top: 94px;
+  width: 917px;
+  height: 402px;
+}
+
+.grayline {
+  position: absolute;
+  left: 28px;
+  top: 284px;
+  width: 800px;
+  height: 10px;
+  background: rgba(217, 217, 217, 1);
+  border-radius: 7px;
+}
+
+.PAContainer {
+  position: absolute;
+  left: 42px;
+  top: 315px;
+  width: 125px;
+  height: 14px;
+}
+
+.PhysicalAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 106px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.PABox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(249, 65, 68, 1);
+  border-radius: 4px;
+}
+
+.EAContainer {
+  position: absolute;
+  left: 263px;
+  top: 316px;
+  width: 155px;
+  height: 14px;
+}
+
+.EnvironmentalAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 135px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.EABox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(249, 132, 74, 0.78);
+  border-radius: 4px;
+}
+
+.VAContainer {
+  position: absolute;
+  left: 513px;
+  top: 316px;
+  width: 125px;
+  height: 14px;
+}
+
+.VehicleAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 106px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.VABox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(67, 170, 139, 1);
+  border-radius: 4px;
+}
+
+.LAContainer {
+  position: absolute;
+  left: 42px;
+  top: 351px;
+  width: 128px;
+  height: 14px;
+}
+
+.LaboratoryAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 109px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.LABox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(243, 114, 44, 1);
+  border-radius: 4px;
+}
+
+.FireRelatedContainer {
+  position: absolute;
+  left: 263px;
+  top: 351px;
+  width: 136px;
+  height: 14px;
+}
+
+.FireRelatedAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 116px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.FireRelatedBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(249, 199, 79, 1);
+  border-radius: 4px;
+}
+
+.EquipmentRelatedContainer {
+  position: absolute;
+  left: 513px;
+  top: 351px;
+  width: 178px;
+  height: 14px;
+}
+
+.EquipmentRelatedAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 159px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.EquipmentRelatedBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(77, 144, 142, 1);
+  border-radius: 4px;
+}
+
+.FacilityRelatedContainer {
+  position: absolute;
+  left: 42px;
+  top: 387px;
+  width: 153px;
+  height: 14px;
+}
+
+.FacilityRelatedAccident {
+  position: absolute;
+  left: 18px;
+  top: 0px;
+  width: 135px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.FacilityRelatedBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(248, 150, 30, 1);
+  border-radius: 4px;
+}
+
+.HRContainer {
+  position: absolute;
+  left: 263px;
+  top: 387px;
+  width: 152px;
+  height: 14px;
+}
+
+.HealthRelatedAccident {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 133px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.HRBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(144, 190, 109, 1);
+  border-radius: 4px;
+}
+
+.EventContainer {
+  position: absolute;
+  left: 513px;
+  top: 387px;
+  width: 55px;
+  height: 14px;
+}
+
+.Event {
+  position: absolute;
+  left: 19px;
+  top: 0px;
+  width: 36px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.EventBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  background: rgba(43, 93, 138, 1);
+  border-radius: 4px;
+}
+
+.PieChartContainer {
+  position: absolute;
+  left: 244px;
+  top: 1161px;
+  width: 961px;
+  height: 300px;
+}
+
+
+.PieBackground {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 961px;
+  height: 441px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 13px;
+}
+
+.PieContainer {
+  position: absolute;
+  left: 325px;
+  top: 38px;
+  width: 325px;
+  height: 362px;
+}
+
+.PieGroup {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 325px;
+  height: 362px;
+}
+
+.ApprovedDeniedReports {
+  position: absolute;
+  left: 10px;
+  bottom: 370px;
+  width: 325px;
+  height: 25.99px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.Approved {
+  margin-top: 10px;
+  position: absolute;
+  left: 74px;
+  top: 338px;
+  width: 72px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ApprovedBox {
+  margin-top: 10px;
+  position: absolute;
+  left: 27px;
+  top: 329px;
+  width: 33px;
+  height: 32px;
+  background: rgba(254, 176, 16, 1);
+  border-radius: 6px;
+}
+
+.Denied {
+  margin-top: 10px;
+  position: absolute;
+  left: 238px;
+  top: 338px;
+  width: 54px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.DeniedBox {
+  margin-top: 10px;
+  position: absolute;
+  left: 186px;
+  top: 329px;
+  width: 33px;
+  height: 32px;
+  background: rgba(138, 37, 44, 1);
+  border-radius: 6px;
+}
+
+.Abg {
+  position: absolute;
+  left: 37px;
+  top: 218px;
+  width: 46px;
+  height: 29px;
+  background: rgba(245, 245, 245, 0.83);
+  border-radius: 6px;
+}
+
+.ApprovedPercentage {
+  position: absolute;
+  left: 46px;
+  top: 223px;
+  width: 30px;
+  height: 18px;
+  color: #feb010;
+  font-size: 1.2rem;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.Dbg {
+  position: absolute;
+  left: 221px;
+  top: 92px;
+  width: 46px;
+  height: 29px;
+  background: rgba(245, 245, 245, 0.83);
+  border-radius: 6px;
+}
+
+.DeniedPercentage {
+  position: absolute;
+  left: 230px;
+  top: 50px;
+  left: 50px;
+  width: 30px;
+  height: 18px;
+  color: #8a252c;
+  font-size: 1.2rem;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.WSInsightBox2 {
+  position: absolute;
+  top: 1800px;
+  left: 180px;
+  width: 1100px;
+  height: auto; /* Adjust height dynamically */
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px; /* Add some padding */
+  overflow: hidden;
+}
+
+.ReportFeedbackContainer {
+  position: absolute;
+  left: 146px;
+  top: 1736px;
+  width: 236px;
+  height: 36px;
+}
+
+.ReportFeedback {
+  position: absolute;
+  right: 0px;
+  top: 4px;
+  width: 200px;
+  height: 25px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.Toggle {
+  position: absolute;
+  left: -7px;
+  top: 9px;
+  width: 26px;
+  height: 23px;
+}
+
+.TableContainer {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.TOTALREPORTSSUBMITTED {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  display: block;
+  text-align: center;
+  color: #8a252c;
+}
+
+.TotalWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* Space between the total and table */
+}
+
+.FeedbackTable {
+  width: 100%;
+  border-collapse: collapse; /* Remove gaps between cells */
+  text-align: left;
+  font-size: 14px;
+}
+
+.FeedbackTable th {
+  background-color: #8a252c;
+  color: #feb010;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.FeedbackTable td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center; /* Center-align for better appearance */
+}
+
+.FeedbackTable tr:nth-child(even) {
+  background-color: #f9f9f9; /* Add alternating row color */
+}
+
+.FeedbackTable tr:hover {
+  background-color: #f1f1f1; /* Add hover effect */
+}
+
+.Total1 {
+  width: 60px;
+  height: 60px;
+  background: rgba(138, 37, 44, 1);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.TotalNumber1 {
+  position: absolute;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(246, 195, 1, 1);
+  text-align: center;
+}
+
+.center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
+
+
+
+.TotalNumber2 {
+  position: absolute;
+  right: 227px;
+  top: 148px;
+  width: 38px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.GroupTable {
+  position: absolute;
+  left: 94px;
+  top: 240px;
+  width: 1005px;
+  height: 186px;
+}
+
+.Table {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 1004px;
+  height: 186px;
+}
+
+._1 {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 200px;
+  height: 62px;
+  background: rgba(138, 37, 44, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.SubmissionDate {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+._2_1 {
+  position: absolute;
+  left: 200px;
+  top: 0px;
+  width: 200px;
+  height: 62px;
+  background: rgba(138, 37, 44, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Location{
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+._3 {
+  position: absolute;
+  left: 401px;
+  top: 0px;
+  width: 200px;
+  height: 62px;
+  background: rgba(138, 37, 44, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Reportcategory{
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+._4 {
+  position: absolute;
+  left: 602px;
+  top: 0px;
+  width: 200px;
+  height: 61px;
+  background: rgba(138, 37, 44, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Status {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+._6 {
+  position: absolute;
+  left: 0px;
+  top: 62px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+._20240116 {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._7 {
+  position: absolute;
+  left: 200px;
+  top: 62px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.ngebuilding {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._8 {
+  position: absolute;
+  left: 401px;
+  top: 62px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Criticalemergency {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._9 {
+  position: absolute;
+  left: 602px;
+  top: 62px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+._11 {
+  position: absolute;
+  left: 0px;
+  top: 124px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+._20240116_2 {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._12 {
+  position: absolute;
+  left: 200px;
+  top: 124px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.outsidecampus {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._13 {
+  position: absolute;
+  left: 401px;
+  top: 124px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Generalreport {
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._14 {
+  position: absolute;
+  left: 602px;
+  top: 124px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.pending {
+  position: absolute;
+  left: 8px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._15 {
+  position: absolute;
+  left: 803px;
+  top: 0px;
+  width: 200px;
+  height: 61px;
+  background: rgba(138, 37, 44, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.Dateresolved {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+._16 {
+  position: absolute;
+  left: 803px;
+  top: 62px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+._5_1 {
+  position: absolute;
+  left: 8px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+._17 {
+  position: absolute;
+  left: 803px;
+  top: 124px;
+  width: 200px;
+  height: 62px;
+  background: rgba(255, 254, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+._0 {
+  position: absolute;
+  left: 8px;
+  top: 13px;
+  width: 181px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: rgba(246, 195, 1, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+  .WSInsightAnalytics_WSInsightAnalytics {
+    height: 400vh !important;
+  }
+
+  .InsightTitle {
+    top: 4% !important;
+    left: 38% !important;
+    width: 200px !important;
+    height: 180px !important;
+  }
+
+  .AnalyticsTitle {
+    top: 250px !important;
+    left: 8% !important;
+    font-size: 20px !important;
+    width: 90% !important;
+  }
+
+  .WSInsightBox {
+    top: 300px;
+    left: 5%;
+    width: 90%;
+    height: 45%;
+  }
+
+  .TotalWrapper {
+    margin-top: 10px;
+  }
+
+  .YearContainer {
+    top: 13%;
+    left: 10%;
+    width: 40%;
+    height: 5%;
+  }
+
+  .YearBox {
+    width: 70%;
+  }
+
+  .BarGraphContainer {
+    left: 10%;
+    width: 90%;
+    top: 400px;
+  }
+
+  .BarBox {
+    top: 10%;
+    width: 90%;
+    height: 90%;
+  }
+
+  .MonthlyAccidentEventStats {
+    top: 15%;
+    left: 28%;
+    font-size: 18px;
+  }
+
+  .grayline {
+    left: 4%;
+    width: 530px;
+  }
+
+  .PAContainer,
+  .LAContainer,
+  .FacilityRelatedContainer {
+    left: 4%;
+  }
+
+  .EAContainer,
+  .FireRelatedContainer,
+  .HRContainer {
+    left: 38%;
+  }
+
+  .VAContainer,
+  .EquipmentRelatedContainer,
+  .EventContainer {
+    left: 70%;
+  }
+
+  .PhysicalAccident,
+  .EnvironmentalAccident,
+  .VehicleAccident,
+  .LaboratoryAccident,
+  .FireRelatedAccident,
+  .EquipmentRelatedAccident,
+  .FacilityRelatedAccident,
+  .HealthRelatedAccident,
+  .Event {
+    font-size: 10px;
+  }
+
+  .PieChartContainer {
+    left: 10%;
+    top: 38%;
+  }
+
+  .PieBackground {
+    width: 65%;
+  }
+
+  .PieContainer {
+    left: 10%;
+  }
+
+  .ApprovedDeniedReports {
+    left: 7%;
+    top: -20%;
+    font-size: 18px;
+  }
+
+  .PieGroup {
+    left: 27%;
+    top: 10%;
+    height: 73%;
+  }
+
+  .ApprovedPercentage {
+    left: 55%;
+    top: 73%;
+  }
+
+  .ApprovedBox {
+    top: 105%;
+  }
+
+  .DeniedPercentage {
+    top: 10%;
+  }
+
+  .Approved {
+    top: 108%;
+    font-size: 15px;
+  }
+
+  .DeniedBox {
+    top: 105%;
+  }
+
+  .Denied {
+    top: 108%;
+    font-size: 15px;
+  }
+
+  .Toggle {
+    left: -40%;
+    top: -500%;
+  }
+
+  .ReportFeedback {
+    left: -20%;
+    top: -510%;
+  }
+
+  .WSInsightBox2 {
+    left: 5%;
+    top: 63%;
+    width: 90%;
+    height: 15%;
+  }
+
+  .TableContainer {
+    top: 63%;
+    left: -5%;
+  }
+
+  .TOTALREPORTSSUBMITTED {
+    top: 20%;
+    font-size: 15px;
+  }
+
+  .Total1 {
+    width: 50px;
+    height: 50px;
+  }
+
+  .TotalNumber1 {
+    font-size: 20px;
+  }
+
+  .FeedbackTable th,
+  .FeedbackTable td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .SubmissionDate {
+    top: 5%;
+    left: -22%;
+    font-size: 10px;
+  }
+
+  .Location {
+    top: 5%;
+    left: -22%;
+    font-size: 10px;
+  }
+
+  .Reportcategory{
+    top: 5%;
+    left: -22%;
+    font-size: 10px;
+  }
+
+  .Status {
+    top: 5%;
+    left: -22%;
+    font-size: 10px;
+  }
+
+  .Dateresolved{
+    top: 5%;
+    left: -22%;
+    font-size: 10px;
+  }
+}
+
+/* Smaller screen styles (500px width) */
+@media screen and (max-width: 500px) {
+  .WSInsightAnalytics_WSInsightAnalytics {
+    height: 300vh !important;
+  }
+
+  .InsightTitle {
+    top: 4% !important;
+    left: 35% !important;
+    width: 160px !important;
+    height: 140px !important;
+  }
+
+  .AnalyticsTitle {
+    top: 210px !important;
+    left: 7% !important;
+    font-size: 16px;
+    width: 85%;
+  }
+
+  .WSInsightBox {
+    top: 240px;
+    left: 5%;
+    width: 90%;
+    height: 58%;
+  }
+
+  .YearContainer {
+    top: 13% !important;
+    left: 8% !important;
+    width: 38% !important;
+    height: 4% !important;
+  }
+
+  .YearBox {
+    width: 120% !important;
+    margin-bottom: 1rem;
+  }
+
+  .BarGraphContainer {
+    left: 8%;
+    width: 85%;
+    top: 320px;
+  }
+
+  .BarBox {
+    top: 8%;
+    width: 99%;
+    height: 110%;
+  }
+
+  .MonthlyAccidentEventStats {
+    top: 12%;
+    left: 26%;
+    font-size: 14px;
+  }
+
+  .grayline {
+    left: 3.5%;
+    width: 340px;
+  }
+
+  .PAContainer,
+  .LAContainer,
+  .FacilityRelatedContainer {
+    left: -3%;
+  }
+
+  .EAContainer,
+  .FireRelatedContainer,
+  .HRContainer {
+    left: 52%;
+  }
+
+  .VAContainer,
+  .EquipmentRelatedContainer,
+  .EventContainer {
+    margin-top: 6.5rem;
+    left: 23%;
+  }
+
+  .PhysicalAccident,
+  .EnvironmentalAccident,
+  .VehicleAccident,
+  .LaboratoryAccident,
+  .FireRelatedAccident,
+  .EquipmentRelatedAccident,
+  .FacilityRelatedAccident,
+  .HealthRelatedAccident,
+  .Event {
+    font-size: 9px;
+  }
+
+  .PieChartContainer {
+    left: 8%;
+    top: 50%;
+  }
+
+  .PieBackground {
+    height: 83%;
+    width: 43.5%;
+  }
+
+  .PieContainer {
+    left: 4%;
+  }
+
+  .ApprovedDeniedReports {
+    left: 2%;
+    top: -18%;
+    font-size: 16px;
+  }
+
+  .PieGroup {
+    left: 22%;
+    top: 8%;
+    height: 65% !important;
+  }
+
+  .ApprovedPercentage {
+    left: 50%;
+    top: 70%;
+  }
+
+  .ApprovedBox {
+    left: -2%;
+    top: 100%;
+  }
+
+  .DeniedPercentage {
+    top: 8%;
+  }
+
+  .Approved {
+    left: 11%;
+    top: 103% !important;
+    font-size: 13px !important;
+  }
+
+  .DeniedBox {
+    left: 45%;
+    top: 100% !important;
+  }
+
+  .Denied {
+    left: 58%;
+    top: 103% !important;
+    font-size: 13px !important;
+  }
+
+  .Toggle {
+    left: -50% !important;
+    top: -980% !important;
+  }
+
+  .minimized .ReportFeedbackContainer {
+    top: 1800px;
+    /* Adjust this value as needed */
+  }
+
+
+  .ReportFeedback {
+    left: -33% !important;
+    top: -990% !important;
+  }
+
+  .WSInsightBox2 {
+    left: 5% !important;
+    top: 75%;
+    width: 90% !important;
+    height: 16% !important;
+  }
+
+  .TableContainer {
+    top: 73% !important;
+    left: -15%;
+  }
+
+  .TOTALREPORTSSUBMITTED {
+    top: 18% !important;
+    left: 11%;
+    font-size: 13px !important;
+  }
+
+  .TotalWrapper {
+    margin-top: 15px;
+  }
+
+  .Total1 {
+    width: 40px;
+    height: 40px;
+  }
+
+  .TotalNumber1 {
+    font-size: 16px;
+  }
+
+  .FeedbackTable {
+    font-size: 10px;
+  }
+
+  .FeedbackTable th,
+  .FeedbackTable td {
+    padding: 5px;
+  }
+
+  .TableContainer {
+    overflow-x: auto; /* Add horizontal scrolling for smaller screens */
+  }
+
+  .SubmissionDate {
+    top: 5% !important;
+    left: -69% !important;
+    font-size: 7.5px !important;
+  }
+
+  .Location {
+    top: 5% !important;
+    left: -55% !important;
+    font-size: 9px !important;
+  }
+
+  .Reportcategory{
+    top: 5% !important;
+    left: -78% !important;
+    font-size: 9px !important;
+  }
+
+  .Status {
+    top: 5% !important;
+    left: -70% !important;
+    font-size: 9px !important;
+  }
+
+  .Dateresolved{
+    top: 5% !important;
+    left: -70% !important;
+    font-size: 9px !important;
+  }
+
+  .GroupTable {
+    position: absolute;
+    left: 95px;
+    top: 230px;
+    width: 920px;
+    height: 186px;
+  }
+
+  .Table {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1000px;
+    height: 195px;
+  }
+}

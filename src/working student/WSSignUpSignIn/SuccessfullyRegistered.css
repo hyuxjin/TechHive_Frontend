@@ -1,0 +1,171 @@
+.successfully-register {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    text-align: center;
+    color: #8a252c;
+    font-family: var(--font-montserrat);
+}
+
+.main-boxSR {
+    position: absolute;
+    top: 35px;
+    left: 240px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    width: 1070px;
+    height: 655px;
+    transition: all 0.5s ease;
+    /* Smooth transition */
+}
+
+.messContainer {
+    position: absolute;
+    top: 200px;
+    left: 875px;
+    font-weight: 600;
+    font-size: 25px;
+    display: inline-block;
+    width: 307px;
+    height: 150px;
+}
+
+.m {
+    margin: 0;
+}
+
+.signinContainer {
+    position: absolute;
+    top: 430px;
+    left: 1030px;
+    width: 119px;
+    height: 39px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 20px;
+    color: white;
+    transform: translateX(-50%);
+    transition: none;
+}
+
+.signinContainer:hover {
+    transform: translateX(-50%) scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+.si-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    background-color: #8a252c;
+    width: 119px;
+    height: 39px;
+}
+
+.si-name {
+    position: absolute;
+    top: 6px;
+    left: 23px;
+    font-weight: 600;
+    display: inline-block;
+    width: 79px;
+    height: 23px;
+}
+
+@media (max-width: 768px) {
+    .main-boxSR {
+        top: 6%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 87%;
+        height: 88%;
+    }
+
+    .messContainer {
+        top: 33%;
+        left: 72%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .signinContainer {
+        top: 63%;
+        left: 72%;
+        width: 25%;
+        height: 39px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .si-name {
+        top: 6px;
+        left: 60px;
+        width: 79px;
+        height: 23px;
+        font-size: 18px;
+    }
+
+    .si-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 20px;
+        background-color: #8a252c;
+        width: 100%;
+        height: 39px;
+    }
+}
+
+@media (max-width: 500px) {
+    .successfully-register {
+        width: 100%;
+        position: relative;
+        height: 90vh;
+        overflow: hidden;
+        text-align: center;
+        color: #8a252c;
+        font-family: var(--font-montserrat);
+    }
+
+    .messContainer {
+        top: 35% !important;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .signinContainer {
+        position: absolute;
+        top: 65% !important;
+        left: 50%;
+        width: 120px;
+        height: 39px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+    }
+
+    .si-button {
+        top: 0 !important;
+        left: 0;
+        border-radius: 20px;
+        background-color: #8a252c;
+        width: 125px;
+        height: 39px;
+    }
+
+    .si-name {
+        top: 6px !important;
+        left: 23px;
+        width: 79px;
+        height: 23px;
+    }
+}

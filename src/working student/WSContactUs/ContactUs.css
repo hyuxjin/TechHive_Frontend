@@ -1,0 +1,737 @@
+.ws-contact-us {
+    width: 100%;
+    position: relative;
+    height: 800px;
+    overflow: hidden;
+    text-align: left;
+    color: #8a252c;
+    font-family: var(--font-montserrat);
+}
+
+.wildcat-cuteC {
+    position: absolute;
+    top: 70px;
+    left: 280px;
+    width: 40px;
+    height: 40px;
+}
+
+.get-started {
+    position: absolute;
+    display: inline-block;
+    top: 70px;
+    left: 1116px;
+    font-weight: 600;
+    font-size: 20px;
+    width: 144px;
+    height: 23px;
+    cursor: pointer;
+}
+
+.get-started:hover {
+    transform: scale(1.1);
+}
+
+.ContactUs-title {
+    position: absolute;
+    display: inline-block;
+    top: 165px;
+    left: 340px;
+    font-size: 25px;
+    width: 170px;
+    height: 30px;
+}
+
+.get-started,
+.ContactUs-title,
+.cinfo {
+    transition: all 0.5s ease;
+    /* Smooth transition */
+}
+
+.cinfo {
+    position: absolute;
+    display: inline-block;
+    top: 205px;
+    left: 340px;
+    font-size: 18px;
+    font-weight: 400;
+    width: 216px;
+    height: 22px;
+}
+
+.phone {
+    position: absolute;
+    display: inline-block;
+    left: 420px;
+    top: 290px;
+    font-weight: 600;
+    font-size: 20px;
+    width: 78px;
+    height: 21px;
+}
+
+.phone:hover {
+    transform: scale(1.1);
+}
+
+.phone-num {
+    top: 320px;
+    width: 128px;
+    position: absolute;
+    left: 420px;
+    display: inline-block;
+    height: 21px;
+}
+
+.phone-num:hover {
+    transform: scale(1.1);
+}
+
+.phone-bg {
+    position: absolute;
+    top: 290px;
+    left: 340px;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 64px;
+    height: 60px;
+}
+
+.phone-icon {
+    position: absolute;
+    top: 305px;
+    left: 355px;
+    width: 36px;
+    height: 33px;
+    overflow: hidden;
+}
+
+.email {
+    position: absolute;
+    top: 400px;
+    left: 420px;
+    font-weight: 600;
+    font-size: 20px;
+    display: inline-block;
+    width: 67px;
+    height: 21px;
+}
+
+.email:hover {
+    transform: scale(1.1);
+}
+
+.email-mail {
+    top: 430px;
+    width: 128px;
+    position: absolute;
+    left: 420px;
+    display: inline-block;
+    height: 21px;
+}
+
+.email-mail:hover {
+    transform: scale(1.1);
+}
+
+.email-bg {
+    position: absolute;
+    top: 400px;
+    left: 340px;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 64px;
+    height: 60px;
+}
+
+.email-icon {
+    position: absolute;
+    top: 415px;
+    left: 355px;
+    height: 33px;
+    width: 36px;
+    overflow: hidden;
+}
+
+.location {
+    position: absolute;
+    top: 520px;
+    left: 420px;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 20px;
+    width: 67px;
+    height: 21px;
+}
+
+.location:hover {
+    transform: scale(1.1);
+}
+
+.location-name {
+    position: absolute;
+    top: 555px;
+    left: 420px;
+    display: inline-block;
+    width: 233px;
+    height: 47px;
+}
+
+.location-name:hover {
+    transform: scale(1.1);
+}
+
+.location-bg {
+    position: absolute;
+    top: 515px;
+    left: 340px;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 64px;
+    height: 60px;
+}
+
+.location-icon {
+    position: absolute;
+    top: 528px;
+    left: 354px;
+    width: 38px;
+    height: 36px;
+    overflow: hidden;
+}
+
+.Lets-title {
+    position: absolute;
+    left: 850px;
+    display: inline-block;
+    top: 165px;
+    font-size: 25px;
+    width: 147px;
+    height: 30px;
+}
+
+.feel-free-to {
+    position: absolute;
+    left: 850px;
+    display: inline-block;
+    top: 205px;
+    font-size: 18px;
+    font-weight: 400;
+    width: 293px;
+    height: 22px;
+}
+
+.ynInput,
+.eInput,
+.pnInput,
+.mInput {
+    position: absolute;
+    top: 290px;
+    left: 850px;
+    border-radius: 15px;
+    background-color: white;
+    border: 1px solid #8a252c;
+    box-sizing: border-box;
+    width: 347px;
+    height: 39px;
+    padding-left: 15px;
+    resize: none;
+}
+
+.mInput:focus {
+    outline: none;
+}
+
+.eInput {
+    top: 350px;
+}
+
+.pnInput {
+    top: 410px;
+}
+
+.mInput {
+    top: 480px;
+    height: 106px;
+}
+
+.submit-button {
+    position: absolute;
+    top: 610px;
+    left: 1105px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) inset;
+    mix-blend-mode: normal;
+
+
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        animation: slideIn 0.3s ease-out;
+        font-family: var(--font-montserrat);
+    }
+
+    .modal-content h2 {
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 24px;
+        font-family: var(--font-montserrat);
+    }
+
+    .modal-content p {
+        margin-bottom: 20px;
+        color: #666;
+        font-size: 16px;
+        font-family: var(--font-montserrat);
+    }
+
+    /* Updated button styles */
+    .modal-content button {
+        background-color: #8a252c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: var(--font-montserrat);
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .modal-content button:hover {
+        background-color: #f9d67b;
+        color: #8a252c;
+    }
+
+    .modal-content.error h2 {
+        color: #8A252C;
+    }
+
+    .modal-content.success h2 {
+        color: #4CAF50;
+    }
+
+    /* Modal Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+}
+
+@media (max-width: 768px) {
+    .wildcat-cuteC {
+        display: none;
+    }
+
+    .get-started {
+        position: absolute;
+        display: inline-block;
+        top: 40px;
+        left: 73%;
+        transform: translateX(-50%);
+        width: auto;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .ContactUs-title {
+        top: 13%;
+        left: 15%;
+        transform: translateX(-50%);
+        width: auto;
+        font-size: 14px;
+    }
+
+    .cinfo {
+        top: 17%;
+        left: 10%;
+        width: 70%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone {
+        top: 22%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone-num {
+        top: 25%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone-bg {
+        top: 22%;
+        left: 10%;
+        width: 5.5%;
+        height: 5%;
+    }
+
+    .phone-icon {
+        top: 22.5%;
+        left: 11%;
+        width: 4%;
+        height: 4%;
+    }
+
+    .email {
+        top: 29%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .email-mail {
+        top: 32%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .email-bg {
+        top: 29%;
+        left: 10%;
+        width: 5%;
+        height: 5%;
+    }
+
+    .email-icon {
+        top: 30%;
+        left: 11%;
+        width: 3%;
+        height: 3%;
+    }
+
+    .location {
+        top: 36%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .location-name {
+        top: 39%;
+        left: 17%;
+        width: 70%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .location-bg {
+        top: 36%;
+        left: 10%;
+        width: 5%;
+        height: 5%;
+    }
+
+    .location-icon {
+        top: 36.5%;
+        left: 10.5%;
+        width: 4%;
+        height: 4%;
+    }
+
+    .Lets-title {
+        top: 45%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        font-size: 14px;
+    }
+
+    .feel-free-to {
+        top: 49%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 14px;
+    }
+
+    .ynInput,
+    .eInput,
+    .pnInput,
+    .mInput {
+        top: 54%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 30px;
+    }
+
+    .eInput {
+        top: 61%;
+    }
+
+    .pnInput {
+        top: 68%;
+    }
+
+    .mInput {
+        top: 75%;
+        height: 70px;
+    }
+
+    .submit-button {
+        top: 91%;
+        left: 78%;
+        width: auto;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        width: 80%;
+        padding: 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+    }
+
+    .modal-content p {
+        font-size: 14px;
+    }
+
+    .modal-content button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 500px) {
+    .ws-contact-us {
+        width: 100%;
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        text-align: left;
+        color: #8a252c;
+        font-family: var(--font-montserrat);
+    }
+
+    .get-started {
+        display: inline-block;
+        top: 40px !important;
+        left: 73% !important;
+        transform: translateX(-50%) !important;
+        width: auto !important;
+    }
+
+    .ContactUs-title {
+        top: 13%;
+        left: 18%;
+        transform: translateX(-50%);
+        width: auto;
+        font-size: 14px;
+    }
+
+    .cinfo {
+        top: 17%;
+        left: 7%;
+        width: 70%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone {
+        top: 22%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone-num {
+        top: 25%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .phone-bg {
+        top: 22%;
+        left: 7%;
+        width: 8.5%;
+        height: 5%;
+    }
+
+    .phone-icon {
+        top: 22.5%;
+        left: 7.5%;
+        width: auto;
+        height: 4%;
+    }
+
+    .email {
+        top: 29%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .email-mail {
+        top: 32%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .email-bg {
+        top: 29%;
+        left: 7%;
+        width: 8.5%;
+        height: 5%;
+    }
+
+    .email-icon {
+        top: 30%;
+        left: 8.3%;
+        width: auto;
+        height: 3%;
+    }
+
+    .location {
+        top: 36%;
+        left: 17%;
+        width: 40%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .location-name {
+        top: 39%;
+        left: 17%;
+        width: 70%;
+        height: auto;
+        font-size: 14px;
+    }
+
+    .location-bg {
+        top: 36%;
+        left: 7%;
+        width: 8.5%;
+        height: 5%;
+    }
+
+    .location-icon {
+        top: 36.5%;
+        left: 7.7%;
+        width: auto;
+        height: 4%;
+    }
+
+    .Lets-title {
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        font-size: 14px;
+    }
+
+    .feel-free-to {
+        top: 55%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        font-size: 14px;
+    }
+
+    .ynInput,
+    .eInput,
+    .pnInput,
+    .mInput {
+        top: 60%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 30px;
+        border-radius: 10px;
+    }
+
+    .eInput {
+        top: 67%;
+    }
+
+    .pnInput {
+        top: 74%;
+    }
+
+    .mInput {
+        top: 81%;
+        height: 70px;
+    }
+
+    .submit-button {
+        top: 94%;
+        left: 72%;
+        width: auto;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .modal-content h2 {
+        font-size: 18px;
+    }
+
+    .modal-content p {
+        font-size: 12px;
+    }
+
+    .modal-content button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}

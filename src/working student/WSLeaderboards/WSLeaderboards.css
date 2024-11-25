@@ -1,0 +1,187 @@
+.ws-leaderboards {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  min-height: 841px; /* Minimum height for the container */
+  overflow: hidden; /* Hide overflow of the main container */
+  text-align: center;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.LeaderboardsTitle {
+  position: absolute;
+  top: 71px;
+  left: 660px;
+  width: 276px;
+  height: 231px;
+  object-fit: cover;
+}
+
+.leaderboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+  gap: 1.2rem;
+  margin-top: 260px; /* Maintain space for the title */
+}
+
+.leaderboard-column {
+  flex: auto;
+  margin: 0 10px;
+  text-align: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  padding-bottom: 20px;
+  min-height: 200px; /* Minimum height to maintain space even when empty */
+  overflow-y: auto; /* Allow scrolling within the column if needed */
+}
+
+.leaderboard-column h3 {
+  background-color: #f4d1d3;
+  padding: 10px;
+  border-radius: 20px 20px 0 0;
+  margin: 0;
+}
+
+.champion-column {
+  background-color: #f5fffa;
+}
+
+.prowler-column {
+  background-color: #f5fffa;
+}
+
+.cub-column {
+  background-color: #f5fffa;
+}
+
+.leaderboard-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-info {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.user-points {
+  color: #666;
+}
+
+.badge {
+  width: 40px; /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+}
+
+.trophy-container {
+  width: 60px; /* Adjust size for larger circular background */
+  height: 60px; /* Adjust size for larger circular background */
+  border-radius: 50%; /* Make the background circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensure the content does not overflow */
+  position: relative; /* Position relative for correct icon placement */
+}
+
+.trophy-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  position: relative;
+  z-index: 1; /* Bring icon above the background */
+}
+
+.gold-background {
+  background-color: #ffd700; /* Gold background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+.bronze-background {
+  background-color: #cd7f32; /* Bronze background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+.silver-background {
+  background-color: #c0c0c0; /* Silver background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+@media (max-width: 500px) {
+  .LeaderboardsTitle {
+    position: absolute;
+    top: 71px;
+    left: 20px;
+    width: 60% !important;
+    height: 231px;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 768px) {
+  .LeaderboardsTitle {
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 18%;
+    object-fit: cover;
+  }
+
+  .WSLeaderboardsBox {
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 50%;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 500px) {
+  .LeaderboardsTitle {
+    top: 10% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 18%;
+    object-fit: cover;
+  }
+
+  .WSLeaderboardsBox {
+    top: 30% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 50%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,49 @@
+.updated-popup {
+  width: 515px;
+  position: relative;
+  height: 298px;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.UpdatedPopUpBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+    background-color: white;
+    width: 515px;
+    height: 298px;
+}
+
+.your-password-has {
+    position: absolute;
+    top: 40px;
+    left: 105px;
+    font-weight: 600;
+    font-size: 20px;
+    display: inline-block;
+    width: 431px;
+}
+
+.SIcon {
+  position: absolute;
+  top: 85px;
+  left: 200px;
+  width: 111px;
+  height: 105px;
+  object-fit: cover;
+}
+  
+.updated-popup-item {
+    position: absolute;
+    top: 219px;
+    left: 210px;
+}
+
+  
+  

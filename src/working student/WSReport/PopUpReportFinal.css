@@ -1,0 +1,765 @@
+.PopUpReportFinalPage {
+  position: fixed;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b);
+  width: 580px;
+  height: 600px;
+  max-height: 75%;
+  padding-bottom: 1rem;
+  color: #8a252c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.PopUpReportFinalPage > * {
+  max-width: 100%;
+}
+
+.back-button-containerFR {
+  position: absolute;
+  top: 30px;
+  left: 38px;
+  width: 64px;
+  height: 60px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.back-bgFR {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: #8a252c;
+  width: 70%;
+  height: 70%;
+}
+
+.back-iconFR {
+  position: absolute;
+  top: 8px;
+  left: 9px;
+  width: 27.6px;
+  height: 27.4px;
+  cursor: pointer;
+}
+
+.back-button-containerFR:hover {
+  transform: scale(1.1);
+}
+
+.Description-Container {
+  position: absolute;
+  top: 60px;
+  left: 139px;
+  width: 308px;
+  height: 71px;
+}
+
+.Description-Input {
+  position: absolute;
+  top: 33px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 308px;
+  height: 40px;
+  resize: none;
+  box-sizing: border-box;
+  font-style: var(--font-montserrat);
+}
+
+.Description-Input:focus {
+  border-color: #8a252c;
+  outline: none;
+}
+
+.Description-Input:focus::placeholder {
+  color: #8a252c;
+}
+
+.Location-Container {
+  position: absolute;
+  top: 170px;
+  left: 139px;
+  width: 308px;
+  height: 71px;
+}
+
+.Location-Input {
+  position: absolute;
+  top: 33px;
+  left: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 308px;
+  height: 40px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.Location-Input:focus {
+  border-color: #8a252c;
+  outline: none;
+}
+
+.Location-Input:focus::placeholder {
+  color: #8a252c;
+}
+
+.Description-Input,
+.Location-Input {
+  font-family: "Montserrat", sans-serif;
+  font-size: smaller;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.t-name {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 17px;
+  display: inline-block;
+  width: 146px;
+  height: 17px;
+}
+
+.Choose-Location {
+  position: absolute;
+  top: 210px;
+  left: 413px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.Choose-Location:hover {
+  transform: scale(1.1);
+}
+
+.Upload-Photo-Container {
+  position: absolute;
+  top: 285px;
+  left: 139px;
+  display: inline-block;
+  width: 340px;
+  height: 17px;
+}
+
+.for-evidence {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.Camera-Container {
+  position: absolute;
+  top: 335px;
+  left: 165px;
+  width: 97px;
+  height: 87px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: transform 0.3s ease;
+}
+
+.Camera-Container:hover {
+  transform: scale(1.05);
+}
+
+.bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 20px;
+  background-color: #ffffff;
+  width: 97px;
+  height: 87px;
+}
+
+.n-camera {
+  position: absolute;
+  top: 52px;
+  left: 17px;
+  font-weight: 500;
+  display: inline-block;
+  width: 64px;
+  height: 18px;
+}
+
+.bicamera-icon {
+  position: absolute;
+  height: 44.83%;
+  width: 41.24%;
+  top: 5.75%;
+  right: 28.87%;
+  bottom: 49.43%;
+  left: 29.9%;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+.Upload-Container {
+  position: absolute;
+  top: 335px;
+  left: 330px;
+  width: 97px;
+  height: 87px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: transform 0.3s ease;
+}
+
+.Upload-Container:hover {
+  transform: scale(1.05);
+}
+
+.n-upload {
+  position: absolute;
+  top: 52px;
+  left: 7px;
+  font-weight: 500;
+  display: inline-block;
+  width: 82px;
+  height: 18px;
+}
+
+.symbolupload-icon {
+  position: absolute;
+  top: 5px;
+  left: 28px;
+  width: 40px;
+  height: 39px;
+  overflow: hidden;
+}
+
+.Image-Preview-Container {
+  position: absolute;
+  top: 440px;
+  left: 145px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: calc(100% - 278px);
+  padding-bottom: 10px;
+}
+
+.Image-Preview {
+  flex: 0 0 auto;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.Image-Preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.remove-image-button:hover {
+  background-color: #8a252c;
+  color: white;
+}
+
+.validation-errors-container {
+  position: absolute;
+  top: 580px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 308px;
+  text-align: center;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 5rem;
+}
+
+.error-message-1 {
+  color: #d32f2f;
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 3rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #8a252c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.camera-permission h2,
+.image-limit-warning h2,
+.file-size-warning h2 {
+  color: #8a252c;
+  margin-bottom: 20px;
+}
+
+.camera-icon {
+  width: 105px;
+  height: 55px;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.cancel-button,
+.allow-button,
+.ok-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  background-color: #8a252c;
+  color: white;
+}
+
+.cancel-button:hover,
+.allow-button:hover,
+.ok-button:hover {
+  background-color: #a91d3a;
+  transform: scale(1.05);
+}
+
+/* Camera Modal Styles */
+.camera-modal {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f9d67b;
+  padding: 20px;
+  padding-bottom: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 80%;
+  max-width: 545px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.camera-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #fdfbc9;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bolder;
+  z-index: 1;
+}
+
+.camera-close-button:hover {
+  background-color: #8a252c;
+  color: whitesmoke;
+}
+
+.camera-feed-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.camera-feed-container video {
+  width: 100%;
+  max-width: 640px;
+  border-radius: 10px;
+  transform: scaleX(-1); /* This mirrors the video feed */
+}
+
+.camera-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.camera-capture-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.camera-capture-circle {
+  width: 70px;
+  height: 70px;
+  background-color: #fdfbc9;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  margin-top: -20px; /* This moves the button up */
+}
+
+.camera-capture-circle:hover {
+  transform: scale(1.1);
+}
+
+.camera-capture-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: #fff;
+  font-size: 18px;
+}
+
+.spinner {
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-overlay p {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Custom styles for the Dialog close button */
+.MuiButtonBase-root.MuiIconButton-root {
+  position: absolute;
+  top: 50px;
+  right: 40px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bolder;
+}
+
+.MuiButtonBase-root.MuiIconButton-root:hover {
+  color: #8a252c;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) and (max-height: 641px) {
+  .PopUpReportFinalPage {
+    width: 600px;
+    height: 650px;
+  }
+
+  .Description-Container,
+  .Location-Container {
+    left: 150px;
+    width: 280px;
+  }
+
+  .Description-Input,
+  .Location-Input {
+    width: 280px;
+    font-size: smaller;
+  }
+
+  .Camera-Container {
+    left: 150px;
+  }
+
+  .Upload-Container {
+    left: 330px;
+  }
+
+  .Choose-Location {
+    left: 395px;
+  }
+
+  .Upload-Photo-Container {
+    left: 150px;
+  }
+
+  .validation-errors-container {
+    top: 580px;
+  }
+
+  .camera-modal {
+    width: 50%;
+    padding: 15px;
+  }
+
+  .camera-capture-circle {
+    width: 60px;
+    height: 60px;
+    margin-top: -25px;
+  }
+
+  .camera-capture-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+}
+
+@media (max-width: 500px) {
+  .Image-Preview-Container {
+    position: absolute;
+    top: 455px;
+    left: 40px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 70%;
+    padding-bottom: 10px;
+  }
+
+  .Image-Preview {
+    flex: 0 0 auto;
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+    position: relative;
+  }
+
+  .back-button-containerFR {
+    position: absolute;
+    top: 20px;
+    left: 2rem;
+    width: 44px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .back-iconFR {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    width: 18.4px;
+    height: 18.4px;
+    cursor: pointer;
+  }
+  .PopUpReportFinalPage {
+    width: 330px;
+    height: 670px;
+  }
+
+  .Description-Container,
+  .Location-Container {
+    left: 30px;
+    width: 260px;
+  }
+
+  .Description-Input,
+  .Location-Input {
+    width: 273px;
+  }
+
+  .Camera-Container {
+    left: 3.5rem;
+    margin-top: 1rem;
+  }
+
+  .Upload-Container {
+    left: 11.5rem;
+    margin-top: 1rem;
+  }
+
+  .Choose-Location {
+    left: 270px;
+  }
+
+  .Upload-Photo-Container {
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  .validation-errors-container {
+    top: 590px;
+    max-width: 280px;
+  }
+ 
+  .camera-modal {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f9d67b;
+    padding: 20px;
+    padding-bottom: 5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 80%;
+    max-width: 545px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* New styles for the file size warning modal */
+.file-size-warning {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 80%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-size-warning h2 {
+  color: #8a252c;
+  margin-bottom: 20px;
+}
+
+.file-size-warning button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #8a252c;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.file-size-warning button:hover {
+  background-color: #a91d3a;
+}
+
+/* Suggestion List Styling */
+.suggestion-list {
+  position: absolute;
+  top: 58px; /* Adjust this to perfectly align with the Description-Input */
+  left: 0;
+  width: 308px; /* Match the width of the Description-Input */
+  max-height: 150px; /* Limit the height to avoid too many suggestions overflowing */
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* Each suggestion */
+.suggestion-list li {
+  padding: 10px;
+  list-style: none;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: 700;
+  font-size: smaller; /* Match the font size */
+}
+
+/* Hover effect for suggestions */
+.suggestion-list li:hover {
+  background-color: #f9d67b;
+  color: black;
+  outline: none;
+}
+
+/* Active suggestion styling */
+.suggestion-list li.active {
+  background-color: #8a252c; /* Light gray background */
+  color: whitesmoke; /* Darker text color */
+  font-weight: 500;
+}
+
+/* Remove border for the last item */
+.suggestion-list li:last-child {
+  border-bottom: none;
+}

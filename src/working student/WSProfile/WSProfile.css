@@ -1,0 +1,586 @@
+.ws-profile {
+  width: 100%;
+  max-width: 100%;
+  height: 729px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.WSTitleP {
+  position: fixed;
+  top: -19px;
+  left: 31px;
+  width: 115px;
+  height: 113px;
+  object-fit: cover;
+  z-index: 1001;
+}
+
+.WSProfileBg {
+  position: absolute;
+  object-fit: cover;
+  top: 120px;
+  left: 170px;
+  border-radius: 0 0 0 0;
+  width: 400px;
+  height: 560px;
+  opacity: 0.95;
+  mix-blend-mode: normal;
+}
+
+.WSProfileUser {
+  position: absolute;
+  object-fit: cover;
+  top: 160px;
+  left: 280px;
+  border-radius: 76px;
+  width: 157px;
+  height: 152px;
+}
+
+.WSProfileBadge {
+  position: absolute;
+  top: 265px;
+  left: 395px;
+  width: 37px;
+  height: 37px;
+  object-fit: cover;
+}
+
+.WSID,
+.WSName,
+.WSPoints,
+.WSEdu {
+  position: absolute;
+  left: 190px;
+  width: 350px;
+  text-align: center;
+}
+
+.WSID {
+  top: 340px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.WSName {
+  top: 375px;
+  font-size: 25px;
+  font-weight: 650;
+}
+
+.WSPoints {
+  top: 425px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.WSEdu {
+  top: 490px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.WSPLogout {
+  position: absolute !important;
+  top: 565px !important;
+  left: 305px !important;
+  width: 90px !important;
+  height: 20px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  color: white !important;
+}
+
+.ProfilePictureContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.WSProfileUserContainer {
+  position: absolute;
+  cursor: pointer;
+  overflow: hidden;
+  width: 157px;
+  height: 152px;
+  top: 160px;
+  left: 280px;
+  z-index: 10;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 11;
+}
+
+.upload-overlay span {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.WSProfileUserContainer:hover .upload-overlay {
+  opacity: 1;
+}
+
+.PasswordGroup {
+  position: absolute;
+  top: 210px;
+  left: 700px;
+  width: 625px;
+  height: 333px;
+}
+
+.PasswordBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 36px;
+  background-color: #ffffff;
+  opacity: 0.3;
+  width: 625px;
+  height: 333px;
+}
+
+.PasswordName {
+  position: absolute;
+  left: 45px;
+  display: inline-block;
+  font-size: 22px;
+  height: 32.3px;
+  top: 45px;
+  font-size: 22px;
+  width: 113px;
+}
+
+.OldPass,
+.NewPass {
+  position: absolute;
+  top: 123.6px;
+  font-weight: 500;
+  font-size: 20px;
+  width: 218px;
+  left: 45px;
+  display: inline-block;
+  height: 32.3px;
+}
+
+.NewPass {
+  top: 181.5px;
+}
+
+.OldPassInput {
+  position: absolute;
+  top: 320px;
+  left: 930px;
+  border-radius: 25px;
+  background-color: white;
+  width: 339px;
+  height: 40px;
+  border: 2px solid #8a252c;
+}
+
+.NewPassInput {
+  position: absolute;
+  top: 380px;
+  left: 930px;
+  border-radius: 25px;
+  background-color: white;
+  width: 339px;
+  height: 40px;
+  border: 2px solid #8a252c;
+}
+
+.edit {
+  position: absolute;
+  top: 455px;
+  left: 1040px;
+  display: inline-block;
+  font-size: 20px;
+  width: 43px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.edit:hover {
+  transform: scale(1.1);
+}
+
+.UpdateContainer {
+  position: absolute;
+  top: 470px;
+  left: 1160px;
+  width: 107px;
+  height: 39px;
+  cursor: pointer;
+  color: white;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.error-popup {
+  font-weight: 500;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  padding: 10px;
+  border-radius: 5px;
+  color: #8a252c;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* New styles for profile update success modal */
+.profile-update-success-modal {
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-update-success-modal h2 {
+  color: #8a252c;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.profile-update-success-modal p {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 25px;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .WSTitleP {
+    position: fixed !important;
+    display: inline-block !important;
+    top: 0px !important;
+    left: 3% !important;
+    width: 17% !important;
+    height: 12% !important;
+  }
+
+  .WSProfileBg {
+    top: 21% !important;
+    left: 25% !important;
+    transform: translateX(-50%) !important;
+    max-width: 300px !important;
+    height: auto !important;
+  }
+
+  .WSProfileUser {
+    top: 160px !important;
+    left: 25% !important;
+    transform: translateX(-50%) !important;
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .WSProfileBadge {
+    top: 240px !important;
+    left: 28% !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .WSID,
+  .WSName,
+  .WSPoints,
+  .WSEdu {
+    left: 25% !important;
+    transform: translateX(-50%) !important;
+    width: 80% !important;
+    text-align: center !important;
+  }
+
+  .WSID {
+    top: 300px !important;
+  }
+
+  .WSName {
+    top: 335px !important;
+    font-size: 20px !important;
+  }
+
+  .WSPoints {
+    top: 375px !important;
+  }
+
+  .WSEdu {
+    top: 425px !important;
+  }
+
+  .WSPLogout {
+    top: 500px !important;
+    left: 24% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .WSProfileUserContainer {
+    top: 160px !important;
+    left: 25% !important;
+    width: 15.5% !important;
+    height: 16.5% !important;
+    transform: translateX(-50%) !important;
+    z-index: 10 !important;
+  }
+
+  .PasswordGroup {
+    top: 150px !important;
+    left: 74% !important;
+    transform: translateX(-50%) !important;
+    font-size: 20px !important;
+    width: 90% !important;
+    max-width: 400px !important;
+  }
+
+  .PasswordBox {
+    top: 10% !important;
+    width: 330px !important;
+    height: 295px !important;
+    padding: 20px !important;
+  }
+
+  .PasswordName,
+  .OldPass,
+  .NewPass {
+    left: 30px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .PasswordName {
+    top: 18% !important;
+  }
+
+  .OldPass {
+    font-size: 18px !important;
+  }
+
+  .NewPass {
+    top: 67% !important;
+    font-size: 18px !important;
+  }
+
+  .OldPassInput,
+  .NewPassInput {
+    left: 30px !important;
+    width: 40% !important;
+    margin-bottom: 15px !important;
+  }
+
+  .OldPassInput {
+    top: 310px;
+    left: 51% !important;
+    height: 28px !important;
+  }
+
+  .NewPassInput {
+    top: 410px !important;
+    left: 51% !important;
+    height: 28px !important;
+  }
+
+  .UpdateButton,
+  .CancelButton {
+    width: 110px !important;
+    height: 25px !important;
+    font-size: 15px !important;
+  }
+
+  .edit,
+  .UpdateContainer {
+    top: 455px !important;
+    left: 51% !important;
+    margin: 10px auto !important;
+    display: block !important;
+  }
+
+  .edit {
+    left: 68% !important;
+  }
+
+  .UpdateContainer {
+    left: 77.5% !important;
+  }
+
+  .profile-update-success-modal {
+    width: 80%;
+    padding: 20px;
+  }
+
+  .profile-update-success-modal h2 {
+    font-size: 20px;
+  }
+
+  .profile-update-success-modal p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .ws-profile {
+    height: 130vh !important;
+  }
+
+  .WSTitleP {
+    position: fixed !important;
+    display: inline-block !important;
+    top: 8px !important;
+    left: 25px !important;
+    width: 13% !important;
+    height: 8% !important;
+  }
+
+  .WSProfileBg {
+    top: 25% !important;
+    width: 45% !important;
+    height: 56% !important;
+  }
+
+  .WSProfileUser {
+    top: 190px !important;
+    width: 85px !important;
+    height: 85px !important;
+  }
+
+  .WSProfileUserContainer {
+    top: 190px !important;
+    left: 25% !important;
+    width: 17% !important;
+    height: 10.2% !important;
+  }
+
+  .WSProfileBadge {
+    top: 250px !important;
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .WSID,
+  .WSName,
+  .WSPoints,
+  .WSEdu {
+    width: 90% !important;
+  }
+
+  .WSID {
+    font-size: 13px !important;
+  }
+
+  .WSName {
+    font-size: 15px !important;
+  }
+
+  .WSPoints {
+    top: 370px !important;
+    font-size: 13px !important;
+  }
+
+  .WSEdu {
+    top: 410px !important;
+    font-size: 13px !important;
+  }
+
+  .WSPLogout {
+    font-size: 12px !important;
+    padding: 5px !important;
+    top: 450px !important;
+    left: 23% !important;
+  }
+
+  .PasswordGroup {
+    top: 130px !important;
+    left: 92% !important;
+  }
+
+  .PasswordBox {
+    width: 180px !important;
+    height: 295px !important;
+    padding: 20px !important;
+    margin-top: 0.6rem;
+  }
+
+  .PasswordName {
+    top: 28% !important;
+    font-size: 16px !important;
+  }
+
+  .OldPass {
+    top: 43% !important;
+    font-size: 14px !important;
+  }
+
+  .NewPass {
+    top: 65% !important;
+    font-size: 14px !important;
+  }
+
+  .OldPassInput,
+  .NewPassInput {
+    width: 35% !important;
+  }
+
+  .OldPassInput {
+    top: 300px !important;
+    left: 56% !important;
+    height: 20px !important;
+  }
+
+  .NewPassInput {
+    top: 375px !important;
+    left: 56% !important;
+    height: 20px !important;
+  }
+
+  .edit {
+    top: 415px !important;
+    left: 285px !important;
+    font-size: 13px !important;
+  }
+
+  .UpdateContainer {
+    top: 425px !important;
+    left: 345px !important;
+  }
+
+  .profile-update-success-modal {
+    width: 70%;
+    padding: 15px;
+  }
+
+  .profile-update-success-modal h2 {
+    font-size: 18px;
+  }
+
+  .profile-update-success-modal p {
+    font-size: 14px;
+  }
+}
