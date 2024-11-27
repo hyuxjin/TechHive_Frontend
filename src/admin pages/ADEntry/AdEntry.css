@@ -11,17 +11,19 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow-x: hidden;
 }
 
 .entrysub-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   width: 100%;
   max-width: 800px;
   padding: 20px;
   margin-top: 80px;
+  margin-bottom: 40px;
 }
 
 .dashboard-title {
@@ -29,6 +31,7 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .reports-section {
@@ -41,6 +44,17 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+}
+
+/* Reports container */
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
 }
 
 /* Report card styling */
@@ -50,13 +64,14 @@
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  margin: 15px 0;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .entrypost-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -64,12 +79,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Traffic Lights */
 .traffic-lights {
   display: flex;
-  gap: 5px;
+  gap: 8px;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
 }
 
 .traffic-circle {
@@ -112,22 +132,22 @@
   cursor: pointer;
   font-size: 20px;
   padding: 5px 10px;
+  transition: transform 0.2s ease;
 }
 
 .flag-icon:hover {
-  opacity: 0.8;
+  transform: scale(1.1);
 }
 
 /* Profile and Details */
-.collapsed-details {
-  cursor: pointer;
-}
-
 .entry-profile-container {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
 }
 
 .profile-picture {
@@ -135,51 +155,70 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-name {
   font-size: 16px;
   font-weight: 600;
   margin: 0;
+  color: #333;
 }
 
 .entry-details {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
 }
 
 .entry-details h5 {
   margin: 0;
   font-size: 14px;
   color: #555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .entry-details span {
   font-weight: normal;
+  color: #666;
 }
 
 .description {
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-top: 10px;
+  white-space: pre-wrap;
+  color: #333;
 }
 
 /* Images */
 .entry-images {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   gap: 10px;
   margin-top: 15px;
-  overflow-x: auto;
-  padding-bottom: 5px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
 }
 
 .report-image {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.report-image:hover {
+  transform: scale(1.05);
 }
 
 /* Modal */
@@ -194,6 +233,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
 }
 
 .modal-content {
@@ -212,6 +252,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
 }
 
 .traffic-lights-and-flag {
@@ -232,30 +274,38 @@
   align-items: center;
   cursor: pointer;
   font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #600000;
 }
 
 .modal-body {
   padding: 0 10px;
 }
 
-.report-details {
-  margin-top: 15px;
-}
-
 .modal-image-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
   margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
 }
 
 .modal-image-small {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.modal-image-small:hover {
+  transform: scale(1.05);
 }
 
 /* Loading and Error States */
@@ -287,10 +337,21 @@
   background-color: rgba(128, 0, 0, 0.1);
   border-radius: 8px;
   margin: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.no-reports {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  margin: 10px 0;
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .entrysub-container {
     padding: 15px;
     margin-top: 60px;
@@ -298,14 +359,40 @@
 
   .modal-content {
     padding: 15px;
+    width: 95%;
   }
 
-  .modal-image-small {
-    width: 120px;
-    height: 120px;
+  .modal-image-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 
   .entry-details h5 {
     font-size: 13px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 20px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .entrypost-card {
+    padding: 15px;
+  }
+
+  .modal-content {
+    padding: 10px;
+  }
+
+  .modal-image-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }

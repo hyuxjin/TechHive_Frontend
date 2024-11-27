@@ -15,47 +15,6 @@ const AdEntry = () => {
     fetchReports();
   }, []);
 
-  const fetchReports = async () => {
-    try {
-      console.log('Fetching reports from:', `${BASE_URL}/api/user/reports`);
-      const response = await fetch(`${BASE_URL}/api/user/reports`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Response not ok:', response.status, errorText);
-        throw new Error(`Failed to fetch reports: ${errorText}`);
-      }
-      
-      const data = await response.json();
-      console.log('Received data:', data);
-      
-      const transformedReports = data.map(report => ({
-        id: report.reportId,
-        name: report.userFullName || 'Anonymous',
-        category: report.reportType || 'General Report',
-        location: report.location || 'Unknown Location',
-        description: report.description,
-        images: [
-          report.image1Path,
-          report.image2Path,
-          report.image3Path
-        ].filter(Boolean),
-        date: new Date(report.submittedAt).toLocaleDateString(),
-        status: getStatusFromBackend(report.status),
-        isFlagged: false,
-        concernedOffice: report.concernedOffice
-      }));
-
-      console.log('Transformed reports:', transformedReports);
-      setReports(transformedReports);
-    } catch (err) {
-      setError('Failed to load reports. Please try again later.');
-      console.error('Error fetching reports:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const getStatusFromBackend = (status) => {
     const statusMap = {
       'PENDING': 'pending',
@@ -74,6 +33,61 @@ const AdEntry = () => {
       'acknowledged': 'DENIED'
     };
     return statusMap[frontendStatus] || 'PENDING';
+  };
+
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      console.log('Fetching reports from:', `${BASE_URL}/api/user/reports`);
+      const response = await fetch(`${BASE_URL}/api/user/reports`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response not ok:', response.status, errorText);
+        throw new Error(`Failed to fetch reports: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Raw data from backend:', data);
+      
+      if (!Array.isArray(data)) {
+        console.error('Received data is not an array:', data);
+        throw new Error('Invalid data format received');
+      }
+
+      const transformedReports = data.map(report => {
+        const images = [
+          report.image1Path,
+          report.image2Path,
+          report.image3Path
+        ].filter(Boolean);
+
+        return {
+          id: report.reportId,
+          name: report.userFullName || 'Anonymous',
+          category: report.reportType || 'General Report',
+          location: report.location || 'Unknown Location',
+          description: report.description || '',
+          images: images,
+          date: report.submittedAt ? new Date(report.submittedAt).toLocaleDateString() : 'Invalid Date',
+          status: getStatusFromBackend(report.status),
+          isFlagged: false,
+          concernedOffice: report.concernedOffice || 'General Office'
+        };
+      });
+
+      transformedReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      console.log('Transformed reports:', transformedReports);
+      setReports(transformedReports);
+      setFlaggedReports(transformedReports.filter(report => report.isFlagged));
+      
+    } catch (err) {
+      setError('Failed to load reports. Please try again later.');
+      console.error('Error fetching reports:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleFlag = (reportId) => {
@@ -95,6 +109,7 @@ const AdEntry = () => {
   };
 
   const handleReportClick = (report) => {
+    console.log('Report clicked:', report);
     if (report.status === 'pending') {
       const updatedReport = { ...report, status: 'acknowledged' };
       updateTrafficLight(report.id, 'acknowledged');
@@ -123,24 +138,7 @@ const AdEntry = () => {
         throw new Error('Failed to update status');
       }
 
-      const updatedReport = await response.json();
-      console.log('Status updated successfully:', updatedReport);
-
-      setReports(prevReports =>
-        prevReports.map(report =>
-          report.id === reportId ? { ...report, status: newStatus } : report
-        )
-      );
-
-      setFlaggedReports(prevReports =>
-        prevReports.map(report =>
-          report.id === reportId ? { ...report, status: newStatus } : report
-        )
-      );
-
-      if (selectedReport?.id === reportId) {
-        setSelectedReport(prev => ({ ...prev, status: newStatus }));
-      }
+      await fetchReports(); // Refresh all reports after update
     } catch (err) {
       setError('Failed to update report status. Please try again.');
       console.error('Error updating status:', err);
@@ -154,6 +152,8 @@ const AdEntry = () => {
       />
       <div 
         className={`traffic-circle gray ${report.status === 'acknowledged' ? 'active' : ''}`}
+        onClick={isClickable ? () => updateTrafficLight(report.id, 'acknowledged') : undefined}
+        style={isClickable ? { cursor: 'pointer' } : {}}
       />
       <div 
         className={`traffic-circle yellow ${report.status === 'ongoing' ? 'active' : ''}`}
@@ -168,62 +168,85 @@ const AdEntry = () => {
     </div>
   );
 
-  const ReportCard = ({ report }) => (
-    <div className="entrypost-card" onClick={() => handleReportClick(report)}>
-      <div className="card-header">
-        <TrafficLights report={report} isClickable={false} />
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFlag(report.id);
-          }}
-          className="flag-icon"
-        >
-          🚩
-        </button>
-      </div>
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    
+    console.log('Original image path:', imagePath);
+    
+    if (imagePath.startsWith('http')) {
+      console.log('Using direct URL:', imagePath);
+      return imagePath;
+    }
+    
+    const path = imagePath.startsWith('/uploads/') 
+      ? imagePath 
+      : `/uploads/${imagePath}`;
+    
+    const fullUrl = `${BASE_URL}${path}`;
+    console.log('Constructed URL:', fullUrl);
+    return fullUrl;
+  };
 
-      <div className="entry-profile-container">
-        <img
-          src="/api/placeholder/40/40"
-          alt="Profile"
-          className="profile-picture"
-        />
-        <h5 className="profile-name">{report.name}</h5>
-      </div>
-
-      <div className="entry-details">
-        <h5>Date: <span>{report.date}</span></h5>
-        <h5>Location: <span>{report.location}</span></h5>
-        {report.concernedOffice && (
-          <h5>Office: <span>{report.concernedOffice}</span></h5>
-        )}
-        <p className="description">{report.description}</p>
-      </div>
-
-      {report.images?.length > 0 && (
-        <div className="entry-images">
-          {report.images.map((img, idx) => {
-            const imageUrl = img.startsWith('http') 
-              ? img 
-              : `${BASE_URL}${img}`;
-            return (
-              <img
-                key={idx}
-                src={imageUrl}
-                alt={`Report ${idx + 1}`}
-                className="report-image"
-                onError={(e) => {
-                  e.target.src = "/api/placeholder/80/80";
-                  console.error('Failed to load image:', imageUrl);
-                }}
-              />
-            );
-          })}
+  const ReportCard = ({ report }) => {
+    console.log('Rendering report card:', report);
+    return (
+      <div className="entrypost-card" onClick={() => handleReportClick(report)}>
+        <div className="card-header">
+          <TrafficLights report={report} isClickable={false} />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFlag(report.id);
+            }}
+            className="flag-icon"
+          >
+            🚩
+          </button>
         </div>
-      )}
-    </div>
-  );
+
+        <div className="entry-profile-container">
+          <img
+            src="/api/placeholder/40/40"
+            alt="Profile"
+            className="profile-picture"
+          />
+          <h5 className="profile-name">{report.name}</h5>
+        </div>
+
+        <div className="entry-details">
+          <h5>Date: <span>{report.date}</span></h5>
+          <h5>Location: <span>{report.location}</span></h5>
+          {report.concernedOffice && (
+            <h5>Office: <span>{report.concernedOffice}</span></h5>
+          )}
+          <p className="description">{report.description}</p>
+        </div>
+
+        {report.images?.length > 0 && (
+          <div className="entry-images">
+            {report.images.filter(Boolean).map((img, idx) => {
+              const imageUrl = getImageUrl(img);
+              console.log(`Image ${idx + 1} URL:`, imageUrl);
+              
+              return (
+                <img
+                  key={idx}
+                  src={imageUrl}
+                  alt={`Report ${idx + 1}`}
+                  className="report-image"
+                  onError={(e) => {
+                    console.error('Image failed to load:', imageUrl);
+                    e.target.src = "/api/placeholder/80/80";
+                    e.target.onerror = null;
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -251,6 +274,9 @@ const AdEntry = () => {
     );
   }
 
+  const pendingReports = reports.filter(report => report.status === 'pending');
+  const otherReports = reports.filter(report => !report.isFlagged && report.status !== 'pending');
+
   return (
     <div className="entrymain-container">
       <header>
@@ -260,23 +286,42 @@ const AdEntry = () => {
         <h1 className="dashboard-title">Reports Dashboard</h1>
         
         <section className="reports-section">
-          <h2 className="section-title">Flagged Reports</h2>
-          {flaggedReports.length > 0 ? (
-            flaggedReports.map(report => (
-              <ReportCard key={report.id} report={report} />
-            ))
-          ) : (
-            <p className="no-reports">No flagged reports</p>
-          )}
+          <h2 className="section-title">Pending Reports ({pendingReports.length})</h2>
+          <div className="reports-container">
+            {pendingReports.length > 0 ? (
+              pendingReports.map(report => (
+                <ReportCard key={report.id} report={report} />
+              ))
+            ) : (
+              <p className="no-reports">No pending reports</p>
+            )}
+          </div>
         </section>
 
         <section className="reports-section">
-          <h2 className="section-title">Incoming Reports</h2>
-          {reports
-            .filter(report => !report.isFlagged)
-            .map(report => (
-              <ReportCard key={report.id} report={report} />
-            ))}
+          <h2 className="section-title">Flagged Reports ({flaggedReports.length})</h2>
+          <div className="reports-container">
+            {flaggedReports.length > 0 ? (
+              flaggedReports.map(report => (
+                <ReportCard key={report.id} report={report} />
+              ))
+            ) : (
+              <p className="no-reports">No flagged reports</p>
+            )}
+          </div>
+        </section>
+
+        <section className="reports-section">
+          <h2 className="section-title">Other Reports ({otherReports.length})</h2>
+          <div className="reports-container">
+            {otherReports.length > 0 ? (
+              otherReports.map(report => (
+                <ReportCard key={report.id} report={report} />
+              ))
+            ) : (
+              <p className="no-reports">No other reports</p>
+            )}
+          </div>
         </section>
 
         {selectedReport && (
@@ -314,23 +359,19 @@ const AdEntry = () => {
 
                 {selectedReport.images?.length > 0 && (
                   <div className="modal-image-container">
-                    {selectedReport.images.map((img, idx) => {
-                      const imageUrl = img.startsWith('http') 
-                        ? img 
-                        : `${BASE_URL}${img}`;
-                      return (
-                        <img
-                          key={idx}
-                          src={imageUrl}
-                          alt={`Report ${idx + 1}`}
-                          className="modal-image-small"
-                          onError={(e) => {
-                            e.target.src = "/api/placeholder/200/200";
-                            console.error('Failed to load image:', imageUrl);
-                          }}
-                        />
-                      );
-                    })}
+                    {selectedReport.images.filter(Boolean).map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={getImageUrl(img)}
+                        alt={`Report ${idx + 1}`}
+                        className="modal-image-small"
+                        onError={(e) => {
+                          console.error('Failed to load image:', img);
+                          e.target.src = "/api/placeholder/200/200";
+                          e.target.onerror = null;
+                        }}
+                      />
+                    ))}
                   </div>
                 )}
               </div>
