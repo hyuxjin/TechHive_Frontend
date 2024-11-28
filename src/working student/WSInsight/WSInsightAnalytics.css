@@ -15,7 +15,7 @@
 }
 
 .WSInsightAnalytics_WSInsightAnalytics.expanded {
-  height: 2340px;
+  height: 3000px;
 }
 
 .FeedbackSection {
@@ -467,143 +467,36 @@
 }
 
 .PieChartContainer {
-  position: absolute;
-  left: 244px;
-  top: 1161px;
-  width: 961px;
-  height: 300px;
+  position: relative; /* Change from absolute */
+  margin: 1140px auto; /* Center using margin auto */
+  width: 400px; /* Set a fixed width */
+  height: 400px; /* Set a fixed height */
+  text-align: center; /* Center text alignment */
 }
 
-
-.PieBackground {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 961px;
-  height: 441px;
-  background: rgba(255, 255, 255, 0.65);
-  border-radius: 13px;
+.custom-legend {
+  margin: 20px auto; /* Added auto margins for horizontal centering */
+  display: flex;
+  justify-content: center; /* Changed to center */
+  align-items: center;
+  width: 80%; /* Reduced width to bring items closer to center */
+  max-width: 1200px; /* Added max-width for larger screens */
+  gap: 50px;
 }
 
-.PieContainer {
-  position: absolute;
-  left: 325px;
-  top: 38px;
-  width: 325px;
-  height: 362px;
-}
-
-.PieGroup {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 325px;
-  height: 362px;
-}
-
-.ApprovedDeniedReports {
-  position: absolute;
-  left: 10px;
-  bottom: 370px;
-  width: 325px;
-  height: 25.99px;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.Approved {
-  margin-top: 10px;
-  position: absolute;
-  left: 74px;
-  top: 338px;
-  width: 72px;
-  height: 15px;
+.legend-item {
   display: flex;
   align-items: center;
-  font-size: 13px;
-  font-weight: 700;
+  gap: 12px;
+  min-width: -webkit-fill-available; /* Fallback for WebKit-based browsers (Samsung Internet 5.0+) */
+  min-width: fit-content; /* Main rule for browsers that support it */
 }
 
-.ApprovedBox {
-  margin-top: 10px;
-  position: absolute;
-  left: 27px;
-  top: 329px;
-  width: 33px;
-  height: 32px;
-  background: rgba(254, 176, 16, 1);
-  border-radius: 6px;
-}
-
-.Denied {
-  margin-top: 10px;
-  position: absolute;
-  left: 238px;
-  top: 338px;
-  width: 54px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.DeniedBox {
-  margin-top: 10px;
-  position: absolute;
-  left: 186px;
-  top: 329px;
-  width: 33px;
-  height: 32px;
-  background: rgba(138, 37, 44, 1);
-  border-radius: 6px;
-}
-
-.Abg {
-  position: absolute;
-  left: 37px;
-  top: 218px;
-  width: 46px;
-  height: 29px;
-  background: rgba(245, 245, 245, 0.83);
-  border-radius: 6px;
-}
-
-.ApprovedPercentage {
-  position: absolute;
-  left: 46px;
-  top: 223px;
-  width: 30px;
-  height: 18px;
-  color: #feb010;
-  font-size: 1.2rem;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.Dbg {
-  position: absolute;
-  left: 221px;
-  top: 92px;
-  width: 46px;
-  height: 29px;
-  background: rgba(245, 245, 245, 0.83);
-  border-radius: 6px;
-}
-
-.DeniedPercentage {
-  position: absolute;
-  left: 230px;
-  top: 50px;
-  left: 50px;
-  width: 30px;
-  height: 18px;
-  color: #8a252c;
-  font-size: 1.2rem;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 700;
+.legend-color {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 4px;
 }
 
 .WSInsightBox2 {
@@ -721,50 +614,6 @@
   height: 100%;
 }
 
-
-
-
-
-.TotalNumber2 {
-  position: absolute;
-  right: 227px;
-  top: 148px;
-  width: 38px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.GroupTable {
-  position: absolute;
-  left: 94px;
-  top: 240px;
-  width: 1005px;
-  height: 186px;
-}
-
-.Table {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 1004px;
-  height: 186px;
-}
-
-._1 {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 200px;
-  height: 62px;
-  background: rgba(138, 37, 44, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
 .SubmissionDate {
   position: absolute;
   left: 9px;
@@ -778,16 +627,6 @@
   color: rgba(246, 195, 1, 1);
   font-size: 16px;
   font-weight: 700;
-}
-
-._2_1 {
-  position: absolute;
-  left: 200px;
-  top: 0px;
-  width: 200px;
-  height: 62px;
-  background: rgba(138, 37, 44, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
 }
 
 .Location{
@@ -805,16 +644,6 @@
   font-weight: 700;
 }
 
-._3 {
-  position: absolute;
-  left: 401px;
-  top: 0px;
-  width: 200px;
-  height: 62px;
-  background: rgba(138, 37, 44, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
 .Reportcategory{
   position: absolute;
   left: 9px;
@@ -828,16 +657,6 @@
   color: rgba(246, 195, 1, 1);
   font-size: 16px;
   font-weight: 700;
-}
-
-._4 {
-  position: absolute;
-  left: 602px;
-  top: 0px;
-  width: 200px;
-  height: 61px;
-  background: rgba(138, 37, 44, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
 }
 
 .Status {
@@ -855,201 +674,6 @@
   font-weight: 700;
 }
 
-._6 {
-  position: absolute;
-  left: 0px;
-  top: 62px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-._20240116 {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._7 {
-  position: absolute;
-  left: 200px;
-  top: 62px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-.ngebuilding {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._8 {
-  position: absolute;
-  left: 401px;
-  top: 62px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-.Criticalemergency {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._9 {
-  position: absolute;
-  left: 602px;
-  top: 62px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-._11 {
-  position: absolute;
-  left: 0px;
-  top: 124px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-._20240116_2 {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._12 {
-  position: absolute;
-  left: 200px;
-  top: 124px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-.outsidecampus {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._13 {
-  position: absolute;
-  left: 401px;
-  top: 124px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-.Generalreport {
-  position: absolute;
-  left: 9px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._14 {
-  position: absolute;
-  left: 602px;
-  top: 124px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-.pending {
-  position: absolute;
-  left: 8px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._15 {
-  position: absolute;
-  left: 803px;
-  top: 0px;
-  width: 200px;
-  height: 61px;
-  background: rgba(138, 37, 44, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
 .Dateresolved {
   position: absolute;
   left: 8px;
@@ -1063,56 +687,6 @@
   color: rgba(246, 195, 1, 1);
   font-size: 16px;
   font-weight: 700;
-}
-
-._16 {
-  position: absolute;
-  left: 803px;
-  top: 62px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-._5_1 {
-  position: absolute;
-  left: 8px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-._17 {
-  position: absolute;
-  left: 803px;
-  top: 124px;
-  width: 200px;
-  height: 62px;
-  background: rgba(255, 254, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
-}
-
-._0 {
-  position: absolute;
-  left: 8px;
-  top: 13px;
-  width: 181px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  color: rgba(246, 195, 1, 1);
-  font-size: 16px;
-  font-weight: 400;
 }
 
 /* Mobile Responsive Styles */
@@ -1235,32 +809,7 @@
     height: 73%;
   }
 
-  .ApprovedPercentage {
-    left: 55%;
-    top: 73%;
-  }
-
-  .ApprovedBox {
-    top: 105%;
-  }
-
-  .DeniedPercentage {
-    top: 10%;
-  }
-
-  .Approved {
-    top: 108%;
-    font-size: 15px;
-  }
-
-  .DeniedBox {
-    top: 105%;
-  }
-
-  .Denied {
-    top: 108%;
-    font-size: 15px;
-  }
+ 
 
   .Toggle {
     left: -40%;
@@ -1433,58 +982,6 @@
     top: 50%;
   }
 
-  .PieBackground {
-    height: 83%;
-    width: 43.5%;
-  }
-
-  .PieContainer {
-    left: 4%;
-  }
-
-  .ApprovedDeniedReports {
-    left: 2%;
-    top: -18%;
-    font-size: 16px;
-  }
-
-  .PieGroup {
-    left: 22%;
-    top: 8%;
-    height: 65% !important;
-  }
-
-  .ApprovedPercentage {
-    left: 50%;
-    top: 70%;
-  }
-
-  .ApprovedBox {
-    left: -2%;
-    top: 100%;
-  }
-
-  .DeniedPercentage {
-    top: 8%;
-  }
-
-  .Approved {
-    left: 11%;
-    top: 103% !important;
-    font-size: 13px !important;
-  }
-
-  .DeniedBox {
-    left: 45%;
-    top: 100% !important;
-  }
-
-  .Denied {
-    left: 58%;
-    top: 103% !important;
-    font-size: 13px !important;
-  }
-
   .Toggle {
     left: -50% !important;
     top: -980% !important;
@@ -1494,7 +991,6 @@
     top: 1800px;
     /* Adjust this value as needed */
   }
-
 
   .ReportFeedback {
     left: -33% !important;
@@ -1573,21 +1069,5 @@
     top: 5% !important;
     left: -70% !important;
     font-size: 9px !important;
-  }
-
-  .GroupTable {
-    position: absolute;
-    left: 95px;
-    top: 230px;
-    width: 920px;
-    height: 186px;
-  }
-
-  .Table {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 1000px;
-    height: 195px;
   }
 }

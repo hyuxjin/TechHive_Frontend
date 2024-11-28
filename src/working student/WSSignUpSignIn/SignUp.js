@@ -12,6 +12,7 @@ const SignUp = () => {
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
   const [idError, setIdError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -34,8 +35,7 @@ const SignUp = () => {
 
   const closeModal = async () => {
     setIsModalOpen(false);
-
-    if (isEmailVerified) {
+    if (isEmailVerified && !isVerificationModalOpen) {
       try {
         const response = await axios.post("/user/insertUser", {
           fullName: fullNameValue,
@@ -51,7 +51,9 @@ const SignUp = () => {
         }
       } catch (error) {
         console.error("Signup Error:", error);
-        openModal("An error occurred during sign up. Please try again.");
+        setTimeout(() => {
+          openModal("An error occurred during sign up. Please try again.");
+        }, 100);
       }
     }
   };
@@ -66,20 +68,25 @@ const SignUp = () => {
 
   const handleSendCode = useCallback(async () => {
     try {
-      await axios.post("/user/sendVerificationEmail", { email: emailValue, fullName: fullNameValue, });
-      openModal("Email Verification Code has been sent to your email.");
-      setCountdown(30);
+      await axios.post("/user/sendVerificationEmail", {
+        email: emailValue,
+        fullName: fullNameValue,
+      });
       setIsVerificationModalOpen(true);
+      setCountdown(30);
     } catch (error) {
-      console.error("Error sending verification code:", error);
-      openModal("Failed to send verification code. Please try again.");
+      const errorMsg = error.response?.data?.message || "Failed to send verification code.";
+      openModal(errorMsg);
     }
   }, [emailValue, fullNameValue]);
 
   const handleResendCode = useCallback(async () => {
     if (countdown === 0) {
       try {
-        await axios.post("/user/sendVerificationEmail", { email: emailValue, fullName: fullNameValue, });
+        await axios.post("/user/sendVerificationEmail", {
+          email: emailValue,
+          fullName: fullNameValue,
+        });
         setCountdown(30);
         openModal("Email Verification Code has been resent to your email.");
       } catch (error) {
@@ -95,64 +102,81 @@ const SignUp = () => {
         email: emailValue,
         code: verificationCode,
       });
-  
+
       if (response.status === 200) {
-        openModal("Email verified successfully!");
         setIsEmailVerified(true);
         setIsVerificationModalOpen(false);
-      } else {
-        openModal("Invalid or expired verification code. Please try again.");
+        setTimeout(() => {
+          openModal("Email verified successfully! Please proceed with sign up.");
+        }, 100);
       }
     } catch (error) {
       console.error("Error verifying code:", error);
-  
-      // Display specific messages for invalid or expired verification codes
-      if (error.response) {
-        if (error.response.status === 400 && error.response.data === "Invalid or expired code.") {
-          openModal("Verification code is invalid or has expired. Please request a new code.");
-        } else {
-          openModal("Failed to verify code. Please try again.");
-        }
-      } else {
-        openModal("An unexpected error occurred. Please try again.");
+
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (error.response?.status === 400 && error.response?.data === "Invalid or expired code.") {
+        errorMessage = "Verification code is invalid or has expired. Please request a new code.";
       }
+
+      setModalMessage(errorMessage);
+      setIsModalOpen(true);
     }
   }, [verificationCode, emailValue]);
-    
+
+  const shakeInput = (selector) => {
+    const inputElement = document.querySelector(selector);
+    if (inputElement) {
+      inputElement.classList.add("input-error");
+      setTimeout(() => inputElement.classList.remove("input-error"), 300);
+    }
+  };
+
   const onSignUpButtonClick = async () => {
-    if (!fullNameValue || !emailValue || !usernameValue || !idNumberValue || !passwordValue || !confirmPasswordValue) {
-      openModal("All fields are required.");
+    setIdError("");
+    setEmailError("");
+
+    if (!fullNameValue.trim()) {
+      shakeInput(".full-name-box");
       return;
     }
 
-    if (!emailValue.endsWith("@cit.edu")) {
-      openModal("Email must be a valid @cit.edu address.");
+    const emailRegex = /^[a-zA-Z]+\.[a-zA-Z]+@cit\.edu$/;
+    if (!emailRegex.test(emailValue)) {
+      setEmailError("Use a valid @cit.edu email address.");
+      shakeInput(".email-box");
       return;
     }
 
-    if (passwordValue !== confirmPasswordValue) {
-      openModal("Password and confirm password do not match.");
-      return;
-    }
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isPasswordValid = passwordRegex.test(passwordValue);
-
-    if (!isPasswordValid) {
-      openModal(
-        "Password must have a minimum of 8 characters, including a combination of uppercase and lowercase letters, and at least one special character."
-      );
+    if (!usernameValue.trim()) {
+      shakeInput(".username-box");
       return;
     }
 
     const idPattern = /^[0-9]{2}-[0-9]{4}-[0-9]{3}$/;
     if (!idPattern.test(idNumberValue)) {
-      openModal("ID number format should be YY-NNNN-NNN.");
+      setIdError("ID number format should be YY-NNNN-NNN.");
+      shakeInput(".id-number-box");
+      return;
+    }
+
+    if (passwordValue !== confirmPasswordValue) {
+      openModal("Password and confirm password do not match.");
+      shakeInput(".pass-box");
+      shakeInput(".cpass-box");
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(passwordValue)) {
+      openModal(
+        "Password must have at least 8 characters, including uppercase, lowercase, a number, and a special character."
+      );
+      shakeInput(".pass-box");
       return;
     }
 
     if (!isEmailVerified) {
-      handleSendCode();
+      await handleSendCode();
       return;
     }
 
@@ -225,7 +249,6 @@ const SignUp = () => {
   return (
     <div className="ws-sign-up">
       <img className="background" alt="" src="/bg1.png" />
-
       <div className="main-boxSU" />
       <div className="back-button-container" onClick={onSIGNUPSIGNINClick}>
         <div className="back-bgSU" />
@@ -248,11 +271,12 @@ const SignUp = () => {
 
       <div className="email-name">Email</div>
       <input
-        className="email-box"
+        className={`email-box ${emailError ? "input-error" : ""}`}
         type="email"
         value={emailValue}
         onChange={handleEmailChange}
       />
+      {emailError && <p className="error-message">{emailError}</p>}
 
       <div className="username-name">Username</div>
       <input
@@ -264,7 +288,7 @@ const SignUp = () => {
 
       <div className="id-number-name">ID Number</div>
       <input
-        className="id-number-box"
+        className={`id-number-box ${idError ? "input-error" : ""}`}
         type="text"
         value={idNumberValue}
         onChange={handleIdNumberChange}
@@ -334,7 +358,7 @@ const SignUp = () => {
               onChange={(e) => setVerificationCode(e.target.value)}
               placeholder="Enter code"
             />
-            <button onClick={handleVerifyCode}>Verify</button>
+            <button onClick={handleVerifyCode}>VERIFY</button>
             <div className="resend-code-container">
               {countdown > 0 ? (
                 <span className="countdown">Resend in {countdown}s</span>

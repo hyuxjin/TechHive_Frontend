@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from 'react-chartjs-2';
 import axios from "../../services/axiosInstance";
 import { format } from 'date-fns';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale } from 'chart.js';
+import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale, Legend } from 'chart.js';
 import './WSInsightAnalytics.css';
 
-Chart.register(ArcElement, Tooltip, BarElement, CategoryScale, LinearScale);
+Chart.register(ArcElement, Tooltip, BarElement, CategoryScale, LinearScale, ChartDataLabels, Legend);
 
 const WSInsightAnalytics = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const WSInsightAnalytics = () => {
     approved: 0,
     denied: 0, // Default values to avoid ReferenceError
   });
+  const [pendingReportsByMonth, setPendingReportsByMonth] = useState([]);
 
   const onHomeTextClick = useCallback(() => {
     navigate("/wshomepage");
@@ -50,108 +52,110 @@ const WSInsightAnalytics = () => {
   };
 
 
-  const data = {
-    labels: ['Pending', 'Acknowledged', 'On-going', 'Resolved'],
-    datasets: [
-      {
-        data: [
-          reportStatusCounts.pending,
-          reportStatusCounts.acknowledged,
-          reportStatusCounts.ongoing,
-          reportStatusCounts.resolved,
-        ],
-        backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'], // Add colors for each section
-        hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
-      },
-    ],
-  };
-  
+  const totalReports = 
+  (reportStatusCounts.pending || 0) + 
+  (reportStatusCounts.acknowledged || 0) + 
+  (reportStatusCounts.ongoing || 0) + 
+  (reportStatusCounts.resolved || 0);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
+const percentages = {
+  pending: totalReports > 0 ? ((reportStatusCounts.pending || 0) / totalReports * 100).toFixed(1) : 0,
+  acknowledged: totalReports > 0 ? ((reportStatusCounts.acknowledged || 0) / totalReports * 100).toFixed(1) : 0,
+  ongoing: totalReports > 0 ? ((reportStatusCounts.ongoing || 0) / totalReports * 100).toFixed(1) : 0,
+  resolved: totalReports > 0 ? ((reportStatusCounts.resolved || 0) / totalReports * 100).toFixed(1) : 0,
+};
+
+const data = {
+  labels: ['Pending', 'Acknowledged', 'On-going', 'Resolved'],
+  datasets: [
+    {
+      data: [
+        reportStatusCounts.pending || 0,
+        reportStatusCounts.acknowledged || 0,
+        reportStatusCounts.ongoing || 0,
+        reportStatusCounts.resolved || 0,
+      ],
+      backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+      hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'center',
+    },
+    tooltip: {
+      enabled: true,
+    },
+    datalabels: {
+      formatter: (value, ctx) => {
+        const percentage = totalReports > 0 ? (value / totalReports) * 100 : 0;
+        if (ctx.dataIndex === 0 && value > 0) { // Only for pending status
+          return `${percentage.toFixed(1)}%`;
+        }
+        return '';
+      },
+      color: '#000',
+      font: {
+        size: 14,
+        weight: 'bold',
+      },
+      align: 'center',
+    },
+  },
+};
+
+
+const barData = {
+  labels: [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ],
+  datasets: [
+    {
+      label: "Pending Reports",
+      data: pendingReportsByMonth,  // Should be updated correctly
+      backgroundColor: "#F6C301",
+      borderColor: "#F6C301",
+      borderWidth: 1,
+    },
+  ],
+};
+
+
+// Bar chart options
+const barOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      position: "top",
+    },
+  },
+  scales: {
+    x: {
+      title: {
         display: true,
-        position: 'right', // Position legend to the right
-      },
-      tooltip: {
-        enabled: true, // Enable tooltips on hover
-      },
-      datalabels: {
-        // Plugin for displaying percentages
-        formatter: (value, ctx) => {
-          const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-          const percentage = ((value / total) * 100).toFixed(1);
-          return `${percentage}%`;
-        },
-        color: '#000', // Percentage color
-        font: {
-          size: 14,
-          weight: 'bold',
-        },
-        align: 'center', // Align the percentage inside the slice
+        text: "Months",
       },
     },
-  };
-
-
- 
-  // Bar chart data with values within 100 and some months missing data
-  const barData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-      {
-        label: 'Physical Accidents',
-        data: [20, 30], // Some months have no data (null)
-        backgroundColor: 'rgba(249,65,68,1.00)',
+    y: {
+      title: {
+        display: true,
+        text: "Number of Pending Reports",
       },
-      {
-        label: 'Laboratory Accident',
-        data: [null, 25, null, null, null, 10], // Some months have no data (null)
-        backgroundColor: 'rgba(243,114,44,1.00)',
-      },
-      {
-        label: 'Facility-Related Accident',
-        data: [10, null, 60], // Some months have no data (null)
-        backgroundColor: 'rgba(248,150,30,1.00)',
-      },
-      {
-        label: 'Environmental Accident',
-        data: [null, null, null, 70], // Some months have no data (null)
-        backgroundColor: 'rgba(249,132,74,0.78)',
-      },
-      {
-        label: 'Health-Related Accident',
-        data: [null, null, null, null, 40], // Some months have no data (null)
-        backgroundColor: 'rgba(144,190,109,1.00)',
-      },
-      {
-        label: 'Vehicle Accident',
-        data: [null, null, null, null, null, 5], // Some months have no data (null)
-        backgroundColor: 'rgba(67,170,139,1.00)',
-      },
-    ],
-  };
-
-  const barOptions = {
-    responsive: true,
-    scales: {
-      x: { stacked: true },
-      y: {
-        stacked: true,
-        max: 100, // Reduced the max value to align the bar heights properly
-        ticks: {
-          beginAtZero: true,
-          stepSize: 20, // Keep a small step size to better align with the gray line
-        },
+      beginAtZero: true,
+      ticks: {
+        stepSize: 10, // Adjust step size as needed
       },
     },
-    plugins: {
-      tooltip: {
-        enabled: true,
-      },
-    },
-  };
+  },
+};
+
 
   const [isOpen, setIsOpen] = useState(false);
  
@@ -196,8 +200,37 @@ const WSInsightAnalytics = () => {
   
     fetchData();
   }, []);
-  
 
+  useEffect(() => {
+    const fetchPendingReports = async () => {
+      try {
+        // Make sure the API endpoint returns the pending reports for each month
+        const response = await axios.get("/api/user/reports/pending/monthly");
+        console.log("Pending Reports by Month:", response.data);  // Check the response structure
+  
+        // Initialize an array with 0s for each month
+        const monthlyData = Array(12).fill(0);  // Default data for all 12 months
+  
+        // Populate the array with the actual data from the response
+        response.data.forEach((item) => {
+          const monthIndex = item.month - 1; // Adjust month to 0-based index
+          monthlyData[monthIndex] = item.count; // Set the count for the corresponding month
+        });
+  
+        // Update the state with the monthly data
+        setPendingReportsByMonth(monthlyData);
+      } catch (error) {
+        console.error("Error fetching pending reports by month:", error);
+      }
+    };
+  
+    fetchPendingReports();
+  }, []); // Runs only once on mount
+  
+  
+  
+  
+  
   return (
     <div className={`WSInsightAnalytics_WSInsightAnalytics ${isFeedbackVisible ? 'expanded' : 'minimized'}`}>
       <div className="WSNavbar">
@@ -244,71 +277,42 @@ const WSInsightAnalytics = () => {
       </div>
 
       <div className="BarGraphContainer">
-        <div className="BarBox" />
-        <span className='MonthlyAccidentEventStats'>Accident and Event Statistics by Month<br /> </span>
-        <div className="BarGraph" style={{ height: '280px', width: '83%' }}>
-          <Bar
-            data={barData}
-            options={{
+  <div className="BarBox" />
+  <span className='MonthlyAccidentEventStats'>Reports Resolved vs. Unresolved by Month
+  <br /> </span>
+  <div className="BarGraph" style={{ height: '340px', width: '90%' }}>
+    <Bar data={barData} options={{
               ...barOptions,
               maintainAspectRatio: false, // Make the graph responsive
               responsive: true,
-            }}
-          />
+            }} />
+  </div>
+</div>
 
-          <div className='grayline' />
-
-          <div className='PAContainer'>
-            <span className='PhysicalAccident'>Physical Accident</span>
-            <div className='PABox' />
-          </div>
-
-          <div className='EAContainer'>
-            <span className='EnvironmentalAccident'>Environmental Accident</span>
-            <div className='EABox' />
-          </div>
-
-          <div className='VAContainer'>
-            <span className='VehicleAccident'>Vehicle Accident</span>
-            <div className='VABox' />
-          </div>
-
-          <div className='LAContainer'>
-            <span className='LaboratoryAccident'>Laboratory Accident</span>
-            <div className='LABox' />
-          </div>
-
-          <div className='FireRelatedContainer'>
-            <span className='FireRelatedAccident'>Fire-Related Accident</span>
-            <div className='FireRelatedBox' />
-          </div>
-
-          <div className='EquipmentRelatedContainer'>
-            <span className='EquipmentRelatedAccident'>Equipment-Related Accident</span>
-            <div className='EquipmentRelatedBox' />
-          </div>
-
-          <div className='FacilityRelatedContainer'>
-            <span className='FacilityRelatedAccident'>Facility-Related Accident</span>
-            <div className='FacilityRelatedBox' />
-          </div>
-
-          <div className='HRContainer'>
-            <span className='HealthRelatedAccident'>Health-Related Accident</span>
-            <div className='HRBox' />
-          </div>
-
-          <div className='EventContainer'>
-            <span className='Event'>Event</span>
-            <div className='EventBox' />
-          </div>
-        </div>
-      </div>
 
       <div className="PieChartContainer">
-    <h3>Report Distribution by Status</h3>
-    <Pie data={data} options={options} />
+  <h3>Report Distribution by Status</h3>
+  <Pie data={data} options={options} />
+  <div className="custom-legend">
+    <div className="legend-item">
+      <span className="legend-color" style={{ backgroundColor: '#F6C301' }}></span>
+      <span>Pending: {reportStatusCounts.pending || 0} ({percentages.pending}%)</span>
+    </div>
+    <div className="legend-item">
+      <span className="legend-color" style={{ backgroundColor: '#F97304' }}></span>
+      <span>Acknowledged: {reportStatusCounts.acknowledged || 0} ({percentages.acknowledged}%)</span>
+    </div>
+    <div className="legend-item">
+      <span className="legend-color" style={{ backgroundColor: '#FF4B5C' }}></span>
+      <span>On-going: {reportStatusCounts.ongoing || 0} ({percentages.ongoing}%)</span>
+    </div>
+    <div className="legend-item">
+      <span className="legend-color" style={{ backgroundColor: '#FF69B4' }}></span>
+      <span>Resolved: {reportStatusCounts.resolved || 0} ({percentages.resolved}%)</span>
+    </div>
   </div>
+</div>
+
 
 
 

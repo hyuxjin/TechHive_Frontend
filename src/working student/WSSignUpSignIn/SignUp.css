@@ -18,7 +18,6 @@
     width: 1070px;
     height: 730px;
     transition: all 0.5s ease;
-    /* Smooth transition */
 }
 
 .back-bgSU {
@@ -64,7 +63,6 @@
     opacity: 0.9;
     mix-blend-mode: normal;
 }
-
 
 .main-titleSU {
     position: absolute;
@@ -184,7 +182,7 @@
 
 .error-message {
     position: absolute;
-    top: 0px; /* Set it close to the top */
+    top: 0px;
     left: 870px;
     color: red;
     font-size: 14px;
@@ -192,9 +190,8 @@
     text-align: center;
     width: 300px;
     z-index: 1000;
-    transform: translateY(-60px); /* Move it 50px further up */
+    transform: translateY(-60px);
 }
-
 
 .signupContainer {
     position: absolute;
@@ -255,82 +252,8 @@
     cursor: pointer;
 }
 
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 80%;
-    color: #8a252c;
-    font-family: var(--font-montserrat);
-}
-
-.modal-content p {
-    margin-bottom: 20px;
-    font-size: 18px;
-}
-
-.modal-ok {
-    background-color: #8a252c;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s, transform 0.3s, color 0.3s;
-    font-family: "Montserrat", sans-serif;
-}
-
-.modal-ok:hover {
-    background-color: #f9d67b;
-    color: #8a252c;
-    transform: scale(1.05);
-}
-
-.modal-ok,
-.modal-confirm,
-.modal-cancel {
-    background-color: #8a252c;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s, transform 0.3s, color 0.3s;
-    font-family: "Montserrat", sans-serif;
-}
-
-.modal-ok:hover,
-.modal-confirm:hover,
-.modal-cancel:hover {
-    background-color: #f9d67b;
-    color: #8a252c;
-    transform: scale(1.05);
-}
-
+/* Modal Base Styles */
+.modal-overlay,
 .email-verification-overlay {
     position: fixed;
     top: 0;
@@ -341,68 +264,196 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: var(--font-montserrat);
+}
+
+.modal-overlay {
     z-index: 1000;
-  }
-  
-  .email-verification-step {
-    background-color: #fdf6e3;
+}
+
+.email-verification-overlay {
+    z-index: 999;
+}
+
+/* Regular Modal Styles */
+.modal-content {
+    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 80%;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content p {
+    color: #8a252c;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.modal-ok,
+.modal-confirm,
+.modal-cancel {
+    background-color: #8a252c;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-montserrat);
+    min-width: 100px;
+}
+
+.modal-ok:hover,
+.modal-confirm:hover,
+.modal-cancel:hover {
+    background-color: #f9d67b;
+    color: #8a252c;
+    transform: scale(1.05);
+}
+
+/* Email Verification Modal Styles */
+.email-verification-step {
+    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
     padding: 30px;
     border-radius: 10px;
-    width: 300px;
+    width: 350px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .email-verification-step h2 {
-    margin-bottom: 20px;
-    color: #8a252c  ;
-  }
-  
-  .email-verification-step input {
+}
+
+.email-verification-step h2 {
+    color: #8a252c;
+    margin-bottom: 25px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.email-verification-step input {
     width: 90%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #8a252c;
-    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #8a252c;
+    border-radius: 20px;
     outline: none;
-  }
-  
-  .email-verification-step button {
-    width: 50%;
-    padding: 10px;
-    background-color: #f9d67b;
-    color: black;
-    font-weight: bolder;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .email-verification-step button:hover {
+    font-size: 16px;
+    text-align: center;
+    font-family: var(--font-montserrat);
+}
+
+.email-verification-step input:focus {
+    border-color: #f9d67b;
+    box-shadow: 0 0 5px rgba(138, 37, 44, 0.2);
+}
+
+.email-verification-step button {
+    width: 60%;
+    padding: 12px;
     background-color: #8a252c;
     color: white;
-  }
-  
-  .resend-code-container {
-    margin-top: 15px;
-    text-align: center;
-  }
-  
-  .countdown {
-    color: #888;
-  }
-  
-  .resend-code {
-    color: #fdfbc9;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .resend-code:hover {
-    color: #8a252c;
-  }
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-family: var(--font-montserrat);
+    margin-bottom: 15px;
+}
 
+.email-verification-step button:hover {
+    background-color: #f9d67b;
+    color: #8a252c;
+    transform: scale(1.05);
+}
+
+.email-verification-step button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.resend-code-container {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(138, 37, 44, 0.2);
+}
+
+.countdown {
+    color: #8a252c;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.resend-code {
+    color: #8a252c;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+.resend-code:hover {
+    color: #8a252c;
+    text-shadow: 1px 1px 1px rgba(138, 37, 44, 0.3);
+}
+
+/* Input Error Styling */
+.input-error {
+    border: 2px solid maroon !important;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Loading State Styles */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
     .back-bgSU {
         top: 10%;
@@ -530,26 +581,26 @@
 
     .signupContainer {
         top: 84%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 20%;
+        left: 38%;
+        transform: translateX(0);
+        width: 25%;
         height: auto;
     }
 
     .s-button {
         width: 100%;
-        height: 40px;
+        height: 33px;
     }
 
     .s-name {
-        top: 7px;
-        left: 54%;
+        top: 5px;
+        left: 57%;
         transform: translateX(-50%);
-        font-size: 18px;
+        font-size: 17px;
     }
 
     .error-message {
-        transform: translateY(-55px); 
+        transform: translateY(-55px);
         width: 80%;
         font-size: 14px;
     }
@@ -557,67 +608,70 @@
     .q1,
     .q2 {
         top: auto;
-        left: 72%;
+        left: 65%;
         transform: translateX(-50%);
         width: 80%;
-        font-size: 16px;
+        font-size: 14px !important;
     }
 
     .q1 {
-        top: 91%;
+        top: 90%;
+        left: 62% !important;
     }
 
     .q2 {
-        top: 91%;
-        left: 102%;
-    }
-
-    .modal-overlay {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        top: 90%;
+        left: 107% !important;
     }
 
     .modal-content {
-        background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
-        border-radius: 10px;
-        padding: 20px;
-        width: 80%;
-        max-width: 300px;
-        text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 70%;
+        max-width: 250px;
+        padding: 15px;
     }
 
     .modal-content p {
-        color: #8a252c;
-        font-size: 16px;
-        margin-bottom: 15px;
-        font-weight: 500;
         font-size: 14px;
-    }
-
-    .modal-ok {
-        background-color: #8a252c;
-        color: #FFFFFF;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
-        width: 100%;
-        max-width: 100px;
-    }
-
-    .modal-ok:hover {
-        background-color: #6e1e23;
+        margin-bottom: 15px;
     }
 
     .modal-ok,
     .modal-confirm,
     .modal-cancel {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .modal-content,
+    .email-verification-step {
+        width: 90%;
+        max-width: 350px;
+        padding: 20px;
+    }
+
+    .modal-content p {
+        font-size: 16px;
+    }
+
+    .modal-ok,
+    .modal-confirm,
+    .modal-cancel {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .email-verification-step h2 {
+        font-size: 20px;
+    }
+
+    .email-verification-step input,
+    .email-verification-step button {
+        font-size: 14px;
+    }
+
+    .countdown,
+    .resend-code {
         font-size: 12px;
-        padding: 6px 12px;
     }
 }
 
@@ -763,7 +817,7 @@
     }
 
     .error-message {
-        transform: translateY(-50px); 
+        transform: translateY(-50px);
         width: 80%;
         font-size: 14px;
     }
@@ -798,15 +852,59 @@
         margin-bottom: 15px;
     }
 
-    .modal-ok {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
     .modal-ok,
     .modal-confirm,
     .modal-cancel {
         font-size: 12px;
         padding: 6px 12px;
+    }
+
+    .modal-content,
+    .email-verification-step {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .modal-content p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .modal-buttons {
+        gap: 10px;
+    }
+
+    .modal-ok,
+    .modal-confirm,
+    .modal-cancel {
+        padding: 6px 15px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+
+    .email-verification-step h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .email-verification-step input {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .email-verification-step button {
+        padding: 8px;
+        font-size: 12px;
+        width: 70%;
+    }
+
+    .resend-code-container {
+        margin-top: 15px;
+        padding-top: 10px;
+    }
+
+    .countdown,
+    .resend-code {
+        font-size: 11px;
     }
 }
