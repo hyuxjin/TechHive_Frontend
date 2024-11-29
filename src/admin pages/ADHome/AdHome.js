@@ -38,22 +38,21 @@ const AdHome = () => {
 
   useEffect(() => {
     const fetchLoggedInAdmin = async () => {
+      try {
         const storedAdmin = JSON.parse(localStorage.getItem("loggedInAdmin"));
-        if (storedAdmin && storedAdmin.adminname) {
-            try {
-                const response = await axios.get(`http://localhost:8080/admin/getByAdminname?adminname=${storedAdmin.adminname}`);
-                const adminData = response.data;
-
-                if (adminData && adminData.adminId) {
-                    setLoggedInAdmin(adminData);
-                    console.log("Fetched admin data with ID:", adminData.adminId);
-                } else {
-                    console.error("Admin data is missing an admin ID.");
-                }
-            } catch (error) {
-                console.error("Error fetching admin data:", error);
-            }
+        if (!storedAdmin || !storedAdmin.adminname) {
+          console.log("No admin data found in localStorage");
+          return;
         }
+        const response = await axios.get(`http://localhost:8080/admin/getByAdminname?adminname=${storedAdmin.adminname}`);
+        const adminData = response.data;
+        if (adminData && adminData.adminId) {
+          setLoggedInAdmin(adminData);
+          console.log("Successfully fetched admin data:", adminData);
+        }
+      } catch (error) {
+        console.error("Error fetching admin data:", error.response || error);
+      }
     };
     fetchLoggedInAdmin();
   }, []);
@@ -75,6 +74,10 @@ const AdHome = () => {
   }, []);
 
   const fetchAdminProfilePicture = useCallback(async (adminId) => {
+    if (!adminId) {
+      console.log("No admin ID provided for profile picture");
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:8080/admin/profile/getProfilePicture/${adminId}`);
       if (response.ok) {
@@ -82,10 +85,11 @@ const AdHome = () => {
         const imageUrl = URL.createObjectURL(imageBlob);
         setAdminProfilePictures(prev => ({ ...prev, [adminId]: imageUrl }));
       } else {
+        console.log(`Using default profile for admin ${adminId}`);
         setAdminProfilePictures(prev => ({ ...prev, [adminId]: defaultProfile }));
       }
     } catch (error) {
-      console.error('Failed to fetch admin profile picture:', error);
+      console.error(`Error fetching profile picture for admin ${adminId}:`, error);
       setAdminProfilePictures(prev => ({ ...prev, [adminId]: defaultProfile }));
     }
   }, []);
@@ -117,26 +121,24 @@ const AdHome = () => {
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/posts/visible");
-        const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        setPosts(sortedPosts);
-
-        const adminIds = new Set();
-        const superUserIds = new Set();
-
-        sortedPosts.forEach(post => {
-          if (post.adminId) {
-            adminIds.add(post.adminId);
-          }
-          if (post.superuserId) {
-            superUserIds.add(post.superuserId);
+        const response = await axios.get("http://localhost:8080/posts/visible", {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
           }
         });
-
-        adminIds.forEach(adminId => fetchAdminProfilePicture(adminId));
-        superUserIds.forEach(superuserId => fetchSuperUserProfilePicture(superuserId));
+        if (response.data) {
+          const sortedPosts = response.data.sort((a, b) => 
+            new Date(b.timestamp) - new Date(a.timestamp)
+          );
+          setPosts(sortedPosts);
+          // Process profile pictures...
+        }
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error details:", error.response || error);
+        if (error.response?.status === 500) {
+          console.error("Server error - check Spring Boot logs");
+        }
       }
     };
 
@@ -199,6 +201,7 @@ const AdHome = () => {
       isVerified: false,
       likes: 0,
       dislikes: 0,
+      userRole: "ADMIN"
     };
 
     try {
@@ -226,9 +229,10 @@ const AdHome = () => {
     try {
       const response = await axios.post(`http://localhost:8080/posts/${postId}/like`, {}, {
         params: {
-          userId: loggedInAdmin ? loggedInAdmin.adminId : loggedInSuperUser.superuserId,
-          isAdmin: !!loggedInAdmin
-        }
+          params: {
+            userId: loggedInAdmin ? loggedInAdmin.adminId : loggedInSuperUser.superuserId,
+            userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
+          }        }
       });
       const updatedPost = response.data;
       setPosts(posts.map(post =>

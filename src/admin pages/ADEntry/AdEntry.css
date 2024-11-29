@@ -20,7 +20,7 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 20px;
   margin-top: 80px;
   margin-bottom: 40px;
@@ -49,24 +49,51 @@
   border-radius: 8px;
 }
 
-/* Reports container */
+/* Reports container with horizontal scroll */
 .reports-container {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-direction: row;
+  gap: 20px;
   width: 100%;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar styling */
+.reports-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.reports-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.reports-container::-webkit-scrollbar-thumb {
+  background: rgba(128, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.reports-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 0, 0, 0.7);
 }
 
 /* Report card styling */
 .entrypost-card {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  min-width: 250px;
+  width: 250px;
+  height: 300px;
+  flex: 0 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
 
 .entrypost-card:hover {
@@ -105,9 +132,9 @@
   opacity: 1;
 }
 
-.traffic-circle.maroon.active {
-  background-color: #800000;
-  border-color: #800000;
+.traffic-circle.red.active {
+  background-color: #FF0000;
+  border-color: #FF0000;
 }
 
 .traffic-circle.gray.active {
@@ -116,13 +143,13 @@
 }
 
 .traffic-circle.yellow.active {
-  background-color: #f8d825;
-  border-color: #f8d825;
+  background-color: #FFD700;
+  border-color: #FFD700;
 }
 
 .traffic-circle.green.active {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
+  background-color: #00FF00;
+  border-color: #00FF00;
 }
 
 /* Flag Icon */
@@ -141,22 +168,10 @@
 
 /* Profile and Details */
 .entry-profile-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   margin-bottom: 12px;
-  padding: 8px;
+  padding: 8px 12px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 8px;
-}
-
-.profile-picture {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-name {
@@ -169,10 +184,11 @@
 .entry-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px;
+  gap: 6px;
+  padding: 8px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 8px;
+  font-size: 12px;
 }
 
 .entry-details h5 {
@@ -191,19 +207,21 @@
 
 .description {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.4;
   margin-top: 10px;
   white-space: pre-wrap;
   color: #333;
+  max-height: 80px;
+  overflow-y: auto;
 }
 
 /* Images */
 .entry-images {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
-  margin-top: 15px;
-  padding: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+  padding: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 8px;
 }
@@ -212,7 +230,7 @@
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
@@ -348,6 +366,8 @@
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   margin: 10px 0;
+  min-width: 250px;
+  flex: 0 0 auto;
 }
 
 /* Responsive Design */
@@ -355,6 +375,12 @@
   .entrysub-container {
     padding: 15px;
     margin-top: 60px;
+  }
+
+  .entrypost-card {
+    min-width: 200px;
+    width: 200px;
+    height: 280px;
   }
 
   .modal-content {
@@ -385,7 +411,10 @@
   }
 
   .entrypost-card {
-    padding: 15px;
+    min-width: 150px;
+    width: 150px;
+    height: 250px;
+    padding: 10px;
   }
 
   .modal-content {
