@@ -12,23 +12,62 @@ const AdProfile = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [admin, setAdmin] = useState({});
-  const [profilePicture, setProfilePicture] = useState("/default.png"); // default profile picture
+  const [profilePicture, setProfilePicture] = useState("/default.png");
 
   useEffect(() => {
     const loggedInAdmin = JSON.parse(localStorage.getItem('loggedInAdmin'));
     console.log("Logged in admin:", loggedInAdmin);
     if (loggedInAdmin) {
       setAdmin(loggedInAdmin);
-      fetch(`http://localhost:8080/admin/profile/getProfilePicture/${loggedInAdmin.adminId}`)
+      // Updated endpoint to match backend controller
+      fetch(`http://localhost:8080/api/profile/admin/getProfilePicture/${loggedInAdmin.adminId}`)
         .then(response => response.blob())
         .then(blob => {
           if (blob.size > 0) {
             setProfilePicture(URL.createObjectURL(blob));
           }
-        });
+        })
+        .catch(error => console.error("Error fetching profile picture:", error));
     }
   }, []);
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("id", admin.adminId); // Updated to match backend parameter name
+
+    try {
+      // Updated endpoint to match backend controller
+      const response = await fetch(`http://localhost:8080/api/profile/admin/uploadProfilePicture`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Profile picture updated successfully:", result);
+      
+      // Refresh the profile picture immediately after successful upload
+      const pictureResponse = await fetch(`http://localhost:8080/api/profile/admin/getProfilePicture/${admin.adminId}`);
+      const pictureBlob = await pictureResponse.blob();
+      const newProfilePictureUrl = URL.createObjectURL(pictureBlob);
+      setProfilePicture(newProfilePictureUrl);
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+      }, 3000);
+    }
+  };
+
+  // Rest of the component remains the same...
   const handleEditClick = () => {
     setIsEditable(true);
     setCurrentPassword("");
@@ -77,32 +116,6 @@ const AdProfile = () => {
     }
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("adminId", admin.adminId);
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("http://localhost:8080/admin/profile/uploadProfilePicture", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("Profile picture updated successfully:", result);
-      
-      const newProfilePictureUrl = URL.createObjectURL(file);
-      setProfilePicture(newProfilePictureUrl);
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-    }
-  };
-
   return (
     <div className="main-container">
       <header>
@@ -116,7 +129,12 @@ const AdProfile = () => {
               <div className="upload-button-container">
                 <label className="upload-button">
                   Upload
-                  <input type="file" onChange={handleFileChange} style={{ display: "none" }} />
+                  <input 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    accept="image/*"
+                    style={{ display: "none" }} 
+                  />
                 </label>
               </div>
             </div>
