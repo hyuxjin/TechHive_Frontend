@@ -102,6 +102,7 @@ body {
 .HWildcat {
   position: relative;
   margin-top: 24px;
+  left: 20px;
   font-size: 64px;
   width: 323px;
   height: 77px;
