@@ -3,16 +3,10 @@ import axios from "../../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { Radio, RadioGroup, FormControlLabel, FormControl } from "@mui/material";
-import Loadable from 'react-loadable';
 import moment from 'moment';
 import "./WSHomepage.css";
 import WSNavBar from './WSNavBar';
 
-// eslint-disable-next-line no-unused-vars
-const WSComment = Loadable({
-  loader: () => import('./WSComment'),
-  loading: () => <div>Loading...</div>,
-});
 
 const WSHomepage = () => {
   const navigate = useNavigate();

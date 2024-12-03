@@ -28,7 +28,6 @@ import SignUp from './working student/WSSignUpSignIn/SignUp';
 import SuccessfullyRegistered from './working student/WSSignUpSignIn/SuccessfullyRegistered';
 import SignIn from './working student/WSSignUpSignIn/SignIn';
 import WSHomepage from './working student/WSHomepage/WSHomepage';
-import WSComment from './working student/WSHomepage/WSComment';
 import WSReport from './working student/WSReport/WSReport';
 import PopUpReport from './working student/WSReport/PopUpReport';
 import PopUpConfirm from './working student/WSReport/PopUpConfirm';
@@ -80,7 +79,6 @@ const App = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/successfullyregistered" element={<SuccessfullyRegistered />} />
         <Route path="/wshomepage" element={<WSHomepage />} />
-        <Route path="/wscomment" element={<WSComment />} />
         <Route path="/wsreport" element={<WSReport />} />
         <Route path="/popupreport" element={<PopUpReport />} />
         <Route path="/popupfinal" element={<PopUpReportFinal />} />
