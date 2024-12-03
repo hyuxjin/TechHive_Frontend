@@ -29,7 +29,7 @@ const WSProfile = ({ className = "" }) => {
 
   const fetchProfilePicture = useCallback(async (userId) => {
     try {
-      const response = await axios.get(`/user/profile/getProfilePicture/${userId}`, {
+      const response = await axios.get(`/api/profile/user/getProfilePicture/${userId}`, {
         responseType: "blob",
       });
       const imageBlob = response.data;
@@ -138,11 +138,11 @@ const WSProfile = ({ className = "" }) => {
     const file = event.target.files[0];
     if (file && loggedInUser) {
       const formData = new FormData();
-      formData.append("userId", loggedInUser.userId);
+      formData.append("id", loggedInUser.userId);
       formData.append("file", file);
   
       try {
-        const response = await axios.post("/user/profile/uploadProfilePicture", formData, {
+        const response = await axios.post("/api/profile/user/uploadProfilePicture", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
