@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "../../services/axiosInstance";
-import { useNavigate } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { Radio, RadioGroup, FormControlLabel, FormControl } from "@mui/material";
 import moment from 'moment';
@@ -9,7 +8,6 @@ import WSNavBar from './WSNavBar';
 
 
 const WSHomepage = () => {
-  const navigate = useNavigate();
   const [newPostContent, setNewPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null); // eslint-disable-line no-unused-vars
@@ -289,22 +287,6 @@ light.color : 'transparent',
     
     return post.image;
   };
-
-  const onREPORTSClick = useCallback(() => {
-    navigate("/wsreport");
-  }, [navigate]);
-
-  const onPROFILEClick = useCallback(() => {
-    navigate("/wsprofile");
-  }, [navigate]);
-
-  const onLEADERBOARDSClick = useCallback(() => {
-    navigate("/wsleaderboards");
-  }, [navigate]);
-
-  const onINSIGHTClick = useCallback(() => {
-    navigate("/insightanalytics");
-  }, [navigate]);
 
   const handlePostInputChange = (e) => {
     const content = e.target.value;
@@ -640,8 +622,6 @@ useEffect(() => {
 
 
   const fileInputRef = useRef(null);
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="ws-homepage">

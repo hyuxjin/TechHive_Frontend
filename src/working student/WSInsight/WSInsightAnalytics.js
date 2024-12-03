@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Pie, Bar } from 'react-chartjs-2';
 import axios from "../../services/axiosInstance";
 import { format } from 'date-fns';
@@ -12,7 +11,6 @@ import './WSInsightAnalytics.css';
 Chart.register(ArcElement, Tooltip, BarElement, CategoryScale, LinearScale, ChartDataLabels, Legend);
 
 const WSInsightAnalytics = () => {
-  const navigate = useNavigate();
   const [currentYear, setCurrentYear] = useState(2024);
   const [isFeedbackVisible, setFeedbackVisible] = useState(false);
   const [fetchedTotalReports, setFetchedTotalReports] = useState(0);
@@ -23,22 +21,6 @@ const WSInsightAnalytics = () => {
     denied: 0, // Default values to avoid ReferenceError
   });
   const [pendingReportsByMonth, setPendingReportsByMonth] = useState([]);
-
-  const onHomeTextClick = useCallback(() => {
-    navigate("/wshomepage");
-  }, [navigate]);
-
-  const onREPORTSClick = useCallback(() => {
-    navigate("/wsreport");
-  }, [navigate]);
-
-  const onLEADERBOARDClick = useCallback(() => {
-    navigate("/wsleaderboards");
-  }, [navigate]);
-
-  const onPROFILEClick = useCallback(() => {
-    navigate("/wsprofile");
-  }, [navigate]);
 
   const decrementYear = () => {
     setCurrentYear(prev => prev - 1);
@@ -156,9 +138,6 @@ const barOptions = {
     },
   },
 };
-
-
-  const [isOpen, setIsOpen] = useState(false);
  
   useEffect(() => {
     const fetchReportStatusCounts = async () => {

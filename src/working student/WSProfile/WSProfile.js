@@ -20,7 +20,6 @@ const WSProfile = ({ className = "" }) => {
   const [isProfileUpdateSuccessVisible, setIsProfileUpdateSuccessVisible] = useState(false);
   const defaultProfilePicture = 'default.png';
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
 
   const fetchLoggedInUser = useCallback(() => {
     const user = JSON.parse(localStorage.getItem("loggedInUser")) || null;
@@ -74,22 +73,6 @@ const WSProfile = ({ className = "" }) => {
   const onLOGOUTTextClick = () => {
     navigate("/logged-out");
   };
-
-  const onHomeTextClick = useCallback(() => {
-    navigate("/wshomepage");
-  }, [navigate]);
-
-  const onReportsTextClick = useCallback(() => {
-    navigate("/wsreport");
-  }, [navigate]);
-
-  const onLeaderboardsTextClick = useCallback(() => {
-    navigate("/wsleaderboards");
-  }, [navigate]);
-
-  const onINSIGHTClick = useCallback(() => {
-    navigate("/insightanalytics");
-  }, [navigate]);
 
   const openUpdatedPopUp = useCallback(async () => {
     if (!currentPassword || !newPassword) {

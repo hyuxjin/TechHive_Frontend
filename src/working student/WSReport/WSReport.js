@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Loadable from 'react-loadable';
 import "./WSReport.css";
 import WSNavBar from '../WSHomepage/WSNavBar'; // Adjust the path as needed
@@ -10,7 +9,6 @@ const PopUpReportFinal = Loadable({
 });
 
 const WSReport = () => {
-  const navigate = useNavigate();
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const togglePopup = useCallback(() => {
@@ -20,25 +18,6 @@ const WSReport = () => {
   const closePopup = useCallback(() => {
     setPopupVisible(false);
   }, []);
-
-
-  const onHomeTextClick = useCallback(() => {
-    navigate("/wshomepage");
-  }, [navigate]);
-
-  const onLEADERBOARDSClick = useCallback(() => {
-    navigate("/wsleaderboards");
-  }, [navigate]);
-
-  const onINSIGHTClick = useCallback(() => {
-    navigate("/insightanalytics");
-  }, [navigate]);
-
-  const onPROFILEClick = useCallback(() => {
-    navigate("/wsprofile");
-  }, [navigate]);
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

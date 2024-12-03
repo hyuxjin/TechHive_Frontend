@@ -1,31 +1,12 @@
-import { useCallback, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./WSLeaderboards.css";
 import WSNavBar from '../WSHomepage/WSNavBar';
 
 const WSLeaderboards = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const onHomeTextClick = useCallback(() => {
-    navigate("/wshomepage");
-  }, [navigate]);
-
-  const onREPORTSClick = useCallback(() => {
-    navigate("/wsreport");
-  }, [navigate]);
-
-  const onINSIGHTClick = useCallback(() => {
-    navigate("/insightanalytics");
-  }, [navigate]);
-
-  const onPROFILEClick = useCallback(() => {
-    navigate("/wsprofile");
-  }, [navigate]);
 
   const fetchUsers = async () => {
     try {
