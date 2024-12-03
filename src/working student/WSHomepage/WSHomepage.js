@@ -44,9 +44,12 @@ const WSHomepage = () => {
   useEffect(() => {
     const fetchLoggedInUser = async () => {
       const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      console.log("Stored user from localStorage:", storedUser); // Debug log
+  
       if (storedUser && storedUser.username) {
         try {
           const response = await axios.get(`/user/getByUsername?username=${storedUser.username}`);
+          console.log("User data from API:", response.data); // Debug log
           setLoggedInUser(response.data);
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -58,10 +61,15 @@ const WSHomepage = () => {
 
   const fetchUserProfilePicture = useCallback(async (userId) => {
     try {
-      const response = await axios.get(`/user/profile/getProfilePicture/${userId}`);
-      if (response.ok) {
-        const imageBlob = await response.blob();
-        const imageUrl = URL.createObjectURL(imageBlob);
+      // Get user's role from loggedInUser or pass it from where the user data is available
+      const userRole = loggedInUser?.role?.toLowerCase() || 'user';  // default to 'user' if no role
+  
+      const response = await axios.get(`/profile/${userRole}/getProfilePicture/${userId}`, {
+        responseType: 'blob'
+      });
+  
+      if (response.status === 200 && response.data) {
+        const imageUrl = URL.createObjectURL(response.data);
         setUserProfilePictures(prev => ({ ...prev, [userId]: imageUrl }));
       } else {
         setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile }));
@@ -70,7 +78,7 @@ const WSHomepage = () => {
       console.error('Failed to fetch user profile picture:', error);
       setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile }));
     }
-  }, []);
+  }, [loggedInUser]);
 
   useEffect(() => {
     if (loggedInUser) {
@@ -125,21 +133,36 @@ const WSHomepage = () => {
     const fetchPostsAndPictures = async () => {
       try {
         const response = await axios.get("/posts");
-        // Sort posts by timestamp in descending order to show the newest first
-        const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        const sortedPosts = response.data.sort((a, b) => 
+          new Date(b.timestamp) - new Date(a.timestamp)
+        );
         setPosts(sortedPosts);
-
-        // Fetch profile pictures for each post owner
-        const userIds = new Set(sortedPosts.map(post => post.userId));
-        userIds.forEach(userId => fetchUserProfilePicture(userId));
+  
+        // Set default pictures first
+        const userIds = [...new Set(sortedPosts.map(post => post.userId))];
+        const initialProfilePictures = Object.fromEntries(
+          userIds.map(userId => [userId, defaultProfile])
+        );
+        setUserProfilePictures(initialProfilePictures);
+  
+        // Then fetch actual pictures if user is logged in
+        if (loggedInUser) {
+          userIds.forEach(userId => fetchUserProfilePicture(userId));
+        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
+    
     fetchPostsAndPictures();
   }, [fetchUserProfilePicture]);
 
-
+  const getUserRole = (userId) => {
+    if (loggedInUser && loggedInUser.userId === userId) {
+      return loggedInUser.role?.toLowerCase() || 'user';
+    }
+    return 'user'; // default role for other users
+  };
 
   useEffect(() => {
     if (currentPostId) {
@@ -320,15 +343,16 @@ light.color : 'transparent',
   // Function to fetch profile picture
   const fetchProfilePicture = useCallback(async (userId) => {
     try {
-      const response = await axios.get(`/user/profile/getProfilePicture/${userId}`);
-      if (response.ok) {
-        const imageBlob = await response.blob();
-        if (imageBlob.size > 0) {
-          const imageUrl = URL.createObjectURL(imageBlob);
-          setProfilePicture(imageUrl);
-        } else {
-          setProfilePicture(defaultProfile);
-        }
+      const user = JSON.parse(localStorage.getItem("loggedInUser"));
+      const userRole = (user?.role || 'user').toLowerCase();
+  
+      const response = await axios.get(`/profile/${userRole}/getProfilePicture/${userId}`, {
+        responseType: 'blob' // Important for handling image data
+      });
+  
+      if (response.status === 200 && response.data.size > 0) {
+        const imageUrl = URL.createObjectURL(response.data);
+        setProfilePicture(imageUrl);
       } else {
         setProfilePicture(defaultProfile);
       }
@@ -336,16 +360,26 @@ light.color : 'transparent',
       console.error('Failed to fetch profile picture:', error);
       setProfilePicture(defaultProfile);
     }
-  }, [defaultProfile]);
+  }, []);
 
 
   // Fetch logged in user data and profile picture on component mount
-  useEffect(() => {
-    const user = fetchLoggedInUsers();
-    if (user) {
-      fetchProfilePicture(user.userId);
+  // Update useEffect to handle user fetching and profile picture loading
+useEffect(() => {
+  const user = fetchLoggedInUsers();
+  if (user?.userId) {
+    fetchProfilePicture(user.userId);
+  } else {
+    setProfilePicture(defaultProfile);
+  }
+
+  // Cleanup function to revoke object URLs
+  return () => {
+    if (profilePicture && profilePicture !== defaultProfile) {
+      URL.revokeObjectURL(profilePicture);
     }
-  }, [fetchLoggedInUsers, fetchProfilePicture]);
+  };
+}, [fetchLoggedInUsers, fetchProfilePicture]);
 
   const handleMicClick = () => {
     if (!("webkitSpeechRecognition" in window)) return;
@@ -382,6 +416,7 @@ light.color : 'transparent',
       userId: loggedInUser.userId,
       fullName: loggedInUser.fullName,
       idNumber: loggedInUser.idNumber,
+      userRole: loggedInUser.role || 'USER',
       isVerified: false,
       likes: 0,
       dislikes: 0,
@@ -422,13 +457,22 @@ light.color : 'transparent',
       return;
     }
     try {
-      const response = await axios.post(`/posts/${postId}/like?userId=${loggedInUser.userId}`);
+      const response = await axios.post(`/posts/${postId}/like`, null, {
+        params: {
+          userId: loggedInUser.userId,
+          userRole: loggedInUser.role || 'USER'
+        }
+      });
+
       const updatedPost = response.data;
       setPosts(posts.map(post =>
         post.postId === postId ? updatedPost : post
       ));
     } catch (error) {
       console.error("Error liking post:", error);
+      if (error.response?.status === 500) {
+        alert("An error occurred while liking the post. Please try again.");
+      }
     }
   };
 
@@ -438,13 +482,22 @@ light.color : 'transparent',
       return;
     }
     try {
-      const response = await axios.post(`/posts/${postId}/dislike?userId=${loggedInUser.userId}`);
+      const response = await axios.post(`/posts/${postId}/dislike`, null, {
+        params: {
+          userId: loggedInUser.userId,
+          userRole: loggedInUser.role || 'USER'
+        }
+      });
+
       const updatedPost = response.data;
       setPosts(posts.map(post =>
         post.postId === postId ? updatedPost : post
       ));
     } catch (error) {
       console.error("Error disliking post:", error);
+      if (error.response?.status === 500) {
+        alert("An error occurred while disliking the post. Please try again.");
+      }
     }
   };
 
