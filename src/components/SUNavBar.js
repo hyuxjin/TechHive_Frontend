@@ -28,7 +28,7 @@ const SUNavBar = () => {
   }, []);
 
   return (
-    <nav className={`navbar ${showNavbar ? "active" : ""}`}>
+    <nav className={`sunavbar ${showNavbar ? "active" : ""}`}>
       <div className="logo">
         <img src={TapIcon} alt="Title logo" />
       </div>

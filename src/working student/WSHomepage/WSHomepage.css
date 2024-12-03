@@ -40,8 +40,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4rem; /* Adjust this gap to reduce space between items */
-  margin-left: 43rem; 
+  gap: 4rem;
+  margin-left: auto;
+  margin-right: 2rem;
 }
 
 .nav-toggle {
@@ -74,8 +75,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.8rem;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
 /* Title */
@@ -95,6 +97,7 @@ body {
   font-size: 20px;
   cursor: pointer;
   z-index: 1001;
+  transition: color 0.3s ease;
 }
 
 

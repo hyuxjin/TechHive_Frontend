@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import UpdatedPopUp from './UpdatedPopUp';
 import ConfirmLogout from "./ConfirmLogout";
 import "./WSProfile.css";
+import WSNavBar from '../WSHomepage/WSNavBar';
 
 const WSProfile = ({ className = "" }) => {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
@@ -168,34 +169,7 @@ const WSProfile = ({ className = "" }) => {
   return (
     <div>
       <div className={`ws-profile ${className}`}>
-        <div className="WSNavbar">
-          <img className="WSTitle" alt="" src="/TITLE.png" />
-          <div className="nav-links">
-            <div className="NHome" onClick={onHomeTextClick}>Home</div>
-            <div className="NReports" onClick={onReportsTextClick}>Report</div>
-            <div className="NLeaderboards" onClick={onLeaderboardsTextClick}>Leaderboard</div>
-            <div className="NInsight" onClick={onINSIGHTClick}>Insight</div>
-            <b className="NProfile">Profile</b>
-          </div>
-          {/* Toggle Navigation Button for mobile */}
-          <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="nav-toggle-icon">
-              <path fillRule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
-            </svg>
-          </button>
-          {/* Mobile Dropdown Menu */}
-          {isOpen && (
-            <div className="mobile-menu">
-              <div className="mobile-menu-links">
-                <div className="NHome-mobile" onClick={onHomeTextClick}>Home</div>
-                <div className="NReports-mobile" onClick={onReportsTextClick}>Report</div>
-                <div className="NLeaderboards-mobile" onClick={onLeaderboardsTextClick}>Leaderboard</div>
-                <div className="NInsight-mobile" onClick={onINSIGHTClick}>Insight</div>
-                <b className="NProfile-mobile">Profile</b>
-              </div>
-            </div>
-          )}
-        </div>
+      <WSNavBar />
         <img className="WSProfileBg" alt="" src="/profilebg.png" />
         <div className="ProfilePictureContainer">
           <img className="WSProfileUser" alt="" src={profilePicture || defaultProfilePicture} />

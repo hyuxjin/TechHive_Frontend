@@ -4,6 +4,7 @@ import { Pie, Bar } from 'react-chartjs-2';
 import axios from "../../services/axiosInstance";
 import { format } from 'date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import WSNavBar from '../WSHomepage/WSNavBar';
 
 import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale, Legend } from 'chart.js';
 import './WSInsightAnalytics.css';
@@ -233,34 +234,7 @@ const barOptions = {
   
   return (
     <div className={`WSInsightAnalytics_WSInsightAnalytics ${isFeedbackVisible ? 'expanded' : 'minimized'}`}>
-      <div className="WSNavbar">
-        <img className="WSTitle" alt="" src="/TITLE.png" />
-        <div className="nav-links">
-          <div className="NHome" onClick={onHomeTextClick}>Home</div>
-          <div className="NReports" onClick={onREPORTSClick}>Report</div>
-          <div className="NLeaderboards" onClick={onLEADERBOARDClick}>Leaderboard</div>
-          <b className="NInsight">Insight</b>
-          <div className="NProfile" onClick={onPROFILEClick}>Profile</div>
-        </div>
-        {/* Toggle Navigation Button for mobile */}
-        <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="nav-toggle-icon">
-            <path fillRule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
-          </svg>
-        </button>
-        {/* Mobile Dropdown Menu */}
-        {isOpen && (
-          <div className="mobile-menu">
-            <div className="mobile-menu-links">
-              <div className="NHome-mobile" onClick={onHomeTextClick}>Home</div>
-              <div className="NReports-mobile" onClick={onREPORTSClick}>Report</div>
-              <div className="NLeaderboards-mobile" onClick={onLEADERBOARDClick}>Leaderboard</div>
-              <b className="NInsight-mobile">Insight</b>
-              <div className="NProfile-mobile" onClick={onPROFILEClick}>Profile</div>
-            </div>
-          </div>
-        )}
-      </div>
+      <WSNavBar />
 
       <img className="InsightTitle" alt="" src="/WSInsightAnalytics_insight.png" />
       <b className="AnalyticsTitle">Analytics</b>

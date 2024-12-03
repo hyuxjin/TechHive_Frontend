@@ -30,7 +30,7 @@ const AdNavBar = () => {
   }, []);
 
   return (
-    <nav className={`navbar ${showNavbar ? "active" : ""}`}>
+    <nav className={`adnavbar ${showNavbar ? "active" : ""}`}>
       <div className="logo">
         <img src={TapIcon} alt="Title logo" />
       </div>
