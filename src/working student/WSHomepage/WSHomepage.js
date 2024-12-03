@@ -61,12 +61,11 @@ const WSHomepage = () => {
 
   const fetchUserProfilePicture = useCallback(async (userId) => {
     try {
-      // Get user's role from loggedInUser or pass it from where the user data is available
-      const userRole = loggedInUser?.role?.toLowerCase() || 'user';  // default to 'user' if no role
-  
-      const response = await axios.get(`/profile/${userRole}/getProfilePicture/${userId}`, {
-        responseType: 'blob'
-      });
+      // Use the exact endpoint from the backend
+      const userRole = loggedInUser?.role?.toLowerCase() || 'user'; // default to 'user' if no role
+      const response = await axios.get(`/api/profile/${userRole}/getProfilePicture/${userId}`, { 
+        responseType: 'blob' 
+      }); 
   
       if (response.status === 200 && response.data) {
         const imageUrl = URL.createObjectURL(response.data);
@@ -345,10 +344,9 @@ light.color : 'transparent',
     try {
       const user = JSON.parse(localStorage.getItem("loggedInUser"));
       const userRole = (user?.role || 'user').toLowerCase();
-  
-      const response = await axios.get(`/profile/${userRole}/getProfilePicture/${userId}`, {
-        responseType: 'blob' // Important for handling image data
-      });
+      const response = await axios.get(`/api/profile/${userRole}/getProfilePicture/${userId}`, { 
+        responseType: 'blob' 
+      }); 
   
       if (response.status === 200 && response.data.size > 0) {
         const imageUrl = URL.createObjectURL(response.data);
@@ -361,7 +359,6 @@ light.color : 'transparent',
       setProfilePicture(defaultProfile);
     }
   }, []);
-
 
   // Fetch logged in user data and profile picture on component mount
   // Update useEffect to handle user fetching and profile picture loading
