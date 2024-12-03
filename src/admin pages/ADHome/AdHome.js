@@ -381,8 +381,10 @@ const AdHome = () => {
 
   return (
     <div className="adhome">
-      <AdNavBar />  
-      <b className="HWildcat">WILDCAT</b>
+      <AdNavBar />
+      <div className="header-wrapper">
+      <b className="TitleWildcat">WILDCAT</b>
+      </div>
 
       <div className="content-wrapper">
         <div className="post-container">
