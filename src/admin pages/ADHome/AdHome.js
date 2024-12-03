@@ -1,20 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import Loadable from 'react-loadable';
 import moment from 'moment';
 import AdNavBar from "../../components/AdNavBar";
 import "./AdHome.css";
 
-const AdComment = Loadable({
-  loader: () => import('./AdComment'),
-  loading: () => <div>Loading...</div>,
-});
-
 const AdHome = () => {
-  const navigate = useNavigate();
-  const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
