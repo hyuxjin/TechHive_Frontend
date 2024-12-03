@@ -44,8 +44,10 @@ const SignUp = () => {
           idNumber: idNumberValue,
           password: passwordValue,
           isAdmin: false,
+          role: "USER", // Add default role
+          status: true
         });
-
+  
         if (response.status === 200) {
           navigate("/successfullyregistered");
         }
@@ -185,7 +187,7 @@ const SignUp = () => {
 
   const handleConfirmSignUp = async () => {
     closeConfirmationModal();
-
+  
     try {
       const response = await axios.post("/user/insertUser", {
         fullName: fullNameValue,
@@ -194,8 +196,10 @@ const SignUp = () => {
         idNumber: idNumberValue,
         password: passwordValue,
         isAdmin: false,
+        role: "USER", // Add default role
+        status: true
       });
-
+  
       if (response.status === 200) {
         navigate("/successfullyregistered");
       }

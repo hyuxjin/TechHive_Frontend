@@ -47,16 +47,18 @@ const SignIn = () => {
 
     const deepClone = (obj, depth = 0) => {
       if (depth > maxDepth) return "[Object too deep]";
-      if (obj && typeof obj === 'object') {
-        if (cache.has(obj)) {
-          return "[Circular]";
-        }
+      if (!obj) return obj; // Handle null/undefined
+      if (typeof obj === 'object') {
+        if (cache.has(obj)) return "[Circular]";
         cache.add(obj);
-
+  
         const copy = Array.isArray(obj) ? [] : {};
         for (const key in obj) {
           if (obj.hasOwnProperty(key)) {
-            copy[key] = deepClone(obj[key], depth + 1);
+            // Skip functions and undefined values
+            if (typeof obj[key] !== 'function' && obj[key] !== undefined) {
+              copy[key] = deepClone(obj[key], depth + 1);
+            }
           }
         }
         return copy;
@@ -64,22 +66,43 @@ const SignIn = () => {
       return obj;
     };
 
-    const safeObject = deepClone(obj);  // Create a clone to avoid circular references
-    return JSON.stringify(safeObject, null, space);
+    try {
+      const safeObject = deepClone(obj);
+      return JSON.stringify(safeObject, null, space);
+    } catch (error) {
+      console.error('Error stringifying user data:', error);
+      // Return a minimal safe version
+      return JSON.stringify({
+        userId: obj.userId,
+        username: obj.username,
+        fullName: obj.fullName,
+        idNumber: obj.idNumber,
+        role: obj.role || 'USER',
+        userRole: obj.role || 'USER'
+      });
+    }
   };
 
   const onSignInButtonClick = useCallback(async () => {
     try {
-      debugger
       const response = await axios.post("/user/login", {
         idNumber: idNumberValue,
         password: passwordValue,
       });
-
+  
       if (response.status === 200) {
-        const user = response.data;
-        console.log("User object before stringification:", user);  // Log user object for inspection
-        localStorage.setItem("loggedInUser", safeStringify(user)); // Use safeStringify
+        const user = {
+          ...response.data,
+          // Ensure userRole is set either from role or default to STUDENT
+          userRole: response.data.role || 'USER'
+        };
+  
+        // Log the user object to verify data
+        console.log("User data before storage:", user);
+  
+        // Store in localStorage with the safe stringify
+        localStorage.setItem("loggedInUser", safeStringify(user));
+  
         showModal("Sign-in successful!", "success");
         setTimeout(() => {
           closeModal();
@@ -87,7 +110,6 @@ const SignIn = () => {
         }, 2000);
       }
     } catch (error) {
-      debugger
       console.error("Sign-in Error:", error);
       showModal("Invalid ID number or password. Please try again.", "error");
     }
