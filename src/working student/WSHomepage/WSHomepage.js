@@ -73,35 +73,43 @@ const WSHomepage = () => {
   }, [loggedInUser]);
 
   useEffect(() => {
+    console.log("Permissions check useEffect triggered");
+    console.log("Logged in user:", loggedInUser);
+  
     if (loggedInUser) {
-      console.log("Checking permissions for user:", loggedInUser.userId); // Debug log
-  
       const userPermissionsKey = `userPermissionsSet_${loggedInUser.userId}`;
+      
+      // Check if permissions have been set before
       const hasSetPermissions = localStorage.getItem(userPermissionsKey);
+      
+      console.log("Has set permissions:", hasSetPermissions);
   
-      console.log("Has set permissions:", hasSetPermissions); // Debug log
-  
+      // Get location and camera permissions
       const locationPermission = localStorage.getItem(`locationPermission_${loggedInUser.userId}`);
       const cameraPermission = localStorage.getItem(`cameraPermission_${loggedInUser.userId}`);
   
-      console.log("Location permission:", locationPermission); // Debug log
-      console.log("Camera permission:", cameraPermission); // Debug log
+      console.log("Location permission:", locationPermission);
+      console.log("Camera permission:", cameraPermission);
   
-      if (!hasSetPermissions) {
-        if (!locationPermission) {
-          setIsLocationDialogOpen(true);
-        } else if (!cameraPermission) {
-          setIsCameraDialogOpen(true);
-        }
+      // Force permissions for new users if no permissions are set
+      if (!locationPermission) {
+        console.log("No location permission found. Opening location dialog.");
+        setIsLocationDialogOpen(true);
+      } else if (!cameraPermission) {
+        console.log("No camera permission found. Opening camera dialog.");
+        setIsCameraDialogOpen(true);
       }
     }
   }, [loggedInUser]);
   
   const handleLocationPermission = (permission) => {
-    console.log("Setting location permission:", permission); // Debug log
+    console.log("Setting location permission:", permission);
   
     if (loggedInUser) {
       localStorage.setItem(`locationPermission_${loggedInUser.userId}`, permission);
+      console.log("Location permission stored:", 
+        localStorage.getItem(`locationPermission_${loggedInUser.userId}`));
+      
       setIsLocationDialogOpen(false);
   
       // Show camera dialog next
@@ -110,10 +118,13 @@ const WSHomepage = () => {
   };
   
   const handleCameraPermission = (permission) => {
-    console.log("Setting camera permission:", permission); // Debug log
+    console.log("Setting camera permission:", permission);
   
     if (loggedInUser) {
       localStorage.setItem(`cameraPermission_${loggedInUser.userId}`, permission);
+      console.log("Camera permission stored:", 
+        localStorage.getItem(`cameraPermission_${loggedInUser.userId}`));
+      
       setIsCameraDialogOpen(false);
   
       // Mark all permissions as complete
