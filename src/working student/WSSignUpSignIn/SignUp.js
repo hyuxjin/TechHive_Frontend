@@ -144,7 +144,7 @@ const SignUp = () => {
 
     const emailRegex = /^[a-zA-Z]+\.[a-zA-Z]+@cit\.edu$/;
     if (!emailRegex.test(emailValue)) {
-      setEmailError("Use a valid @cit.edu email address.");
+      setEmailError("Use a valid @cit.edu email address");
       shakeInput(".email-box");
       return;
     }
@@ -156,7 +156,7 @@ const SignUp = () => {
 
     const idPattern = /^[0-9]{2}-[0-9]{4}-[0-9]{3}$/;
     if (!idPattern.test(idNumberValue)) {
-      setIdError("ID number format should be YY-NNNN-NNN.");
+      setIdError("ID number format should be YY-NNNN-NNN");
       shakeInput(".id-number-box");
       return;
     }

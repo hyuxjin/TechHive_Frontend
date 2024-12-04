@@ -183,14 +183,17 @@
 .error-message {
     position: absolute;
     top: 0px;
-    left: 870px;
+    left: 50%;
+    transform: translate( 76%, -66px);
     color: red;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
-    width: 300px;
+    width: auto;
     z-index: 1000;
-    transform: translateY(-60px);
+    background: none;
+    padding: 0;
+    border: none;
 }
 
 .signupContainer {
@@ -600,7 +603,7 @@
     }
 
     .error-message {
-        transform: translateY(-55px);
+        transform: translate(15%, -50px);
         width: 80%;
         font-size: 14px;
     }
@@ -817,7 +820,7 @@
     }
 
     .error-message {
-        transform: translateY(-50px);
+        transform: translate( -5%, -50px);
         width: 80%;
         font-size: 14px;
     }
@@ -907,4 +910,6 @@
     .resend-code {
         font-size: 11px;
     }
+
+   
 }
