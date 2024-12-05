@@ -18,6 +18,7 @@ export default function SUSignInForm() {
     const [idNumber, setIdNumber] = useState("");
     const [password, setPassword] = useState("");
 
+    // Countdown effect for resend code timer
     useEffect(() => {
         let timer;
         if (countdown > 0) {
@@ -26,12 +27,14 @@ export default function SUSignInForm() {
         return () => clearTimeout(timer);
     }, [countdown]);
 
+    // Modal display handler
     const showModal = (message, type) => {
         setModalMessage(message);
         setModalType(type);
-        setTimeout(() => setModalMessage(""), 3000); // Auto-hide modal
+        setTimeout(() => setModalMessage(""), 3000); // Auto-hide modal after 3 seconds
     };
 
+    // Forgot Password handler
     const handleForgotPasswordClick = () => {
         setShowForgotPassword(true);
     };
@@ -41,6 +44,7 @@ export default function SUSignInForm() {
         setEmail("");
     };
 
+    // Send reset code
     const handleSendCode = async () => {
         try {
             const response = await fetch('http://localhost:8080/superuser/requestPasswordReset', {
@@ -63,18 +67,20 @@ export default function SUSignInForm() {
         }
     };
 
+    // Resend code handler
     const handleResendCode = async () => {
         if (countdown === 0) {
             await handleSendCode();
         }
     };
 
+    // Verify reset code
     const handleVerifyCode = async () => {
         try {
             const response = await fetch('http://localhost:8080/superuser/verifyResetCode', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, resetCode: verificationCode }), // Match backend field
+                body: JSON.stringify({ email, resetCode: verificationCode }),
             });
 
             if (response.ok) {
@@ -91,6 +97,7 @@ export default function SUSignInForm() {
         }
     };
 
+    // Reset password
     const handleResetPassword = async () => {
         if (newPassword !== confirmPassword) {
             showModal("Passwords do not match.", "error");
@@ -118,6 +125,7 @@ export default function SUSignInForm() {
         }
     };
 
+    // Sign-in handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -126,6 +134,7 @@ export default function SUSignInForm() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include', // Important for session cookies
                 body: JSON.stringify({
                     superUserIdNumber: idNumber,
                     superUserPassword: password,
@@ -133,9 +142,8 @@ export default function SUSignInForm() {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('superuserToken', data.token);
-                localStorage.setItem('loggedInSuperUser', JSON.stringify(data));
+                // Store minimal data, let session handle auth
+                sessionStorage.setItem('userRole', 'SUPER_USER');
                 navigate("/SUhome");
             } else {
                 const message = await response.text();
