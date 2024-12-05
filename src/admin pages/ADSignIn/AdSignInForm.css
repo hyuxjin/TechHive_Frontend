@@ -44,7 +44,7 @@
 }
 
 /* Updated Forgot Password positioning */
-.signin-form .forgot-password {
+.signin-form .adforgot-password {
   position: absolute; /* Change to absolute positioning */
   right: 10px; /* Position from the right */
   top: 50%; /* Position vertically */
@@ -67,7 +67,7 @@
 }
 
 /* Rest of the styles remain the same */
-.forgot-password-popup,
+.adforgot-password-popup,
 .verification-popup,
 .reset-password-popup {
   position: fixed;
@@ -82,7 +82,7 @@
   z-index: 1000;
 }
 
-.popup-content {
+.adpopup-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
@@ -91,14 +91,14 @@
   position: relative;
 }
 
-.popup-content label {
+.adpopup-content label {
   display: block;
   margin-bottom: 10px;
   color: #8A252C;
   font-weight: 500;
 }
 
-.popup-content input {
+.adpopup-content input {
   width: calc(100% - 20px);
   height: 35px;
   border-radius: 20px;
@@ -108,7 +108,31 @@
   margin-top: 5px;
 }
 
-.popup-content button {
+.adpopup-content button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.adpopup-content button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.adclose-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: 300;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 88%;
+}
+
+.adsendcode {
   width: 170px;
   height: 30px;
   border-radius: 20px;
@@ -119,22 +143,6 @@
   border: none;
   cursor: pointer;
   margin-top: 10px;
-}
-
-.popup-content button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #8A252C;
 }
 
 /* Modal Styles */

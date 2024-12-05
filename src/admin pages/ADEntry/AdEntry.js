@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdNavBar from '../../components/AdNavBar';
 import './AdEntry.css';
+import TrafficLights from '../../components/TrafficLights';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -178,47 +179,23 @@ const AdEntry = () => {
     }
   };
 
-  const TrafficLights = ({ report, isClickable }) => (
-    <div className="traffic-lights">
-      <div 
-        className={`traffic-circle red ${report.status === 'pending' ? 'active' : ''}`}
-      />
-      <div 
-        className={`traffic-circle gray ${report.status === 'acknowledged' ? 'active' : ''}`}
-        onClick={isClickable && report.status !== 'acknowledged' ? 
-          () => updateTrafficLight(report.id, 'acknowledged') : undefined}
-        style={isClickable && report.status !== 'acknowledged' ? { cursor: 'pointer' } : {}}
-      />
-      <div 
-        className={`traffic-circle yellow ${report.status === 'in-progress' ? 'active' : ''}`}
-        onClick={isClickable && report.status !== 'in-progress' ? 
-          () => updateTrafficLight(report.id, 'in-progress') : undefined}
-        style={isClickable && report.status !== 'in-progress' ? { cursor: 'pointer' } : {}}
-      />
-      <div 
-        className={`traffic-circle green ${report.status === 'resolved' ? 'active' : ''}`}
-        onClick={isClickable && report.status !== 'resolved' ? 
-          () => updateTrafficLight(report.id, 'resolved') : undefined}
-        style={isClickable && report.status !== 'resolved' ? { cursor: 'pointer' } : {}}
-      />
-    </div>
-  );
-
   const ReportCard = ({ report }) => (
     <div className="entrypost-card" onClick={() => handleReportClick(report)}>
-      <div className="card-header">
-        <TrafficLights report={report} isClickable={false} />
-        <button
-  onClick={(e) => {
-    e.stopPropagation();  // Prevents the event from propagating to parent elements
-    toggleFlag(report.id); // Call the function to toggle the flag
-  }}
-  className="flag-icon"
->
-  🚩
-</button>
-
-      </div>
+    <div className="card-header">
+      <TrafficLights 
+        status={report.status} 
+        isClickable={false} // Reports in AdEntry are not clickable here
+      />
+      <button
+        onClick={(e) => {
+          e.stopPropagation();  // Prevents the event from propagating to parent elements
+          toggleFlag(report.id); // Call the function to toggle the flag
+        }}
+        className="flag-icon"
+      >
+        🚩
+      </button>
+    </div>
 
       <div className="entry-profile-container">
         <h5 className="profile-name">{report.name}</h5>
@@ -345,25 +322,21 @@ const AdEntry = () => {
         </section>
 
         {selectedReport && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button
-                  onClick={closeReportModal}
-                  className="back-button"
-                >
-                  ←
-                </button>
-                <div className="traffic-lights-and-flag">
-                  <TrafficLights report={selectedReport} isClickable={true} />
-                  <button
-                    onClick={() => toggleFlag(selectedReport.id)}
-                    className="flag-icon"
-                  >
-                    🚩
-                  </button>
-                </div>
-              </div>
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <button onClick={closeReportModal} className="back-button">←</button>
+        <div className="traffic-lights-and-flag">
+          <TrafficLights 
+            status={selectedReport.status} 
+            isClickable={true} 
+            onChange={(newStatus) => updateTrafficLight(selectedReport.id, newStatus)} 
+          />
+          <button onClick={() => toggleFlag(selectedReport.id)} className="flag-icon">
+            🚩
+          </button>
+        </div>
+      </div>
 
               <div className="modal-body">
                 <h2>{selectedReport.name}</h2>

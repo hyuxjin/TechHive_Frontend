@@ -4,6 +4,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/
 import moment from 'moment';
 import AdNavBar from "../../components/AdNavBar";
 import "./AdHome.css";
+import TrafficLights from "../../components/TrafficLights";
 
 const AdHome = () => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -22,27 +23,37 @@ const AdHome = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [adminProfilePictures, setAdminProfilePictures] = useState({});
   const [superUserProfilePictures, setSuperUserProfilePictures] = useState({});
-  const defaultProfile = '/dp.png';
   const [showCloseButton, setShowCloseButton] = useState(false);
+  const defaultProfile = '/dp.png';
 
   const fileInputRef = useRef(null);
+
+  const getPostImage = (post) => {
+    if (!post.image) return null;
+    
+    if (post.image.startsWith('data:')) {
+      return post.image;
+    }
+    
+    if (post.image.startsWith('http')) {
+      return post.image;
+    }
+    
+    return `http://localhost:8080${post.image}`;
+  };
 
   useEffect(() => {
     const fetchLoggedInAdmin = async () => {
       try {
         const storedAdmin = JSON.parse(localStorage.getItem("loggedInAdmin"));
-        if (!storedAdmin || !storedAdmin.adminname) {
-          console.log("No admin data found in localStorage");
-          return;
-        }
+        if (!storedAdmin?.adminname) return;
         const response = await axios.get(`http://localhost:8080/admin/getByAdminname?adminname=${storedAdmin.adminname}`);
         const adminData = response.data;
-        if (adminData && adminData.adminId) {
+        if (adminData?.adminId) {
           setLoggedInAdmin(adminData);
-          console.log("Successfully fetched admin data:", adminData);
         }
       } catch (error) {
-        console.error("Error fetching admin data:", error.response || error);
+        console.error("Error fetching admin data:", error);
       }
     };
     fetchLoggedInAdmin();
@@ -51,11 +62,10 @@ const AdHome = () => {
   useEffect(() => {
     const fetchLoggedInSuperUser = async () => {
       const storedSuperUser = JSON.parse(localStorage.getItem("loggedInSuperUser"));
-      if (storedSuperUser && storedSuperUser.superusername) {
+      if (storedSuperUser?.superusername) {
         try {
           const response = await axios.get(`http://localhost:8080/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
           setLoggedInSuperUser(response.data);
-          console.log("Fetched superuser data:", response.data);
         } catch (error) {
           console.error("Error fetching superuser data:", error);
         }
@@ -65,76 +75,71 @@ const AdHome = () => {
   }, []);
 
   const fetchAdminProfilePicture = useCallback(async (adminId) => {
-    if (!adminId) {
-      console.log("No admin ID provided for profile picture");
-      return;
-    }
+    if (!adminId) return;
     try {
       const response = await fetch(`http://localhost:8080/admin/profile/getProfilePicture/${adminId}`);
-      if (response.ok) {
-        const imageBlob = await response.blob();
-        const imageUrl = URL.createObjectURL(imageBlob);
-        setAdminProfilePictures(prev => ({ ...prev, [adminId]: imageUrl }));
-      } else {
-        console.log(`Using default profile for admin ${adminId}`);
-        setAdminProfilePictures(prev => ({ ...prev, [adminId]: defaultProfile }));
-      }
+      const imageBlob = response.ok ? await response.blob() : null;
+      setAdminProfilePictures(prev => ({ 
+        ...prev, 
+        [adminId]: imageBlob ? URL.createObjectURL(imageBlob) : defaultProfile 
+      }));
     } catch (error) {
-      console.error(`Error fetching profile picture for admin ${adminId}:`, error);
+      console.error('Error fetching admin profile picture:', error);
       setAdminProfilePictures(prev => ({ ...prev, [adminId]: defaultProfile }));
     }
   }, []);
 
   const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
+    if (!superuserId) return;
     try {
       const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
-      if (response.ok) {
-        const imageBlob = await response.blob();
-        const imageUrl = URL.createObjectURL(imageBlob);
-        setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: imageUrl }));
-      } else {
-        setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
-      }
+      const imageBlob = response.ok ? await response.blob() : null;
+      setSuperUserProfilePictures(prev => ({ 
+        ...prev, 
+        [superuserId]: imageBlob ? URL.createObjectURL(imageBlob) : defaultProfile 
+      }));
     } catch (error) {
-      console.error('Failed to fetch superuser profile picture:', error);
+      console.error('Error fetching superuser profile picture:', error);
       setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
     }
   }, []);
 
   useEffect(() => {
-    if (loggedInAdmin && loggedInAdmin.adminId) {
+    if (loggedInAdmin?.adminId) {
       fetchAdminProfilePicture(loggedInAdmin.adminId);
-    } else {
-      console.error("Admin ID is not provided!");
     }
-  }, [loggedInAdmin, fetchAdminProfilePicture]);
+    if (loggedInSuperUser?.superuserId) {
+      fetchSuperUserProfilePicture(loggedInSuperUser.superuserId);
+    }
+  }, [loggedInAdmin, loggedInSuperUser, fetchAdminProfilePicture, fetchSuperUserProfilePicture]);
 
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/posts/visible", {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await axios.get("http://localhost:8080/posts/visible");
         if (response.data) {
-          const sortedPosts = response.data.sort((a, b) => 
+          console.log('Raw posts data:', response.data); // Debug log
+          const processedPosts = response.data.map(post => {
+            console.log('Individual post:', post); // Debug each post
+            console.log('isSubmittedReport:', post.isSubmittedReport);
+            console.log('status:', post.status);
+            return {
+              ...post,
+              image: post.image ? getPostImage(post) : null,
+              timestamp: moment(post.timestamp).local()
+            };
+          });
+          const sortedPosts = processedPosts.sort((a, b) => 
             new Date(b.timestamp) - new Date(a.timestamp)
           );
           setPosts(sortedPosts);
-          // Process profile pictures...
         }
       } catch (error) {
-        console.error("Error details:", error.response || error);
-        if (error.response?.status === 500) {
-          console.error("Server error - check Spring Boot logs");
-        }
+        console.error("Error fetching posts:", error);
       }
     };
-
     fetchPostsAndPictures();
-  }, [fetchAdminProfilePicture, fetchSuperUserProfilePicture]);
+  }, []);
 
   const handlePostInputChange = (e) => {
     const content = e.target.value;
@@ -145,12 +150,31 @@ const AdHome = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert("File is too large. Maximum size is 5MB.");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        const base64String = reader.result;
+        setImagePreview(base64String);
         setShowCloseButton(true);
       };
+      reader.onerror = () => {
+        console.error('FileReader error:', reader.error);
+        alert("Error reading file. Please try again.");
+      };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCloseImagePreview = () => {
+    setImagePreview(null);
+    setShowCloseButton(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -187,8 +211,8 @@ const AdHome = () => {
       content: newPostContent,
       image: imagePreview,
       adminId: loggedInAdmin.adminId,
-      fullName: loggedInAdmin.fullName,
-      idNumber: loggedInAdmin.idNumber,
+      fullname: loggedInAdmin.fullname,
+      idnumber: loggedInAdmin.idnumber,
       isVerified: false,
       likes: 0,
       dislikes: 0,
@@ -202,7 +226,12 @@ const AdHome = () => {
         }
       });
 
-      setPosts(prevPosts => [response.data, ...prevPosts]);
+      const createdPost = {
+        ...response.data,
+        image: response.data.image ? getPostImage(response.data) : null
+      };
+
+      setPosts(prevPosts => [createdPost, ...prevPosts]);
       setNewPostContent("");
       setSelectedFile(null);
       setImagePreview(null);
@@ -213,43 +242,36 @@ const AdHome = () => {
   };
 
   const handleLike = async (postId) => {
-    if (!loggedInAdmin && !loggedInSuperUser) {
-      alert("Please log in to like posts.");
-      return;
-    }
     try {
       const response = await axios.post(`http://localhost:8080/posts/${postId}/like`, {}, {
         params: {
-          params: {
-            userId: loggedInAdmin ? loggedInAdmin.adminId : loggedInSuperUser.superuserId,
-            userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
-          }        }
+          userId: loggedInAdmin?.adminId || loggedInSuperUser?.superuserId,
+          userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
+        }
       });
-      const updatedPost = response.data;
-      setPosts(posts.map(post =>
-        post.postId === postId ? updatedPost : post
-      ));
+      const updatedPost = {
+        ...response.data,
+        image: response.data.image ? getPostImage(response.data) : null
+      };
+      setPosts(posts.map(post => post.postId === postId ? updatedPost : post));
     } catch (error) {
       console.error("Error liking post:", error);
     }
   };
-
+  
   const handleDislike = async (postId) => {
-    if (!loggedInAdmin && !loggedInSuperUser) {
-      alert("Please log in to dislike posts.");
-      return;
-    }
     try {
       const response = await axios.post(`http://localhost:8080/posts/${postId}/dislike`, {}, {
         params: {
-          userId: loggedInAdmin ? loggedInAdmin.adminId : loggedInSuperUser.superuserId,
-          isAdmin: !!loggedInAdmin
+          userId: loggedInAdmin?.adminId || loggedInSuperUser?.superuserId,
+          userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
         }
       });
-      const updatedPost = response.data;
-      setPosts(posts.map(post =>
-        post.postId === postId ? updatedPost : post
-      ));
+      const updatedPost = {
+        ...response.data,
+        image: response.data.image ? getPostImage(response.data) : null
+      };
+      setPosts(posts.map(post => post.postId === postId ? updatedPost : post));
     } catch (error) {
       console.error("Error disliking post:", error);
     }
@@ -288,8 +310,8 @@ const AdHome = () => {
       content: newComment,
       postId: currentPostId,
       adminId: loggedInAdmin.adminId,
-      fullName: loggedInAdmin.fullName,
-      idNumber: loggedInAdmin.idNumber,
+      fullname: loggedInAdmin.fullname,
+      idnumber: loggedInAdmin.idnumber,
     };
 
     try {
@@ -354,11 +376,11 @@ const AdHome = () => {
 
   const formatTimestamp = (timestamp) => {
     const momentDate = moment(timestamp);
-    return momentDate.format('dddd, MMMM D, YYYY [at] h:mm A');
+    return momentDate.local().format('dddd, MMMM D, YYYY [at] h:mm A');
   };
-
+  
   const getRelativeTime = (timestamp) => {
-    return moment(timestamp).fromNow();
+    return moment(timestamp).local().fromNow();
   };
 
   const handleClosePost = () => {
@@ -374,12 +396,26 @@ const AdHome = () => {
     <div className="adhome">
       <AdNavBar />
       <div className="header-wrapper">
-      <b className="TitleWildcat">WILDCAT</b>
+        <b className="TitleWildcat">WILDCAT</b>
       </div>
 
       <div className="content-wrapper">
         <div className="post-container">
           <div className="post-form">
+            <div className="profile-picture-wrapper">
+              <img
+                src={
+                  loggedInAdmin
+                    ? adminProfilePictures[loggedInAdmin.adminId] || defaultProfile
+                    : loggedInSuperUser
+                    ? superUserProfilePictures[loggedInSuperUser.superuserId] || defaultProfile
+                    : defaultProfile
+                }
+                alt="Profile"
+                className="profile-picture"
+              />
+            </div>
+
             <form onSubmit={handlePostSubmit}>
               <div className="input-container">
                 <input
@@ -404,6 +440,7 @@ const AdHome = () => {
                     ref={fileInputRef}
                     id="file-upload"
                     type="file"
+                    accept="image/*"
                     className="file-input"
                     style={{ display: "none" }}
                     onChange={handleFileChange}
@@ -435,7 +472,12 @@ const AdHome = () => {
             </form>
             {imagePreview && (
               <div className="image-preview">
-                <img src={imagePreview} alt="Preview" style={{ width: '100px', height: '100px' }} />
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  style={{ maxWidth: '200px', height: 'auto' }}
+                />
+                <button onClick={handleCloseImagePreview}>Remove Image</button>
               </div>
             )}
           </div>
@@ -444,9 +486,19 @@ const AdHome = () => {
         <div className="post-list">
           {posts.map((post) => (
             <div key={post.postId} className="post-card">
-              <div className="card-container">
+              <div className="card-container" style={{ position: 'relative' }}>
+              {post.isSubmittedReport && post.status && (loggedInAdmin || loggedInSuperUser) && (
+   <div className="traffic-light-container">
+   <TrafficLights 
+     status={post.status} // This will be mapped inside TrafficLights component
+     isClickable={false}
+     onChange={() => {}} // Empty function since it's not clickable
+   />
+ </div>
+)}
+
                 <div className="name-container">
-                <img
+                  <img
                     src={
                       post.adminId
                         ? adminProfilePictures[post.adminId] || defaultProfile
@@ -455,7 +507,7 @@ const AdHome = () => {
                     alt="Profile Avatar"
                     className="admins-dp"
                   />
-                  <h5>{post.fullName} ({post.idNumber})</h5>
+                  <h5>{post.fullname} ({post.idnumber})</h5>
                   {loggedInAdmin && loggedInAdmin.adminId === post.adminId && (
                     <img
                       src="/delete.png"
@@ -477,8 +529,12 @@ const AdHome = () => {
                     <img
                       className="post-image"
                       alt="Post"
-                      src={post.image}
-                      style={{ maxWidth: '100%', height: 'auto' }}
+                      src={getPostImage(post)}
+                      onError={(e) => {
+                        console.error('Error loading image:', post.image);
+                        e.target.style.display = 'none';
+                      }}
+                      style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
                     />
                   )}
                 </div>
@@ -499,7 +555,9 @@ const AdHome = () => {
                     </button>
                   </div>
                   <div className="footer-comments">
-                    <button className="comment-button" onClick={() => handleOpenComments(post.postId)}>Comment</button>
+                    <button className="comment-button" onClick={() => handleOpenComments(post.postId)}>
+                      Comment
+                    </button>
                   </div>
                 </div>
               </div>
@@ -524,7 +582,7 @@ const AdHome = () => {
               <div className="comment-header">
                 <div className="admin-info-container">
                   <span className="admin-info">
-                    {comment.fullName} ({comment.idNumber})
+                    {comment.fullname} ({comment.idnumber})
                   </span>
                   {(loggedInAdmin && (loggedInAdmin.adminId === comment.adminId || loggedInAdmin.adminId === currentPostOwner)) && (
                     <img
@@ -536,12 +594,8 @@ const AdHome = () => {
                   )}
                 </div>
                 <div className="timestamp-container">
-                  <span className="formatted-time">
-                    {formatTimestamp(comment.timestamp)}
-                  </span>
-                  <span className="relative-time">
-                    {comment.relativeTime}
-                  </span>
+                  <span className="formatted-time">{formatTimestamp(comment.timestamp)}</span>
+                  <span className="relative-time">{comment.relativeTime}</span>
                 </div>
               </div>
               <p>{comment.content}</p>

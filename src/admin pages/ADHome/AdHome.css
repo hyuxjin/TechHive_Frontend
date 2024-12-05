@@ -51,6 +51,18 @@
   cursor: pointer;
   z-index: 1001;
 }
+.profile-picture-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.profile-picture {
+  width: 100px; /* Adjust size as needed */
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
 .NHome { left: 820px; width: 63px; }
 .NReports { left: 990px; width: 82px; }
@@ -597,4 +609,6 @@
     padding: 10px;
     margin-bottom: 20px;
   }
+
+  
 }

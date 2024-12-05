@@ -179,17 +179,18 @@ export default function AdSignInForm() {
         <br />
         <button type="submit">SIGN IN</button>
         <br />
-        <span className="forgot-password" onClick={handleForgotPasswordClick}>
+        <span className="adforgot-password" onClick={handleForgotPasswordClick}>
           Forgot Password?
         </span>
       </form>
 
       {showForgotPassword && (
-        <div className="forgot-password-popup">
-          <div className="popup-content">
-            <button className="close-button" onClick={handleCloseForgotPassword}>
+        <div className="adforgot-password-popup">
+          <div className="adpopup-content">
+            <button className="adclose-button" onClick={handleCloseForgotPassword}>
               &times;
             </button>
+            <h2>Forgot Password</h2>
             <label>
               Enter email address
               <input
@@ -200,14 +201,14 @@ export default function AdSignInForm() {
               />
             </label>
             <br />
-            <button onClick={handleSendCode}>Send Code</button>
+            <button className="adsendcode" onClick={handleSendCode}>Send Code</button>
           </div>
         </div>
       )}
 
       {showVerificationPopup && (
         <div className="verification-popup">
-          <div className="popup-content">
+          <div className="adpopup-content">
             <label>
               Verification Code
               <input

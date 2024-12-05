@@ -12,8 +12,8 @@ const AdSignIn = () => {
           <img className="img1" src={WildCatText} alt="WildCat Text" />
           <img className="img2" src={WildAdmin} alt="Wild Admin" />
         </div>
-        <div className="login-container">
-          <div className="login-design">
+        <div className="adminlogin-container">
+          <div className="adminlogin-design">
             <span>WELCOME!</span>
             <span style={{ fontWeight: "300" }}>
               Sign in to your Account

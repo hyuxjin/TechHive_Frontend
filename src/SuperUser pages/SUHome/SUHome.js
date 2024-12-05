@@ -413,7 +413,7 @@ const handleDeletePost = (postId) => {
     return (
         <div className="adhome">
             <SUNavBar />  
-            <b className="HWildcat">WILDCAT</b>
+            <b className="SUHWildcat">WILDCAT</b>
 
             <div className="content-wrapper">
                 <div className="post-container">

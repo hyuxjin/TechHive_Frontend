@@ -1,0 +1,34 @@
+/* src/components/TrafficLights.css */
+
+.traffic-lights {
+  display: flex;
+  gap: 5px;
+}
+
+.traffic-circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #555;
+  transition: background-color 0.3s;
+}
+
+.traffic-circle.red.active {
+  background-color: red;
+}
+
+.traffic-circle.gray.active {
+  background-color: gray;
+}
+
+.traffic-circle.yellow.active {
+  background-color: yellow;
+}
+
+.traffic-circle.green.active {
+  background-color: green;
+}
+
+.traffic-circle:hover {
+  opacity: 0.8;
+}

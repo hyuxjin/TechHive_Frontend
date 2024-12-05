@@ -716,7 +716,7 @@ useEffect(() => {
               <div className="card-container">
                 <div className="name-container">
                   <img src={userProfilePictures[post.userId] || defaultProfile} alt="User Avatar" />
-                  <h5>{post.fullName} ({post.idNumber})</h5>
+                  <h5>{post.fullname} ({post.idnumber})</h5>
                   {loggedInUser && loggedInUser.userId === post.userId && !post.isSubmittedReport && (
                     <img
                       src="/delete.png"

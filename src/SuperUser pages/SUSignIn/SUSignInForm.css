@@ -31,7 +31,7 @@ form button {
   cursor: pointer;
 }
 
-form .forgot-password {
+form .suforgot-password {
   font-size: 12px; /* Smaller font size */
   font-style: italic; /* Italicized text */
   color: #8A252C;
@@ -47,7 +47,7 @@ form .forgot-password {
 
 
 
-.forgot-password-popup {
+.suforgot-password-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -60,7 +60,7 @@ form .forgot-password {
   z-index: 1000;
 }
 
-.popup-content {
+.supopup-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
@@ -69,14 +69,18 @@ form .forgot-password {
   position: relative;
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.suclose-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: 300;
+  font-size: 15px;
   border: none;
-  background: transparent;
-  font-size: 20px;
   cursor: pointer;
+  margin-top: 10px;
+  margin-left: 88%;
 }
 
 .verification-popup {
@@ -92,7 +96,7 @@ form .forgot-password {
   z-index: 1000;
 }
 
-.verification-popup .popup-content {
+.verification-popup .supopup-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
@@ -101,7 +105,7 @@ form .forgot-password {
   position: relative;
 }
 
-.verification-popup .popup-content .small-button {
+.verification-popup .supopup-content .small-button {
   width: 80px;
   height: 30px;
   border-radius: 15px;
@@ -126,7 +130,7 @@ form .forgot-password {
   z-index: 1000;
 }
 
-.reset-password-popup .popup-content {
+.reset-password-popup .supopup-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
@@ -135,12 +139,12 @@ form .forgot-password {
   position: relative;
 }
 
-.reset-password-popup .popup-content label {
+.reset-password-popup .supopup-content label {
   display: block;
   margin-bottom: 10px;
 }
 
-.reset-password-popup .popup-content input {
+.reset-password-popup .supopup-content input {
   width: calc(100% - 20px);
   height: 35px;
   border-radius: 20px;
@@ -149,7 +153,7 @@ form .forgot-password {
   outline-style: none;
 }
 
-.reset-password-popup .popup-content button {
+.reset-password-popup {
   width: 120px;
   height: 40px;
   border-radius: 20px;
@@ -157,6 +161,23 @@ form .forgot-password {
   color: #FFFFFF;
   font-weight: bold;
   font-size: 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.supopup-content button {
+  justify-content: flex-end;
+}
+
+.susendcode {
+  width: 170px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: 300;
+  font-size: 15px;
   border: none;
   cursor: pointer;
   margin-top: 10px;

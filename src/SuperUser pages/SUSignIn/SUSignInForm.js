@@ -169,7 +169,7 @@ export default function SUSignInForm() {
                         required
                     />
                 </label>
-                <button type="button" onClick={handleForgotPasswordClick} className="forgot-password">
+                <button type="button" onClick={handleForgotPasswordClick} className="suforgot-password">
                     Forgot Password?
                 </button>
                 <br />
@@ -177,9 +177,9 @@ export default function SUSignInForm() {
             </form>
 
             {showForgotPassword && (
-                <div className="forgot-password-popup">
-                    <div className="popup-content">
-                        <button className="close-button" onClick={handleCloseForgotPassword}>
+                <div className="suforgot-password-popup">
+                    <div className="supopup-content">
+                        <button className="suclose-button" onClick={handleCloseForgotPassword}>
                             &times;
                         </button>
                         <h2>Forgot Password</h2>
@@ -193,14 +193,14 @@ export default function SUSignInForm() {
                             />
                         </label>
                         <br />
-                        <button onClick={handleSendCode}>Send Code</button>
+                        <button className="susendcode" onClick={handleSendCode}>Send Code</button>
                     </div>
                 </div>
             )}
 
             {showVerificationPopup && (
                 <div className="verification-popup">
-                    <div className="popup-content">
+                    <div className="supopup-content">
                         <h2>Enter Verification Code</h2>
                         <label>
                             Verification Code
