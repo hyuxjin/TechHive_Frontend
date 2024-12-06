@@ -567,6 +567,10 @@ body {
   /* Navigation Toggle */
   .nav-toggle {
     display: block;
+    position: absolute; /* Absolute positioning */
+    top: 20px; /* Adjust top positioning if necessary */
+    right: 20px; /* Move to the right side */
+    z-index: 1001; /* Ensure it stays on top */
   }
   /* Title */
   .WSTitle {
@@ -583,9 +587,13 @@ body {
   }
 
   .post-list {
-    width: 100% !important;
-    left: 8%;
+    width: 100% !important; /* Use 100% width to prevent overflow */
+    padding-right: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Center align all the items in the post-list */
   }
+
 }
 
 @media (max-width: 500px) {
@@ -602,11 +610,13 @@ body {
   .post-card {
     width: 85% !important;
     max-width: 425px;
-    left: 50%;
+    left: -6%; 
     top: 45%;
     height: 45%;
     overflow-y: auto;
     padding: 10px;
+    position: relative;
+    
   }
 
   .post-form {
