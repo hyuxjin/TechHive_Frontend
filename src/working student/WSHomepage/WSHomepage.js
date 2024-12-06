@@ -23,7 +23,7 @@ const WSHomepage = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null); // State to hold profile picture
   const [userProfilePictures, setUserProfilePictures] = useState({});
-  const defaultProfile = '/dp.png'; // Path to the default profile picture
+  const defaultProfile = '/default.png'; // Path to the default profile picture
 
   const [inputHasContent, setInputHasContent] = useState(false); // eslint-disable-line no-unused-vars
   const [showCancelButton, setShowCancelButton] = useState(false); // eslint-disable-line no-unused-vars
@@ -327,36 +327,37 @@ light.color : 'transparent',
     }
   };
 
-  // Function to fetch profile picture
+   // Fetch Profile Picture based on User ID
   const fetchProfilePicture = useCallback(async (userId) => {
     try {
       const user = JSON.parse(localStorage.getItem("loggedInUser"));
       const userRole = (user?.role || 'user').toLowerCase();
-      const response = await axios.get(`/api/profile/${userRole}/getProfilePicture/${userId}`, { 
-        responseType: 'blob' 
-      }); 
-  
+
+      const response = await axios.get(`/api/profile/${userRole}/getProfilePicture/${userId}`, {
+        responseType: 'blob'
+      });
+
       if (response.status === 200 && response.data.size > 0) {
         const imageUrl = URL.createObjectURL(response.data);
         setProfilePicture(imageUrl);
       } else {
+        // If no image found, set default image
         setProfilePicture(defaultProfile);
       }
     } catch (error) {
       console.error('Failed to fetch profile picture:', error);
-      setProfilePicture(defaultProfile);
+      setProfilePicture(defaultProfile);  // Set default profile picture on error
     }
   }, []);
 
-  // Fetch logged in user data and profile picture on component mount
-  // Update useEffect to handle user fetching and profile picture loading
-useEffect(() => {
-  const user = fetchLoggedInUsers();
-  if (user?.userId) {
-    fetchProfilePicture(user.userId);
-  } else {
-    setProfilePicture(defaultProfile);
-  }
+   // Fetch logged-in user data and profile picture on component mount
+   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (user?.userId) {
+      fetchProfilePicture(user.userId);
+    } else {
+      setProfilePicture(defaultProfile);  // Set default image if no user found
+    }
 
   // Cleanup function to revoke object URLs
   return () => {
@@ -364,7 +365,7 @@ useEffect(() => {
       URL.revokeObjectURL(profilePicture);
     }
   };
-}, [fetchLoggedInUsers, fetchProfilePicture]);
+}, [fetchProfilePicture, profilePicture]);
 
   const handleMicClick = () => {
     if (!("webkitSpeechRecognition" in window)) return;
