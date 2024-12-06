@@ -24,7 +24,7 @@ const AdHome = () => {
   const [adminProfilePictures, setAdminProfilePictures] = useState({});
   const [superUserProfilePictures, setSuperUserProfilePictures] = useState({});
   const [showCloseButton, setShowCloseButton] = useState(false);
-  const defaultProfile = '/dp.png';
+  const defaultProfile = '/default.png';
 
   const fileInputRef = useRef(null);
 
