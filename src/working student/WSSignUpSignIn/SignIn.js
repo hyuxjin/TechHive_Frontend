@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from 'lucide-react';
 import axios from "../../services/axiosInstance";
 import "./SignIn.css";
 
@@ -19,6 +20,7 @@ const SignIn = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState(""); // "error" or "success"
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     let timer;
@@ -38,6 +40,10 @@ const SignIn = () => {
     setIsModalOpen(false);
     setModalMessage("");
     setModalType("");
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   // Updated safe stringify to avoid circular reference issue and deep nesting
@@ -241,11 +247,22 @@ const SignIn = () => {
       />
       <div className="P-name">Password</div>
       <input
-        className="P-box"
-        type="password"
-        value={passwordValue}
-        onChange={handlePasswordChange}
-      />
+    className="P-box"
+    type={showPassword ? "text" : "password"}
+    value={passwordValue}
+    onChange={handlePasswordChange}
+  />
+  <button
+  type="button"
+  onClick={togglePasswordVisibility}
+  className="eye-icon-button"
+  >
+  {!showPassword ? (
+    <EyeOff size={20} />
+  ) : (
+    <Eye size={20} />
+  )}
+</button>
       <div className="forgot-password" onClick={handleForgotPasswordClick}>
         Forgot Password?
       </div>

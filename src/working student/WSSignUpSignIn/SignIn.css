@@ -115,6 +115,33 @@
     left: 870px;
 }
 
+.password-input-container {
+    position: absolute;
+    top: 440px;
+    left: 865px;
+    width: 347px;
+    height: 39px; /* Added height */
+}
+
+.eye-icon-button {
+    position: absolute;
+    top: 450px;  /* Adjusted to align with input */
+    right: 300px; /* Adjusted to position on the right side of input */
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8a252c;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.eye-icon-button:hover {
+    color: #f6c301
+}
+
 .id-number-b,
 .P-box {
     position: absolute;
@@ -134,6 +161,7 @@
 
 .P-box {
     top: 440px;
+    padding-right: 40px;
 }
 
 .forgot-password {
@@ -206,7 +234,6 @@
     cursor: pointer;
 }
 
-/* Password reset components styles */
 .password-reset-overlay {
     position: fixed;
     top: 0;
@@ -267,7 +294,6 @@
     background-color: #6d1e23;
 }
 
-/* New styles for resend code and timer */
 .resend-code-container {
     display: flex;
     justify-content: center;
@@ -295,7 +321,6 @@
     color: #8a252c;
 }
 
-/* New styles for the password reset back button */
 .reset-back-button {
     position: absolute;
     top: 10px;
@@ -395,7 +420,6 @@
     transform: scale(1.05);
 }
 
-/* Media queries */
 @media (max-width: 768px) {
     .back-bgSI {
         top: 10%;
@@ -464,21 +488,37 @@
         top: 49%;
     }
 
-    .id-number-b,
-    .P-box {
-        top: auto;
+    .password-input-container {
+        position: absolute;
+        top: 54%;
+        left: 51%;
+        transform: translateX(-50%);
+        width: 53%;
+    }
+
+    .eye-icon-button {
+        position: absolute;
+        top: 56%;  /* Match P-box positioning */
+        right: 25%;  /* Adjust to align with input's right edge */
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    .id-number-b {
+        top: 38%;
         left: 51%;
         transform: translateX(-50%);
         width: 53%;
         height: 36px;
     }
 
-    .id-number-b {
-        top: 38%;
-    }
-
     .P-box {
-        top: 54%;
+        top: 54%;  /* Align with container */
+        left: 51%;
+        transform: translateX(-50%);
+        width: 53%;
+        height: 36px;
+        position: absolute;
     }
 
     .SIContainer {
@@ -529,7 +569,7 @@
     .q4,
     .q5 {
         top: auto;
-        left: 68%;
+        left: 70%;
         transform: translateX(-50%);
         width: 80%;
         font-size: 18px;
@@ -537,6 +577,7 @@
 
     .q4 {
         top: 83%;
+        left: 70%;
     }
 
     .q5 {
@@ -565,31 +606,24 @@
         font-size: 14px;
     }
 
-    .resend-code,
-    .countdown {
-        font-size: 12px;
-    }
-
     .modal-overlay {
-        align-items: flex-start;
-        padding-top: 60px;
+        padding-top: 40px;
     }
 
     .modal-content {
-        max-width: 80%;
-        width: calc(100% - 40px);
-        padding: 15px;
-        margin: 0 auto;
+        max-width: 90%;
+        width: calc(100% - 30px);
+        padding: 12px;
     }
 
     .modal-content p {
-        font-size: 14px;
-        margin-bottom: 15px;
+        font-size: 13px;
+        margin-bottom: 12px;
     }
 
     .modal-ok {
-        font-size: 14px;
-        padding: 8px 16px;
+        font-size: 13px;
+        padding: 7px 14px;
     }
 }
 
@@ -667,6 +701,19 @@
         top: 49%;
     }
 
+    .password-input-container {
+        width: 53%;
+        top: 54%;
+    }
+    
+    .eye-icon-button {
+        position: absolute;
+        top: 57%;
+        right: 25%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
     .id-number-b,
     .P-box {
         top: auto;
@@ -682,8 +729,13 @@
 
     .P-box {
         top: 54%;
+        left: 51%;
+        transform: translateX(-50%);
+        width: 53%;
+        height: 36px;
+        position: absolute;
     }
-
+    
     .SIContainer {
         position: absolute;
         top: 70%;
