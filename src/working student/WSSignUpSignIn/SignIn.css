@@ -125,8 +125,8 @@
 
 .eye-icon-button {
     position: absolute;
-    top: 450px;  /* Adjusted to align with input */
-    right: 300px; /* Adjusted to position on the right side of input */
+    top: 450px;  
+    right: 300px; 
     background: none;
     border: none;
     cursor: pointer;
@@ -504,6 +504,10 @@
         z-index: 2;
     }
 
+    .eye-icon-button:hover {
+        color: #f6c301
+    }
+
     .id-number-b {
         top: 38%;
         left: 51%;
@@ -712,6 +716,10 @@
         right: 25%;
         transform: translateY(-50%);
         z-index: 2;
+    }
+
+    .eye-icon-button:hover {
+        color: #f6c301
     }
 
     .id-number-b,
