@@ -243,6 +243,7 @@ const barOptions = {
 </div>
 
 
+<div className="PieBackground"></div>
       <div className="PieChartContainer">
   <h3>Report Distribution by Status</h3>
   <Pie data={data} options={options} />

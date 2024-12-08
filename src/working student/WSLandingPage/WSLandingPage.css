@@ -258,16 +258,14 @@
 
   .contact-us-name {
     top: 50px;
-    left: 25%;
-    transform: translateX(-50%);
+    left: 19%;
     width: auto;
     font-size: 16px;
   }
 
   .about-us-name {
     top: 50px;
-    left: 75%;
-    transform: translateX(-50%);
+    left: 70%;
     width: auto;
     font-size: 16px;
   }
@@ -288,13 +286,7 @@
   .get-started-button {
     position: absolute;
     top: 83%;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: none;
-  }
-
-  .get-started-button:hover {
-    transform: translateX(-50%);
+    left: 42%;
   }
 
   .badge-container,
@@ -359,6 +351,10 @@
 
   .title-icon:hover {
     transform: translateX(-50%) !important;
+  }
+
+  .get-started-button {
+    left: 37%;
   }
 
   .badge-container,
