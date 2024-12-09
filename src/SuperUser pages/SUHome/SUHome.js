@@ -205,14 +205,17 @@ const SUHome = () => {
     
       // Log the post data before sending it
       const newPost = {
-          content: newPostContent,
-          image: imagePreview,
-          superUserId: loggedInSuperUser.superuserId, // Ensure this is set
-          fullName: loggedInSuperUser.fullName,
-          idNumber: loggedInSuperUser.superuseridNumber,
-          likes: 0,
-          dislikes: 0,
-      };
+        content: newPostContent,
+        image: imagePreview,
+        superUserId: loggedInSuperUser.superuserId,
+        fullName: loggedInSuperUser.fullName,
+        idNumber: loggedInSuperUser.superuseridNumber,
+        userRole: "SUPERUSER",  // Add this
+        likes: 0,
+        dislikes: 0,
+        isVisible: true,  // Add this
+        isVerified: false  // Add this
+    };
     
       console.log("Post Data:", newPost); // Log the data to be sent
   
@@ -252,8 +255,20 @@ const SUHome = () => {
         });
         const updatedPost = response.data;
 
-        // If this is a user's post or report, update their points
-        if (updatedPost.userId) {
+        // If this is a report post and there's a userId, update their points with 10 points
+        if (updatedPost.userId && updatedPost.isSubmittedReport) {
+            try {
+                await axios.post(`/api/leaderboard/addPoints`, {}, {
+                    params: {
+                        userId: updatedPost.userId,
+                        points: 10  // Changed to 10 points for report posts
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating user points:", error);
+            }
+        } else if (updatedPost.userId) {
+            // Regular post gets 5 points
             try {
                 await axios.post(`/api/leaderboard/addPoints`, {}, {
                     params: {
@@ -266,7 +281,6 @@ const SUHome = () => {
             }
         }
 
-        // Update the posts state with the new like count
         setPosts(posts.map(post =>
             post.postId === postId ? updatedPost : post
         ));
@@ -291,8 +305,20 @@ const handleDislike = async (postId) => {
         });
         const updatedPost = response.data;
 
-        // If this is a user's post or report, update their points
-        if (updatedPost.userId) {
+        // If this is a report post and there's a userId, update their points with -10 points
+        if (updatedPost.userId && updatedPost.isSubmittedReport) {
+            try {
+                await axios.post(`/api/leaderboard/subtractPoints`, {}, {
+                    params: {
+                        userId: updatedPost.userId,
+                        points: 10  // Changed to 10 points for report posts
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating user points:", error);
+            }
+        } else if (updatedPost.userId) {
+            // Regular post gets -5 points
             try {
                 await axios.post(`/api/leaderboard/subtractPoints`, {}, {
                     params: {
@@ -305,7 +331,6 @@ const handleDislike = async (postId) => {
             }
         }
 
-        // Update the posts state with the new dislike count
         setPosts(posts.map(post =>
             post.postId === postId ? updatedPost : post
         ));
@@ -314,12 +339,12 @@ const handleDislike = async (postId) => {
     }
 };
 
-const handleRemoveLike = async (postId, userId) => {
+const handleRemoveLike = async (postId, userId, isReport) => {
     try {
         await axios.post(`/api/leaderboard/subtractPoints`, {}, {
             params: {
                 userId: userId,
-                points: 5
+                points: isReport ? 10 : 5
             }
         });
     } catch (error) {
@@ -327,12 +352,12 @@ const handleRemoveLike = async (postId, userId) => {
     }
 };
 
-const handleRemoveDislike = async (postId, userId) => {
+const handleRemoveDislike = async (postId, userId, isReport) => {
     try {
         await axios.post(`/api/leaderboard/addPoints`, {}, {
             params: {
                 userId: userId,
-                points: 5
+                points: isReport ? 10 : 5
             }
         });
     } catch (error) {
@@ -454,15 +479,33 @@ const handleDeletePost = (postId) => {
         }
     };
 
+    const getPostImage = (post) => {
+        if (!post.image) return null;
+        
+        if (post.image.startsWith('data:')) {
+            return post.image;
+        }
+        
+        if (post.image.startsWith('http')) {
+            return post.image;
+        }
+        
+        return `http://localhost:8080${post.image}`;
+    };
+
     const formatTimestamp = (timestamp) => {
-        const momentDate = moment(timestamp);
-        return momentDate.format('dddd, MMMM D, YYYY [at] h:mm A');
+        const momentDate = moment(timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
+        return momentDate.isValid() 
+            ? momentDate.format('dddd, MMMM D, YYYY [at] h:mm A')
+            : 'Invalid date';
     };
-
+    
     const getRelativeTime = (timestamp) => {
-        return moment(timestamp).fromNow();
+        const momentDate = moment(timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
+        return momentDate.isValid() 
+            ? momentDate.fromNow()
+            : 'Invalid date';
     };
-
     const handleClosePost = () => {
         setNewPostContent('');
         setImagePreview(null);
@@ -559,8 +602,11 @@ const handleDeletePost = (postId) => {
     )}
                             <div className="name-container">
     <img src={superuserProfilePictures[post.superUserId] || defaultProfile} alt="SuperUser Avatar" />
-    <h5>{post.fullName} ({post.superuseridNumber})</h5>
-    {/* Remove ownership check here, allowing all SuperUsers to see delete icon */}
+    <h5>
+        {post.fullName || post.fullname} 
+        {post.idNumber || post.idnumber || post.superuseridNumber ? 
+            ` (${post.idNumber || post.idnumber || post.superuseridNumber})` : ''}
+    </h5>
     {loggedInSuperUser && (
         <img
             src="/delete.png"
@@ -572,21 +618,28 @@ const handleDeletePost = (postId) => {
     )}
 </div>
 
-                                <div className="timestamp">
-                                    <span className="formatted-date">{formatTimestamp(post.timestamp)}</span>
-                                    <br />
-                                    <span className="relative-time">{getRelativeTime(post.timestamp)}</span>
-                                </div>
+<div className="timestamp" style={{ marginBottom: '10px', color: '#666' }}>
+    <div className="formatted-date" style={{ fontSize: '14px' }}>
+        {moment(post.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS').format('dddd, MMMM D, YYYY [at] h:mm A')}
+    </div>
+    <div className="relative-time" style={{ fontSize: '12px', color: '#888' }}>
+        {moment(post.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS').fromNow()}
+    </div>
+</div>
                                 <div className="card-contents">
                                     <p>{post.content}</p>
-                                    {post.image && (
-                                        <img
-                                            className="post-image"
-                                            alt="Post"
-                                            src={post.image}
-                                            style={{ maxWidth: '100%', height: 'auto' }}
-                                        />
-                                    )}
+                                   {post.image && (
+    <img
+        className="post-image"
+        alt="Post"
+        src={getPostImage(post)}
+        onError={(e) => {
+            console.error('Error loading image:', post.image);
+            e.target.style.display = 'none';
+        }}
+        style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+    />
+)}
                                 </div>
                                 <div className="footer-line" />
                                 <div className="footer-actions">

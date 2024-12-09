@@ -40,22 +40,20 @@ export default function AdSignInForm() {
         body: JSON.stringify({ idNumber, password }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("adminToken", data.token);
-        localStorage.setItem(
-          "loggedInAdmin",
-          JSON.stringify({
-            adminId: data.adminId,
-            adminname: data.adminname,
-            fullName: data.fullName,
-            email: data.email,
-            idNumber: data.idNumber,
-            profilePicture: data.profilePicture, // Store the profile picture URL
-          })
-        );
-        navigate("/adhome");
-      } else {
+     // In AdSignInForm.js, modify the login success handler
+if (response.ok) {
+  const data = await response.json();
+  localStorage.setItem("adminToken", data.token);
+  localStorage.setItem("loggedInAdmin", JSON.stringify({
+    adminId: data.adminId,
+    adminname: data.adminname,
+    fullname: data.fullName,  // Make sure this matches the backend property name
+    idnumber: data.idNumber,  // Make sure this matches the backend property name
+    email: data.email,
+    profilePicture: data.profilePicture
+  }));
+  navigate("/adhome");
+} else {
         const message = await response.text();
         showModal(`Login failed: ${message}`, "error");
       }

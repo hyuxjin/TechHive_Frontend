@@ -1,237 +1,318 @@
-import React, { useState } from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
-import { FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-import * as XLSX from 'xlsx'; // Import XLSX for Excel generation
+import React, { useState, useEffect } from "react";
+import { Pie, Bar } from 'react-chartjs-2';
+import axios from "../../services/axiosInstance";
+import { format } from 'date-fns';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SUNavBar from "../../components/SUNavBar";
+
+import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale, Legend } from 'chart.js';
 import './SUInsight.css';
 
-// Register chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+Chart.register(ArcElement, Tooltip, BarElement, CategoryScale, LinearScale, ChartDataLabels, Legend);
 
 const SUInsight = () => {
-  const [year, setYear] = useState(2024);
-  const [office, setOffice] = useState('Clinic Office');
-  const [showReportDetails, setShowReportDetails] = useState(false);
-  const [month, setMonth] = useState('');
-  const [status, setStatus] = useState('');
+  const [currentYear, setCurrentYear] = useState(2024);
+  const [isFeedbackVisible, setFeedbackVisible] = useState(false);
+  const [fetchedTotalReports, setFetchedTotalReports] = useState(0);
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [reportStatusCounts, setReportStatusCounts] = useState({
+    pending: 0,
+    acknowledged: 0,
+    ongoing: 0,
+    resolved: 0,
+  });
+  const [pendingReportsByMonth, setPendingReportsByMonth] = useState([]);
 
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
+  const decrementYear = () => {
+    setCurrentYear(prev => prev - 1);
   };
 
-  const handleOfficeChange = (event) => {
-    setOffice(event.target.value);
+  const incrementYear = () => {
+    setCurrentYear(prev => prev + 1);
   };
 
-  const handleMonthChange = (event) => {
-    setMonth(event.target.value);
+  const toggleFeedback = () => {
+    setFeedbackVisible(prev => !prev);
   };
 
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
+  const totalReports = 
+    (reportStatusCounts.pending || 0) + 
+    (reportStatusCounts.acknowledged || 0) + 
+    (reportStatusCounts.ongoing || 0) + 
+    (reportStatusCounts.resolved || 0);
+
+  const percentages = {
+    pending: totalReports > 0 ? ((reportStatusCounts.pending || 0) / totalReports * 100).toFixed(1) : 0,
+    acknowledged: totalReports > 0 ? ((reportStatusCounts.acknowledged || 0) / totalReports * 100).toFixed(1) : 0,
+    ongoing: totalReports > 0 ? ((reportStatusCounts.ongoing || 0) / totalReports * 100).toFixed(1) : 0,
+    resolved: totalReports > 0 ? ((reportStatusCounts.resolved || 0) / totalReports * 100).toFixed(1) : 0,
   };
 
-  const handleToggle = () => {
-    setShowReportDetails(!showReportDetails);
-  };
-
-  // Function to export data to Excel
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(tableData); // Convert data to worksheet
-    const workbook = XLSX.utils.book_new(); // Create a new workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Reports'); // Append worksheet to the workbook
-    XLSX.writeFile(workbook, 'report_data.xlsx'); // Trigger file download
-  };
-
-  // Bar chart data for reports received
-  const barData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+  const data = {
+    labels: ['Pending', 'Acknowledged', 'On-going', 'Resolved'],
     datasets: [
       {
-        label: 'Reports received',
-        data: [40, 90, 60, 50, 60, 70, 80, 85, 80, 90, 95, 85],
-        backgroundColor: [
-          'red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'violet', 'rose', 'pink',
+        data: [
+          reportStatusCounts.pending || 0,
+          reportStatusCounts.acknowledged || 0,
+          reportStatusCounts.ongoing || 0,
+          reportStatusCounts.resolved || 0,
         ],
+        backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+        hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
       },
     ],
   };
 
-  // Options for the bar chart
-  const barOptions = {
-    maintainAspectRatio: false,
+  const options = {
     responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'center',
+      },
+      tooltip: {
+        enabled: true,
+      },
+      datalabels: {
+        formatter: (value, ctx) => {
+          const percentage = totalReports > 0 ? (value / totalReports) * 100 : 0;
+          if (ctx.dataIndex === 0 && value > 0) {
+            return `${percentage.toFixed(1)}%`;
+          }
+          return '';
+        },
+        color: '#000',
+        font: {
+          size: 14,
+          weight: 'bold',
+        },
+        align: 'center',
       },
     },
   };
 
-  // Pie chart data for approved and denied reports (Donut chart)
-  const pieData = {
-    labels: ['Approved', 'Denied'],
+  const barData = {
+    labels: [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ],
     datasets: [
       {
-        label: 'Reports Approval',
-        data: [80, 20],
-        backgroundColor: ['green', 'red'],
-        hoverOffset: 4,
+        label: "Pending Reports",
+        data: pendingReportsByMonth,
+        backgroundColor: "#F6C301",
+        borderColor: "#F6C301",
+        borderWidth: 1,
       },
     ],
   };
 
-  // Options for the donut chart
-  const pieOptions = {
-    maintainAspectRatio: false,
+  const barOptions = {
     responsive: true,
-    cutout: '70%', // Converts pie chart to donut chart with a 70% cutout
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Months",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Number of Pending Reports",
+        },
+        beginAtZero: true,
+        ticks: {
+          stepSize: 10,
+        },
+      },
+    },
   };
 
-  // Sample data for the table
-  const tableData = [
-    { name: 'Richard Molina', submissionDate: '2024-01-16', status: 'Approved', dateVerified: '2024-01-16 | 1 AM', category: 'Critical Report' },
-    // Add more sample data as needed
-  ];
+  useEffect(() => {
+    const fetchReportStatusCounts = async () => {
+      try {
+        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
+        if (!userId) return;
+
+        const response = await axios.get(`/api/user/reports/reportStatusCounts/${userId}`);
+        console.log("Report Status Counts Response:", response.data);
+        setReportStatusCounts({
+          pending: response.data.pending || 0,
+          acknowledged: response.data.acknowledged || 0,
+          ongoing: response.data.in_progress || 0,
+          resolved: response.data.resolved || 0
+        });
+      } catch (error) {
+        console.error("Failed to fetch report status counts:", error);
+      }
+    };
+
+    fetchReportStatusCounts();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
+        if (!userId) return;
+
+        // Fetch user's reports
+        const reportsResponse = await axios.get(`/api/user/reports/user/${userId}`);
+        console.log("User Reports Response:", reportsResponse.data);
+        setFeedbackList(reportsResponse.data);
+        setFetchedTotalReports(reportsResponse.data.length);
+
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchPendingReports = async () => {
+      try {
+        const response = await axios.get("/api/user/reports/pending/monthly");
+        console.log("Pending Reports by Month:", response.data);
+
+        // Map the response data to an array of counts
+        const monthlyData = Array(12).fill(0);
+        response.data.forEach(item => {
+          monthlyData[item.month - 1] = item.count;
+        });
+
+        setPendingReportsByMonth(monthlyData);
+      } catch (error) {
+        console.error("Error fetching pending reports by month:", error);
+      }
+    };
+
+    fetchPendingReports();
+  }, []);
 
   return (
-    <div className="ad-insight-container">
+    <div className={`SUInsight_SUInsight ${isFeedbackVisible ? 'expanded' : 'minimized'}`}>
       <SUNavBar />
-      
-      <img src={`${process.env.PUBLIC_URL}/insighthead.png`} alt="Insight Header" className="insight-header-image" />
 
-      <div className="dropdown-container">
-        <FormControl variant="outlined" className="dropdown">
-          <InputLabel id="year-label">Year</InputLabel>
-          <Select
-            labelId="year-label"
-            id="year-select"
-            value={year}
-            onChange={handleYearChange}
-            label="Year"
-          >
-            <MenuItem value={2023}>2023</MenuItem>
-            <MenuItem value={2024}>2024</MenuItem>
-            <MenuItem value={2025}>2025</MenuItem>
-          </Select>
-        </FormControl>
+      <img className="SUInsightTitle" alt="" src="/WSInsightAnalytics_insight.png" />
+      <b className="SUAnalyticsTitle">Analytics</b>
 
-        <FormControl variant="outlined" className="dropdown">
-          <InputLabel id="office-label">Office</InputLabel>
-          <Select
-            labelId="office-label"
-            id="office-select"
-            value={office}
-            onChange={handleOfficeChange}
-            label="Office"
-          >
-            <MenuItem value="Clinic Office">Clinic Office</MenuItem>
-          </Select>
-        </FormControl>
+      <div className="SUInsightBox" />
+
+      <div className="SUYearContainer">
+        <div className="SUYearBox" />
+        <span className='SUYear'>Year</span>
+        <img className="SUCalendar" alt="" src="/WSInsight_Calendar.png" />
+        <img className="SUarrow_left" alt="" src="/WsInsight_Leftbtn.png" onClick={decrementYear} />
+        <span className='SU_2024'>{currentYear}</span>
+        <img className="SUarrow_right" alt="" src="/WsInsight_Rightbtn.png" onClick={incrementYear} />
       </div>
 
-      <div className="chart-container">
-        <h2>Reports Received</h2>
-        <div style={{ width: '600px', height: '300px' }}> {/* Increased width for the bar chart */}
-          <Bar data={barData} options={barOptions} />
+      <div className="SUBarGraphContainer">
+        <div className="SUBarBox" />
+        <span className='SUMonthlyAccidentEventStats'>Reports Resolved vs. Unresolved by Month<br /> </span>
+        <div className="SUBarGraph" style={{ height: '340px', width: '90%' }}>
+          <Bar data={barData} options={{
+            ...barOptions,
+            maintainAspectRatio: false,
+            responsive: true,
+          }} />
         </div>
       </div>
 
-      <div className="chart-container">
-        <h2>Approved and Denied Reports</h2>
-        <div style={{ width: '300px', height: '300px' }}> {/* Set the size for the donut chart */}
-          <Pie data={pieData} options={pieOptions} />
-        </div>
-      </div>
-
-      <Button variant="contained" color="primary" onClick={handleToggle}>
-        {showReportDetails ? 'Hide Full List of Reports' : 'See Full List of Reports'}
-      </Button>
-
-      {showReportDetails && (
-        <div className="report-details-container">
-          <div className="dropdown-container">
-            <FormControl variant="outlined" className="dropdown">
-              <InputLabel id="month-label">Month</InputLabel>
-              <Select
-                labelId="month-label"
-                id="month-select"
-                value={month}
-                onChange={handleMonthChange}
-                label="Month"
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="January">January</MenuItem>
-                <MenuItem value="February">February</MenuItem>
-                <MenuItem value="March">March</MenuItem>
-                <MenuItem value="April">April</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl variant="outlined" className="dropdown">
-              <InputLabel id="status-label">Status</InputLabel>
-              <Select
-                labelId="status-label"
-                id="status-select"
-                value={status}
-                onChange={handleStatusChange}
-                label="Status"
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="Approved">Approved</MenuItem>
-                <MenuItem value="Denied">Denied</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button variant="contained" color="secondary" onClick={exportToExcel}>
-              Download Excel
-            </Button>
+      <div className="SUPieBackground"></div>
+      <div className="SUPieChartContainer">
+        <h3>Report Distribution by Status</h3>
+        <Pie data={data} options={options} />
+        <div className="SUcustom-legend">
+          <div className="SUlegend-item">
+            <span className="SUlegend-color" style={{ backgroundColor: '#F6C301' }}></span>
+            <span>Pending: {reportStatusCounts.pending || 0} ({percentages.pending}%)</span>
           </div>
-
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Submission Date</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Date Verified</TableCell>
-                  <TableCell>Category</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tableData.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.submissionDate}</TableCell>
-                    <TableCell>{row.status}</TableCell>
-                    <TableCell>{row.dateVerified}</TableCell>
-                    <TableCell>{row.category}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div className="SUlegend-item">
+            <span className="SUlegend-color" style={{ backgroundColor: '#F97304' }}></span>
+            <span>Acknowledged: {reportStatusCounts.acknowledged || 0} ({percentages.acknowledged}%)</span>
+          </div>
+          <div className="SUlegend-item">
+            <span className="SUlegend-color" style={{ backgroundColor: '#FF4B5C' }}></span>
+            <span>On-going: {reportStatusCounts.ongoing || 0} ({percentages.ongoing}%)</span>
+          </div>
+          <div className="SUlegend-item">
+            <span className="SUlegend-color" style={{ backgroundColor: '#FF69B4' }}></span>
+            <span>Resolved: {reportStatusCounts.resolved || 0} ({percentages.resolved}%)</span>
+          </div>
         </div>
+      </div>
+
+      {isFeedbackVisible && (
+        <>
+          <div className={`SUFeedbackSection ${isFeedbackVisible ? 'visible' : 'hidden'}`}></div>
+          <div className="SUInsightBox2">
+            <div className="SUTableContainer">
+              <span className="SUTOTALREPORTSSUBMITTED">TOTAL REPORTS SUBMITTED</span>
+              <div className="SUTotalWrapper">
+                <div className="SUTotal1" />
+                <span className="SUTotalNumber1">{fetchedTotalReports}</span>
+              </div>
+              <div className="SUTableWrapper">
+                <table className="SUFeedbackTable">
+                  <thead>
+                    <tr>
+                      <th>Submission Date</th>
+                      <th>Location</th>
+                      <th>Report Category</th>
+                      <th>Status</th>
+                      <th>Date Resolved</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {feedbackList.map((report, index) => (
+                      <tr key={index}>
+                        <td>{format(new Date(report.submittedAt), 'yyyy-MM-dd')}</td>
+                        <td>{report.location}</td>
+                        <td>{report.reportCategory}</td>
+                        <td style={{
+                          color: report.status === 'PENDING' ? '#F6C301'
+                            : report.status === 'ACKNOWLEDGED' ? '#F97304'
+                            : report.status === 'IN_PROGRESS' ? '#FF4B5C'
+                            : report.status === 'RESOLVED' ? '#FF69B4'
+                            : '#000'
+                        }}>
+                          {report.status}
+                        </td>
+                        <td>
+                          {report.resolvedAt
+                            ? format(new Date(report.resolvedAt), 'yyyy-MM-dd')
+                            : '-'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </>
       )}
+
+      <div className='SUReportFeedbackContainer'>
+        <span className='SUReportFeedback'>Report Feedback</span>
+        <img
+          className="SUToggle"
+          alt=""
+          src={isFeedbackVisible ? "/Toggledown.png" : "/Toggleright.png"}
+          onClick={toggleFeedback}
+        />
+      </div>
     </div>
   );
 };

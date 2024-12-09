@@ -130,40 +130,38 @@ const SUDirectory = () => {
     }
   };
 
-  // Fetch Admin Data
   const fetchAdminData = async () => {
     try {
       const response = await fetch('http://localhost:8080/admin/getAllAdmins');
       const data = await response.json();
-
+  
       const formattedData = data.map(admin => ({
-        name: admin.fullName,
-        idNumber: admin.idNumber,
+        name: admin.fullName,           // Changed from admin.fullName
+        idNumber: admin.idNumber,       // Changed from admin.idNumber
         email: admin.email,
-        username: admin.adminname,
+        username: admin.adminname,      // Changed from admin.adminname to match backend
         status: admin.status,
       }));
-
+  
       setTableData(formattedData);
     } catch (error) {
       console.error('Error fetching admin data:', error);
     }
   };
 
-  // Fetch SuperUser Data
   const fetchSuperUserData = async () => {
     try {
       const response = await fetch('http://localhost:8080/superuser/getAllSuperUsers');
       const data = await response.json();
-
+  
       const formattedData = data.map(superuser => ({
         name: superuser.fullName,
-        idNumber: superuser.superUserIdNumber,
+        idNumber: superuser.superUserIdNumber,  // Changed to match backend entity
         email: superuser.email,
-        username: superuser.superUsername,
+        username: superuser.superUsername,      // Changed to match backend entity
         status: superuser.status,
       }));
-
+  
       setTableData(formattedData);
     } catch (error) {
       console.error('Error fetching superuser data:', error);
@@ -351,36 +349,36 @@ const SUDirectory = () => {
 
   // Submit form to create a new Admin, SuperUser, or Office
   const handleSubmit = async () => {
-    if (category !== 'Office' && newAccount.password !== newAccount.confirmPassword) {
+    if (newAccount.password !== newAccount.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
+  
     let newEntry;
     let endpoint = '';
-
+  
     if (category === 'Admin') {
       newEntry = {
         fullName: newAccount.fullName,
-        adminname: newAccount.username,
+        adminname: newAccount.username,    // Changed to match backend entity
         email: newAccount.email,
         idNumber: newAccount.idNumber,
         password: newAccount.password,
-        status: true,  // Enabled by default
+        status: true,
       };
       endpoint = 'http://localhost:8080/admin/insertAdmin';
     } else if (category === 'SuperUser') {
       newEntry = {
-        superUsername: newAccount.username,
         fullName: newAccount.fullName,
+        superUsername: newAccount.username,    // Changed to match backend entity
         email: newAccount.email,
-        superUserIdNumber: newAccount.idNumber,
-        superUserPassword: newAccount.password,
-        status: true,  // Enabled by default
+        superUserIdNumber: newAccount.idNumber,  // Changed to match backend entity
+        superUserPassword: newAccount.password,  // Changed to match backend entity
+        status: true,
       };
       endpoint = 'http://localhost:8080/superuser/insertSuperUser';
     }
-
+  
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -389,11 +387,15 @@ const SUDirectory = () => {
         },
         body: JSON.stringify(newEntry),
       });
-
+  
       if (response.ok) {
-        const createdEntry = await response.json();
-        setTableData([...tableData, createdEntry]);
-        setShowForm(false);  // Close the modal
+        // Refresh the data after successful creation
+        if (category === 'Admin') {
+          fetchAdminData();
+        } else if (category === 'SuperUser') {
+          fetchSuperUserData();
+        }
+        setShowForm(false);
       } else {
         console.error(`Failed to create ${category} in the backend.`);
       }

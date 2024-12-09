@@ -1,56 +1,458 @@
-.ad-insight-container {
-    margin: 0 auto;
-    max-width: 1500px;
-    padding: 20px;
-    font-family: var(--font-montserrat);
-    min-height: 100vh;
-    color: #333;
-    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
-  }
-  
-  .insight-header-image {
-    width: 276px;
-    height: 270px;
-    display: block;
-    margin: 30px auto;
-  }
-  
-  .dropdown-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
-    margin: 20px 0;
-    padding: 0 20px;
-  }
-  
-  .dropdown {
-    width: 200px;
-    margin: 8px;
+.AdInsight_AdInsight {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  overflow: hidden;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+  transition: height 0.3s ease-in-out;
+}
+
+.AdInsight_AdInsight.minimized {
+  height: 1750px;
+}
+
+.AdInsight_AdInsight.expanded {
+  height: 3000px;
+}
+
+.AdInsightTitle {
+  position: absolute;
+  top: 71px;
+  left: 640px;
+  width: 276px;
+  height: 231px;
+  object-fit: cover;
+}
+
+.AdAnalyticsTitle {
+  position: absolute;
+  display: inline-block;
+  top: 345px;
+  left: 230px;
+  font-size: 24px;
+  width: 600px;
+  height: 40px;
+}
+
+.AdInsightBox {
+  position: absolute;
+  top: 420px;
+  left: 180px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 1100px;
+  height: 1230px;
+}
+
+.AdYearContainer {
+  position: absolute;
+  left: 244px;
+  top: 455px;
+  width: 282.5px;
+  height: 90px;
+}
+
+.AdYearBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 282.5px;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+}
+
+.AdYear {
+  position: absolute;
+  left: 19px;
+  top: 9px;
+  width: 50px;
+  height: 23px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.AdCalendar {
+  position: absolute;
+  left: 19px;
+  top: 42px;
+  width: 36px;
+  height: 33px;
+}
+
+.Adarrow_left, .Adarrow_right {
+  position: absolute;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.Adarrow_left {
+  left: 70px;
+  top: 45px;
+}
+
+.Adarrow_right {
+  left: 160px;
+  top: 45px;
+}
+
+.Adarrow_left:hover, .Adarrow_right:hover {
+  transform: scale(1.3);
+}
+
+.Ad_2024 {
+  position: absolute;
+  left: 105px;
+  top: 46px;
+  width: 56px;
+  height: 25px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.AdBarGraphContainer {
+  position: absolute;
+  left: 244px;
+  top: 584px;
+  width: 961px;
+  height: 523px;
+}
+
+.AdBarBox {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 961px;
+  height: 523px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 15px;
+}
+
+.AdMonthlyAccidentEventStats {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.AdBarGraph {
+  position: absolute;
+  left: 45px;
+  top: 94px;
+  width: 917px;
+  height: 402px;
+}
+
+.AdPieBackground {
+  position: absolute;
+  left: 242px;
+  top: 1130px;
+  width: 961px;
+  height: 490px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 15px;
+}
+
+.AdPieChartContainer {
+  position: relative;
+  margin: 1140px auto;
+  width: 400px;
+  height: 370px;
+  text-align: center;
+}
+
+.Adcustom-legend {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 1200px;
+  gap: 50px;
+}
+
+.Adlegend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: fit-content;
+}
+
+.Adlegend-color {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.AdInsightBox2 {
+  position: absolute;
+  top: 1800px;
+  left: 180px;
+  width: 1100px;
+  height: auto;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.AdTableContainer {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.AdTOTALREPORTSSUBMITTED {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  display: block;
+  text-align: center;
+  color: #8a252c;
+}
+
+.AdTotalWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.AdTotal1 {
+  width: 60px;
+  height: 60px;
+  background: rgba(138, 37, 44, 1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.AdTotalNumber1 {
+  position: absolute;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(246, 195, 1, 1);
+  text-align: center;
+}
+
+.AdFeedbackTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.AdFeedbackTable th {
+  background-color: #8a252c;
+  color: #feb010;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.AdFeedbackTable td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.AdFeedbackTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.AdFeedbackTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+.AdReportFeedbackContainer {
+  position: absolute;
+  left: 146px;
+  top: 1736px;
+  width: 236px;
+  height: 36px;
+}
+
+.AdReportFeedback {
+  position: absolute;
+  right: 0px;
+  top: 4px;
+  width: 200px;
+  height: 25px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.AdToggle {
+  position: absolute;
+  left: -7px;
+  top: 9px;
+  width: 26px;
+  height: 23px;
+  cursor: pointer;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+  .AdInsight_AdInsight {
+    height: 400vh !important;
   }
 
-  .dropdown .MuiInputBase-root {
-    width: 100%;
+  .AdInsightTitle {
+    top: 3% !important;
+    left: 38% !important;
+    width: 200px !important;
+    height: 180px !important;
   }
-  
-  .dropdown .MuiSelect-root {
-    width: 100%;
+
+  .AdAnalyticsTitle {
+    top: 250px !important;
+    left: 8% !important;
+    font-size: 20px !important;
+    width: 90% !important;
   }
-  
-  .chart-container {
-    margin: 20px 0;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .AdInsightBox {
+    top: 300px;
+    left: 5%;
+    width: 91.5%;
+    height: 41%;
   }
-  
-  h2 {
-    color: #333;
-    margin-bottom: 20px;
+
+  .AdYearContainer {
+    top: 11%;
+    left: 8%;
+    width: 40%;
+    height: 5%;
   }
-  
+
+  .AdBarGraphContainer {
+    left: 8%;
+    width: 90%;
+    top: 400px;
+  }
+
+  .AdBarGraph {
+    left: 3%;
+    margin-top: 40px;
+    width: 90%;
+  }
+
+  .AdPieBackground {
+    top: 33%;
+    left: 8%;
+    width: 85%;
+    height: 17.5%;
+  }
+
+  .AdPieChartContainer {
+    width: 300px;
+    height: 300px;
+    margin-top: 1000px;
+  }
+
+  .AdInsightBox2 {
+    left: 5%;
+    top: 56%;
+    width: 86%;
+    height: auto;
+    min-height: 15%;
+  }
+
+  .AdTableContainer {
+    overflow-x: auto;
+  }
+
+  .AdFeedbackTable {
+    font-size: 12px;
+  }
+
+  .AdToggle {
+    left: -40%;
+    top: -440%;
+  }
+
+  .AdReportFeedback {
+    left: -20%;
+    top: -450%;
+  }
+}
+
+/* Smaller screen styles */
+@media screen and (max-width: 500px) {
+  .AdInsightAnalytics_AdInsightAnalytics {
+    height: 300vh !important;
+  }
+
+  .AdInsightTitle {
+    top: 4% !important;
+    left: 35% !important;
+    width: 160px !important;
+    height: 140px !important;
+  }
+
+  .AdAnalyticsTitle {
+    top: 210px !important;
+    left: 7% !important;
+    font-size: 16px;
+    width: 85%;
+  }
+
+  .AdPieChartContainer {
+    width: 210px;
+    height: 210px;
+    margin-top: 860px;
+    font-size: 10px;
+  }
+
+  .Adcustom-legend {
+    width: 50px;
+    height: 60px;
+    font-size: 7px;
+  }
+
+  .AdInsightBox2 {
+    left: 5% !important;
+    top: 65%;
+    width: 83% !important;
+    height: auto !important;
+    min-height: 25%;
+  }
+
+  .AdFeedbackTable {
+    font-size: 10px;
+  }
+
+  .AdFeedbackTable th,
+  .AdFeedbackTable td {
+    padding: 5px;
+  }
+
+  .AdToggle {
+    left: -50% !important;
+    top: -980% !important;
+  }
+
+  .AdReportFeedback {
+    left: -33% !important;
+    top: -990% !important;
+  }
+
+  .minimized .AdReportFeedbackContainer {
+    top: 1600px;
+  }
+}

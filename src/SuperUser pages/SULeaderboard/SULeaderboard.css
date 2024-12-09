@@ -1,76 +1,187 @@
-.su-leaderboard-container {
-    margin: 0 auto;
-    max-width: 1500px;
-    padding: 20px;
-    font-family: var(--font-montserrat);
-    min-height: 100vh;
-    color: #333;
-    background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+.su-leaderboards {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #fdfbc9 54.1%, #f9d67b);
+  min-height: 841px; /* Minimum height for the container */
+  overflow: hidden; /* Hide overflow of the main container */
+  text-align: center;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.suLeaderboardsTitle {
+  position: absolute;
+  top: 71px;
+  left: 660px;
+  width: 276px;
+  height: 231px;
+  object-fit: cover;
+}
+
+.suleaderboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+  gap: 1.2rem;
+  margin-top: 260px; /* Maintain space for the title */
+}
+
+.suleaderboard-column {
+  flex: auto;
+  margin: 0 10px;
+  text-align: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  padding-bottom: 20px;
+  min-height: 200px; /* Minimum height to maintain space even when empty */
+  overflow-y: auto; /* Allow scrolling within the column if needed */
+}
+
+.suleaderboard-column h3 {
+  background-color: #f4d1d3;
+  padding: 10px;
+  border-radius: 20px 20px 0 0;
+  margin: 0;
+}
+
+.suchampion-column {
+  background-color: #f5fffa;
+}
+
+.suprowler-column {
+  background-color: #f5fffa;
+}
+
+.sucub-column {
+  background-color: #f5fffa;
+}
+
+.suleaderboard-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.suuser-info {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.suuser-name {
+  font-weight: bold;
+}
+
+.suuser-points {
+  color: #666;
+}
+
+.subadge {
+  width: 40px; /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+}
+
+.sutrophy-container {
+  width: 60px; /* Adjust size for larger circular background */
+  height: 60px; /* Adjust size for larger circular background */
+  border-radius: 50%; /* Make the background circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensure the content does not overflow */
+  position: relative; /* Position relative for correct icon placement */
+}
+
+.sutrophy-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  position: relative;
+  z-index: 1; /* Bring icon above the background */
+}
+
+.sugold-background {
+  background-color: #ffd700; /* Gold background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+.subronze-background {
+  background-color: #cd7f32; /* Bronze background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+.susilver-background {
+  background-color: #c0c0c0; /* Silver background for trophies */
+  border-radius: 50%; /* Ensure it stays circular */
+  width: 60px; /* Increase width for the circle */
+  height: 60px; /* Increase height for the circle */
+  display: flex; /* Center icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+}
+
+@media (max-width: 500px) {
+  .suLeaderboardsTitle {
+    position: absolute;
+    top: 71px;
+    left: 20px;
+    width: 60% !important;
+    height: 231px;
+    object-fit: cover;
   }
-  
-  .leaderboard-header-image {
-    width: 276px;
-    height: 270px;
-    display: block;
-    margin: 30px auto;
+}
+
+@media (max-width: 768px) {
+  .suLeaderboardsTitle {
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 18%;
+    object-fit: cover;
   }
-  
-  .leaderboard-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+
+  .suLeaderboardsBox {
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 50%;
+    object-fit: cover;
   }
-  
-  .leaderboard-row {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 600px;
-    justify-content: space-between;
-    color: white;
-    font-weight: bold;
-    transition: transform 0.3s ease;
-    background: linear-gradient(to right, #f0f0f0 0%, #ffffff 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+@media (max-width: 500px) {
+  .suLeaderboardsTitle {
+    top: 10% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 18%;
+    object-fit: cover;
   }
-  
-  .leaderboard-row:hover {
-    transform: scale(1.05);
+
+  .suLeaderboardsBox {
+    top: 30% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 50%;
+    object-fit: cover;
   }
-  
-  .leaderboard-row.first {
-    background: linear-gradient(to right, #ffe600 0%, #ffeb3b 50%, rgba(0, 0, 0, 0) 100%);
-  }
-  
-  .leaderboard-row.second {
-    background: linear-gradient(to right, #c0c0c0 0%, #d3d3d3 50%, rgba(0, 0, 0, 0) 100%);
-  }
-  
-  .leaderboard-row.third {
-    background: linear-gradient(to right, #cd7f32 0%, #d8a169 50%, rgba(0, 0, 0, 0) 100%);
-  }
-  
-  .leaderboard-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: 3px solid white;
-  }
-  
-  .leaderboard-name {
-    flex-grow: 1;
-    font-size: 20px;
-    text-align: left;
-    color: #333;
-  }
-  
-  .leaderboard-points {
-    font-size: 24px;
-    font-weight: bold;
-    color: maroon;
-  }
-  
+}
