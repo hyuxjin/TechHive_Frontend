@@ -24,7 +24,13 @@ const AdHome = () => {
   const [adminProfilePictures, setAdminProfilePictures] = useState({});
   const [superUserProfilePictures, setSuperUserProfilePictures] = useState({});
   const [showCloseButton, setShowCloseButton] = useState(false);
+<<<<<<< Updated upstream
   const defaultProfile = '/default.png';
+=======
+  const [profilePicture, setProfilePicture] = useState(null);  // Add this line
+  const defaultProfile = '/dp.png';
+  const [reportStatuses, setReportStatuses] = useState({});
+>>>>>>> Stashed changes
 
   const fileInputRef = useRef(null);
 
@@ -114,10 +120,11 @@ const AdHome = () => {
   }, [loggedInAdmin, loggedInSuperUser, fetchAdminProfilePicture, fetchSuperUserProfilePicture]);
 
   useEffect(() => {
-    const fetchPostsAndPictures = async () => {
+    const fetchPostsAndReports = async () => {
       try {
         const response = await axios.get("http://localhost:8080/posts/visible");
         if (response.data) {
+<<<<<<< Updated upstream
           console.log('Raw posts data:', response.data); // Debug log
           const processedPosts = response.data.map(post => {
             console.log('Individual post:', post); // Debug each post
@@ -127,6 +134,22 @@ const AdHome = () => {
               ...post,
               image: post.image ? getPostImage(post) : null,
               timestamp: moment(post.timestamp).local()
+=======
+          console.log('Fetched posts:', response.data);
+          const processedPosts = response.data.map(post => {
+            const timestamp = moment(post.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
+            
+            // Debug log
+            if (post.isSubmittedReport) {
+              console.log('Found submitted report post:', post.postId);
+              fetchReportStatus(post.postId);
+            }
+  
+            return {
+              ...post,
+              image: post.image ? getPostImage(post) : null,
+              timestamp: timestamp
+>>>>>>> Stashed changes
             };
           });
           const sortedPosts = processedPosts.sort((a, b) => 
@@ -138,8 +161,23 @@ const AdHome = () => {
         console.error("Error fetching posts:", error);
       }
     };
-    fetchPostsAndPictures();
+    fetchPostsAndReports();
   }, []);
+
+  useEffect(() => {
+    console.log('Report statuses updated:', reportStatuses);
+  }, [reportStatuses]);
+
+  const getTrafficLightStatus = (status) => {
+    console.log('Converting status:', status);
+    const statusMap = {
+      'PENDING': 'pending',
+      'ACKNOWLEDGED': 'acknowledged',
+      'IN_PROGRESS': 'in-progress',
+      'RESOLVED': 'resolved'
+    };
+    return statusMap[status] || 'pending';
+  };
 
   const handlePostInputChange = (e) => {
     const content = e.target.value;
@@ -249,6 +287,12 @@ const AdHome = () => {
           userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
         }
       });
+
+      // If the user is an admin, update the post owner's points
+
+      if (loggedInAdmin && response.data.userId) {
+        await axios.post(`http://localhost:8080/user/${response.data.userId}/adminLike`);
+      }
       const updatedPost = {
         ...response.data,
         image: response.data.image ? getPostImage(response.data) : null
@@ -267,6 +311,12 @@ const AdHome = () => {
           userRole: loggedInAdmin ? "ADMIN" : "SUPERUSER"
         }
       });
+
+      // If the user is an admin, update the post owner's points
+    if (loggedInAdmin && response.data.userId) {
+      await axios.post(`http://localhost:8080/user/${response.data.userId}/adminDislike`);
+    }
+    
       const updatedPost = {
         ...response.data,
         image: response.data.image ? getPostImage(response.data) : null
@@ -392,6 +442,23 @@ const AdHome = () => {
     }
   };
 
+  const fetchReportStatus = async (postId) => {
+    try {
+      console.log(`Fetching report status for post ${postId}`);
+      // Since this is a user's report post, we should look up by report ID, not post ID
+      const response = await axios.get(`http://localhost:8080/api/user/reports/byPost/${postId}`);
+      console.log('Report status response:', response.data);
+      if (response.data) {
+        setReportStatuses(prev => ({
+          ...prev,
+          [postId]: response.data.status
+        }));
+      }
+    } catch (error) {
+      console.error(`Error fetching report status for post ${postId}:`, error);
+    }
+  };
+
   return (
     <div className="adhome">
       <AdNavBar />
@@ -484,6 +551,7 @@ const AdHome = () => {
         </div>
 
         <div className="post-list">
+<<<<<<< Updated upstream
           {posts.map((post) => (
             <div key={post.postId} className="post-card">
               <div className="card-container" style={{ position: 'relative' }}>
@@ -496,6 +564,72 @@ const AdHome = () => {
    />
  </div>
 )}
+=======
+        {posts.map((post) => (
+          <div key={post.postId} className="post-card">
+            <div className="card-container" style={{ position: 'relative' }}>
+              {console.log('Post data:', post)}
+              {post.isSubmittedReport && post.status && (
+  <div className="adhometraffic-light-container" style={{
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    zIndex: 10,
+    display: 'flex'
+  }}>
+    {console.log('Rendering traffic light for post:', post.postId, 'Status:', post.status)}
+    <TrafficLights 
+      status={getTrafficLightStatus(post.status)}
+      isClickable={false}
+      onChange={() => {}}
+    />
+  </div>
+)}
+
+<div className="name-container">
+          <img
+            src={
+              post.adminId
+                ? adminProfilePictures[post.adminId] || defaultProfile
+                : superUserProfilePictures[post.superuserId] || defaultProfile
+            }
+            alt="Profile Avatar"
+            className="admins-dp"
+          />
+          {/* Modified this part to ensure fullName and idNumber display */}
+          <h5>
+            {post.fullName || post.fullname} 
+            {post.idNumber || post.idnumber ? ` (${post.idNumber || post.idnumber})` : ''}
+          </h5>
+          {loggedInAdmin && loggedInAdmin.adminId === post.adminId && (
+            <img
+              src="/delete.png"
+              alt="Delete"
+              className="delete-icon"
+              onClick={() => handleDeletePost(post.postId)}
+              style={{ cursor: 'pointer', width: '20px', height: '20px', marginLeft: 'auto' }}
+            />
+          )}
+        </div>
+
+                {/* Modified timestamp display */}
+                <div className="timestamp" style={{ marginBottom: '10px', color: '#666' }}>
+  <div className="formatted-date" style={{ fontSize: '14px' }}>
+    {new Date(post.timestamp).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    })}
+  </div>
+  <div className="relative-time" style={{ fontSize: '12px', color: '#888' }}>
+    {moment(post.timestamp).fromNow()}
+  </div>
+</div>
+>>>>>>> Stashed changes
 
                 <div className="name-container">
                   <img

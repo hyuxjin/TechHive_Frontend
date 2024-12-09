@@ -181,21 +181,24 @@ const AdEntry = () => {
 
   const ReportCard = ({ report }) => (
     <div className="entrypost-card" onClick={() => handleReportClick(report)}>
-    <div className="card-header">
-      <TrafficLights 
-        status={report.status} 
-        isClickable={false} // Reports in AdEntry are not clickable here
-      />
-      <button
-        onClick={(e) => {
-          e.stopPropagation();  // Prevents the event from propagating to parent elements
-          toggleFlag(report.id); // Call the function to toggle the flag
-        }}
-        className="flag-icon"
-      >
-        🚩
-      </button>
-    </div>
+      <div className="card-header">
+  <div className="controls-container">
+    <TrafficLights
+      className="controls-traffic-lights"  // Changed from adentrytraffic-lights
+      status={report.status}
+      isClickable={false}
+    />
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleFlag(report.id);
+      }}
+      className="flag-icon"
+    >
+      🚩
+    </button>
+  </div>
+</div>
 
       <div className="entry-profile-container">
         <h5 className="profile-name">{report.name}</h5>
@@ -215,8 +218,9 @@ const AdEntry = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
-    const path = imagePath.startsWith('/uploads/') ? imagePath : `/uploads/${imagePath}`;
-    return `${BASE_URL}${path}`;
+    // Remove any leading slashes and ensure we use the correct folder name
+    const cleanPath = imagePath.replace(/^\/+/, '');
+    return `${BASE_URL}/${cleanPath}`;
   };
 
   if (loading) return (
@@ -326,12 +330,13 @@ const AdEntry = () => {
     <div className="modal-content">
       <div className="modal-header">
         <button onClick={closeReportModal} className="back-button">←</button>
-        <div className="traffic-lights-and-flag">
-          <TrafficLights 
-            status={selectedReport.status} 
-            isClickable={true} 
-            onChange={(newStatus) => updateTrafficLight(selectedReport.id, newStatus)} 
-          />
+        <div className="adentrytraffic-lights-and-flag">
+        <TrafficLights
+  className="adentrytraffic-lights"
+  status={selectedReport.status}
+  isClickable={true}
+  onChange={(newStatus) => updateTrafficLight(selectedReport.id, newStatus)}
+/>
           <button onClick={() => toggleFlag(selectedReport.id)} className="flag-icon">
             🚩
           </button>

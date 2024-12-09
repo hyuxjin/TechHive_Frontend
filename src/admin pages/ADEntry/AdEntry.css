@@ -110,14 +110,42 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Traffic Lights */
-.traffic-lights {
+.controls-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Specific styling for traffic lights in controls container */
+.controls-traffic-lights {
   display: flex;
   gap: 8px;
   padding: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 12px;
+  margin-left: auto; /* Push to the right */
 }
+
+
+/* Traffic Lights */
+.adentrytraffic-lights {
+  display: flex;
+  gap: 8px;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  position: absolute;  /* Add this */
+  right: 15px;        /* Add this */
+  top: 22px;         /* Add this */
+}
+
+.cardcontainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 
 .traffic-circle {
   width: 12px;
@@ -274,7 +302,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.traffic-lights-and-flag {
+.adentrytraffic-lights-and-flag {
   display: flex;
   align-items: center;
   gap: 15px;

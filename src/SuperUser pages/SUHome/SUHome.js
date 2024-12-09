@@ -6,6 +6,7 @@ import Loadable from 'react-loadable';
 import moment from 'moment';
 import SUNavBar from "../../components/SUNavBar";
 import "./SUHome.css";
+import TrafficLights from "../../components/TrafficLights";
 
 const SUComment = Loadable({
     loader: () => import('./SUComment'),
@@ -236,47 +237,108 @@ const SUHome = () => {
     }
   };
   
-    const handleLike = async (postId) => {
-        if (!loggedInSuperUser) {
-            alert("Please log in to like posts.");
-            return;
-        }
-        try {
-            const response = await axios.post(`http://localhost:8080/posts/${postId}/like`, {}, {
-                params: {
-                    userId: loggedInSuperUser.superuserId, // Send superuser ID
-                    isAdmin: false // Indicates this is a superuser action
-                }
-            });
-            const updatedPost = response.data;
-            setPosts(posts.map(post =>
-                post.postId === postId ? updatedPost : post
-            ));
-        } catch (error) {
-            console.error("Error liking post:", error);
-        }
-    };
+  const handleLike = async (postId) => {
+    if (!loggedInSuperUser) {
+        alert("Please log in to like posts.");
+        return;
+    }
+    try {
+        // First handle the post like
+        const response = await axios.post(`http://localhost:8080/posts/${postId}/like`, {}, {
+            params: {
+                userId: loggedInSuperUser.superuserId,
+                userRole: "SUPERUSER"
+            }
+        });
+        const updatedPost = response.data;
 
-    const handleDislike = async (postId) => {
-        if (!loggedInSuperUser) {
-            alert("Please log in to dislike posts.");
-            return;
+        // If this is a user's post or report, update their points
+        if (updatedPost.userId) {
+            try {
+                await axios.post(`/api/leaderboard/addPoints`, {}, {
+                    params: {
+                        userId: updatedPost.userId,
+                        points: 5
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating user points:", error);
+            }
         }
-        try {
-            const response = await axios.post(`http://localhost:8080/posts/${postId}/dislike`, {}, {
-                params: {
-                    userId: loggedInSuperUser.superuserId, // Send superuser ID
-                    isAdmin: false // Indicates this is a superuser action
-                }
-            });
-            const updatedPost = response.data;
-            setPosts(posts.map(post =>
-                post.postId === postId ? updatedPost : post
-            ));
-        } catch (error) {
-            console.error("Error disliking post:", error);
+
+        // Update the posts state with the new like count
+        setPosts(posts.map(post =>
+            post.postId === postId ? updatedPost : post
+        ));
+    } catch (error) {
+        console.error("Error liking post:", error);
+    }
+};
+
+
+const handleDislike = async (postId) => {
+    if (!loggedInSuperUser) {
+        alert("Please log in to dislike posts.");
+        return;
+    }
+    try {
+        // First handle the post dislike
+        const response = await axios.post(`http://localhost:8080/posts/${postId}/dislike`, {}, {
+            params: {
+                userId: loggedInSuperUser.superuserId,
+                userRole: "SUPERUSER"
+            }
+        });
+        const updatedPost = response.data;
+
+        // If this is a user's post or report, update their points
+        if (updatedPost.userId) {
+            try {
+                await axios.post(`/api/leaderboard/subtractPoints`, {}, {
+                    params: {
+                        userId: updatedPost.userId,
+                        points: 5
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating user points:", error);
+            }
         }
-    };
+
+        // Update the posts state with the new dislike count
+        setPosts(posts.map(post =>
+            post.postId === postId ? updatedPost : post
+        ));
+    } catch (error) {
+        console.error("Error disliking post:", error);
+    }
+};
+
+const handleRemoveLike = async (postId, userId) => {
+    try {
+        await axios.post(`/api/leaderboard/subtractPoints`, {}, {
+            params: {
+                userId: userId,
+                points: 5
+            }
+        });
+    } catch (error) {
+        console.error("Error removing points for like:", error);
+    }
+};
+
+const handleRemoveDislike = async (postId, userId) => {
+    try {
+        await axios.post(`/api/leaderboard/addPoints`, {}, {
+            params: {
+                userId: userId,
+                points: 5
+            }
+        });
+    } catch (error) {
+        console.error("Error removing points for dislike:", error);
+    }
+};
 
     const handleOpenComments = async (postId) => {
       setCurrentPostId(postId);
@@ -411,7 +473,7 @@ const handleDeletePost = (postId) => {
     };
 
     return (
-        <div className="adhome">
+        <div className="suhome">
             <SUNavBar />  
             <b className="SUHWildcat">WILDCAT</b>
 
@@ -484,7 +546,17 @@ const handleDeletePost = (postId) => {
                 <div className="post-list">
                     {posts.map((post) => (
                         <div key={post.postId} className="post-card">
-                            <div className="card-container">
+                            <div className="card-container" style={{ position: 'relative' }}>
+    {post.isSubmittedReport && post.status && (loggedInSuperUser) && (
+        <div className="sutraffic-light-container">
+            <TrafficLights
+                className="sutrafficlights"
+                status={post.status}
+                isClickable={false}
+                onChange={() => {}}
+            />
+        </div>
+    )}
                             <div className="name-container">
     <img src={superuserProfilePictures[post.superUserId] || defaultProfile} alt="SuperUser Avatar" />
     <h5>{post.fullName} ({post.superuseridNumber})</h5>
