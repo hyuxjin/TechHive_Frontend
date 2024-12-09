@@ -658,6 +658,7 @@ body {
   }
 
   .post-form form button {
+    left: -50%;
     width: 53px;
     height: 25px;
     border-radius: 10px;
@@ -691,5 +692,9 @@ body {
   .close-button {
     position: relative;
     left: -110px;
+  }
+
+  .traffic-lights-container{
+    left: 75%;
   }
 }

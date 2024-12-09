@@ -641,7 +641,7 @@ const AdHome = () => {
                     alt="Profile Avatar"
                     className="admins-dp"
                   />
-                  <h5>{post.fullname} ({post.idnumber})</h5>
+                  <h5>{post.fullName} ({post.idNumber})</h5>
                   {loggedInAdmin && loggedInAdmin.adminId === post.adminId && (
                     <img
                       src="/delete.png"
