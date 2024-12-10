@@ -134,40 +134,34 @@ export default function SUSignInForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/superuser/signin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    superUserIdNumber: idNumber,
-                    superUserPassword: password,
-                }),
-            });
-    
-            const data = await response.text();
-            let jsonData;
-            try {
-                jsonData = JSON.parse(data);
-            } catch (e) {
-                jsonData = data;
-            }
-    
-            if (response.ok) {
-                sessionStorage.setItem('userRole', 'SUPER_USER');
-                if (typeof jsonData === 'object') {
-                    sessionStorage.setItem('userData', JSON.stringify(jsonData));
-                }
-                navigate("/SUhome");
-            } else {
-                showModal(typeof jsonData === 'string' ? jsonData : 'Login failed', "error");
-            }
+          const response = await fetch("http://localhost:8080/superuser/signin", {
+            method: "POST",
+            credentials: 'include',  // Important for session cookies
+            headers: { 
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({ 
+              superUserIdNumber: idNumber,
+              superUserPassword: password 
+            }),
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            // Store both the user data and the session information
+            localStorage.setItem("loggedInSuperUser", JSON.stringify(data));
+            localStorage.setItem("sessionId", data.sessionId);
+            navigate("/suhome");
+          } else {
+            const message = await response.text();
+            showModal(`Login failed: ${message}`, "error");
+          }
         } catch (error) {
-            console.error("Error during login:", error);
-            showModal("An error occurred. Please try again.", "error");
+          console.error("Error:", error);
+          showModal("An error occurred. Please try again.", "error");
         }
-    };
+      };
 
     return (
         <>

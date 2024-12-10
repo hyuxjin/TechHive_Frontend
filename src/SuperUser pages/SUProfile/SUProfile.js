@@ -11,131 +11,153 @@ const SUProfile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [superuser, setSuperUser] = useState(null); // Initialize as null to avoid undefined issues
-  const [profilePicture, setProfilePicture] = useState("/default.png"); // default profile picture
+  const [errorMessage, setErrorMessage] = useState("");
+  const [superuser, setSuperUser] = useState(null);
+  const [profilePicture, setProfilePicture] = useState("/default.png");
 
-  // Check local storage for user data and initialize state
   useEffect(() => {
     const loggedInSuperUser = localStorage.getItem("loggedInSuperUser");
+    console.log("Checking local storage for superuser:", loggedInSuperUser);
 
     if (loggedInSuperUser) {
       const superuserData = JSON.parse(loggedInSuperUser);
-      console.log("Logged in superuser data from local storage:", superuserData); // Debugging log
+      console.log("Logged in superuser data:", superuserData);
 
       if (superuserData && superuserData.superuserId) {
-        // Set the superuser state
         setSuperUser(superuserData);
-        // Fetch the profile picture
         fetchProfilePicture(superuserData.superuserId);
       } else {
-        console.error("superuserId is missing in the local storage data.");
+        setErrorMessage("Invalid user data");
+        setShowErrorMessage(true);
+        setTimeout(() => {
+          setShowErrorMessage(false);
+          setErrorMessage("");
+        }, 3000);
       }
-    } else {
-      console.error("No superuser data found in local storage.");
     }
-  }, []); // Only run once on component mount
+  }, []);
 
-  // Fetch profile picture from backend
   const fetchProfilePicture = (superuserId) => {
-    console.log("Fetching profile picture for SuperUser ID:", superuserId); // Debugging log
-
-    fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`)
-      .then((response) => {
+    fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`, {
+      credentials: 'include'
+    })
+      .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to fetch profile picture: ${response.status}`);
         }
         return response.blob();
       })
-      .then((blob) => {
+      .then(blob => {
         if (blob.size > 0) {
-          const imageUrl = URL.createObjectURL(blob);
-          setProfilePicture(imageUrl); // Set profile picture to the newly created URL
-          console.log("Profile picture URL:", imageUrl); // Log the created URL for debugging
-        } else {
-          console.log("Blob is empty, using default image.");
-          setProfilePicture("/default.png"); // Use default image on error
+          setProfilePicture(URL.createObjectURL(blob));
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching profile picture:", error);
-        setProfilePicture("/default.png"); // Set default picture on error
+        setErrorMessage("Failed to load profile picture");
+        setShowErrorMessage(true);
+        setTimeout(() => {
+          setShowErrorMessage(false);
+          setErrorMessage("");
+        }, 3000);
       });
   };
 
-  // Handle edit click
   const handleEditClick = () => {
     setIsEditable(true);
     setCurrentPassword("");
     setNewPassword("");
+    setErrorMessage("");
   };
 
-  // Handle password update
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = () => {
     if (!currentPassword || !newPassword) {
+      setErrorMessage("Please fill in both password fields");
       setShowErrorMessage(true);
-      setTimeout(() => {
-        setShowErrorMessage(false);
-      }, 3000);
+      setTimeout(() => { setShowErrorMessage(false); }, 3000);
       return;
     }
-
-    try {
-      const response = await fetch(`http://localhost:8080/superuser/updateSuperUserPassword?superuserId=${superuser.superuserId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          currentSuperUserPassword: currentPassword,
-          newSuperUserPassword: newPassword,
-        }),
-        
+  
+    fetch(`http://localhost:8080/superuser/updateSuperUserPassword?superuserId=${superuser.superuserId}`, {
+      method: "PUT",
+      credentials: 'include',  // Important for session cookies
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        // Include the session ID if you stored it
+        "Authorization": `Bearer ${localStorage.getItem("sessionId")}`
+      },
+      body: JSON.stringify({
+        currentSuperUserPassword: currentPassword,
+        newSuperUserPassword: newPassword,
+      }),
+    })
+      .then(response => {
+        if (response.status === 401) {
+          // If session is invalid, redirect to login
+          localStorage.removeItem("loggedInSuperUser");
+          localStorage.removeItem("sessionId");
+          window.location.href = '/sulogin';
+          throw new Error("Session expired. Please login again.");
+        }
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(text || 'Failed to update password');
+          });
+        }
+        return response.text();
+      })
+      .then(() => {
+        setIsEditable(false);
+        setShowSuccessMessage(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setTimeout(() => { setShowSuccessMessage(false); }, 3000);
+      })
+      .catch(error => {
+        console.error("Error updating password:", error);
+        setErrorMessage(error.message);
+        setShowErrorMessage(true);
+        setTimeout(() => { setShowErrorMessage(false); }, 3000);
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("Password updated successfully:", result);
-
-      setIsEditable(false);
-      setShowSuccessMessage(true);
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 3000);
-    } catch (error) {
-      console.error("Error updating password:", error);
-      setShowErrorMessage(true);
-      setTimeout(() => {
-        setShowErrorMessage(false);
-      }, 3000);
-    }
   };
 
-  // Handle file change (profile picture upload)
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log("Superuser ID for upload:", superuser?.superuserId); // Debug log to ensure superuserId exists
+    console.log("Selected file:", file);
 
     if (!file) {
-      console.error("No file selected for upload.");
+      console.error("No file selected");
       return;
     }
 
     if (!file.type.startsWith("image/")) {
-      console.error("Selected file is not an image.");
+      setErrorMessage("Please select an image file");
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        setErrorMessage("");
+      }, 3000);
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) { // 2MB size limit
-      console.error("File size exceeds the 2MB limit.");
+    if (file.size > 2 * 1024 * 1024) {
+      setErrorMessage("File size must be less than 2MB");
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        setErrorMessage("");
+      }, 3000);
       return;
     }
 
-    // Ensure superuserId exists before proceeding
-    if (!superuser || !superuser.superuserId) {
-      console.error("SuperUser ID is undefined. Cannot upload the file.");
+    if (!superuser?.superuserId) {
+      setErrorMessage("User session not found. Please login again.");
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        setErrorMessage("");
+      }, 3000);
       return;
     }
 
@@ -143,23 +165,34 @@ const SUProfile = () => {
     formData.append("superuserId", superuser.superuserId);
     formData.append("file", file);
 
-    try {
-      setProfilePicture("/default.png"); // Reset picture while uploading
-
-      const response = await fetch("http://localhost:8080/superuser/profile/uploadProfilePicture", {
-        method: "POST",
-        body: formData,
+    fetch("http://localhost:8080/superuser/profile/uploadProfilePicture", {
+      method: "POST",
+      credentials: 'include',
+      body: formData,
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log("Profile picture uploaded successfully");
+        return fetchProfilePicture(superuser.superuserId);
+      })
+      .catch(error => {
+        console.error("Error uploading profile picture:", error);
+        setErrorMessage("Failed to upload profile picture");
+        setShowErrorMessage(true);
+        setTimeout(() => {
+          setShowErrorMessage(false);
+          setErrorMessage("");
+        }, 3000);
       });
+  };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      console.log("Profile picture uploaded successfully.");
-      fetchProfilePicture(superuser.superuserId); // Fetch updated profile picture
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-    }
+  const handleCancelClick = () => {
+    setIsEditable(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setErrorMessage("");
   };
 
   return (
@@ -175,14 +208,19 @@ const SUProfile = () => {
               <div className="upload-button-container">
                 <label className="upload-button">
                   Upload
-                  <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
+                  <input 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    accept="image/*"
+                    style={{ display: "none" }} 
+                  />
                 </label>
               </div>
             </div>
             <div className="name-details">
-              <span className="id-number">{superuser?.superuseridNumber}</span>
+              <span className="id-number">{superuser?.superUserIdNumber}</span>
               <h1>{superuser?.fullName}</h1>
-              <span>{superuser?.superusername}</span>
+              <span>{superuser?.superUsername}</span>
             </div>
             <span className="email-design">{superuser?.email}</span>
             <LogoutDialog />
@@ -190,7 +228,7 @@ const SUProfile = () => {
         </div>
         <div className="password-container">
           <h1>Password</h1>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div>
               <label>Current Password</label>
               <input
@@ -198,6 +236,7 @@ const SUProfile = () => {
                 value={currentPassword}
                 readOnly={!isEditable}
                 onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder={isEditable ? "Enter current password" : "********"}
               />
             </div>
             <div>
@@ -207,6 +246,7 @@ const SUProfile = () => {
                 value={newPassword}
                 readOnly={!isEditable}
                 onChange={(e) => setNewPassword(e.target.value)}
+                placeholder={isEditable ? "Enter new password" : "********"}
               />
             </div>
             <div className="btn-container">
@@ -215,7 +255,7 @@ const SUProfile = () => {
                   <button type="button" className="update-btn" onClick={handleUpdateClick}>
                     Update
                   </button>
-                  <button type="button" className="cancel-btn" onClick={() => setIsEditable(false)}>
+                  <button type="button" className="cancel-btn" onClick={handleCancelClick}>
                     Cancel
                   </button>
                 </>
@@ -227,7 +267,7 @@ const SUProfile = () => {
             </div>
           </form>
           {showSuccessMessage && <EditSuccessfulDialog />}
-          {showErrorMessage && <ErrorDialog />}
+          {showErrorMessage && <ErrorDialog message={errorMessage} />}
         </div>
       </main>
     </div>
