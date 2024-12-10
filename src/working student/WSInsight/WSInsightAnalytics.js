@@ -163,21 +163,22 @@ const barOptions = {
       try {
         const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
         if (!userId) return;
- 
+
         // Fetch total reports
         const totalResponse = await axios.get(`/api/feedback/totalReports/${userId}`);
-        console.log("Total Reports Response:", totalResponse.data); // Debugging log
+        console.log("Total Reports Response:", totalResponse.data);
         setFetchedTotalReports(totalResponse.data.totalReports);
- 
-        // Fetch feedback list
-        const feedbackResponse = await axios.get(`/api/feedback/latest/${userId}`);
-        console.log("Feedback List Response:", feedbackResponse.data); // Debugging log
-        setFeedbackList(feedbackResponse.data);
+
+        // Fetch all user reports instead of just feedback
+        const reportsResponse = await axios.get(`/api/user/reports/user/${userId}`);
+        console.log("Reports List Response:", reportsResponse.data);
+        setFeedbackList(reportsResponse.data); // Using existing feedbackList state to store reports
+
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
- 
+
     fetchData();
   }, []);
  
@@ -291,33 +292,35 @@ const barOptions = {
           </tr>
         </thead>
         <tbody>
-          {feedbackList.map((feedback, index) => (
-            <tr key={index}>
-              <td>{format(new Date(feedback.submissionDate), 'yyyy-MM-dd')}</td>
-              <td>{feedback.location}</td>
-              <td>{feedback.reportCategory}</td>
-              <td
-                style={{
-                  color:
-                    feedback.status === 'PENDING'
-                      ? '#F6C301'
-                      : feedback.status === 'APPROVED'
-                      ? '#4CAF50'
-                      : feedback.status === 'DENIED'
-                      ? '#F44336'
-                      : '#000',
-                }}
-              >
-                {feedback.status}
-              </td>
-              <td>
-                {feedback.dateResolved
-                  ? format(new Date(feedback.dateResolved), 'yyyy-MM-dd')
-                  : '-'}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {feedbackList.map((report, index) => (
+    <tr key={index}>
+      <td>{report.submittedAt ? new Date(report.submittedAt).toLocaleDateString() : '-'}</td>
+      <td>{report.location}</td>
+      <td>{report.reportType}</td>
+      <td
+        style={{
+          color:
+            report.status === 'PENDING'
+              ? '#F6C301'
+              : report.status === 'ACKNOWLEDGED'
+              ? '#4CAF50'
+              : report.status === 'IN_PROGRESS'
+              ? '#F44336'
+              : report.status === 'RESOLVED'
+              ? '#FF69B4'
+              : '#000',
+        }}
+      >
+        {report.status}
+      </td>
+      <td>
+        {report.resolvedAt 
+          ? new Date(report.resolvedAt).toLocaleDateString()
+          : '-'}
+      </td>
+    </tr>
+  ))}
+</tbody>
       </table>
     </div>
   </div>
