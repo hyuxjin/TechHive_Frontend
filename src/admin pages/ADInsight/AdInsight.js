@@ -4,7 +4,6 @@ import axios from "../../services/axiosInstance";
 import { format } from 'date-fns';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import AdNavBar from "../../components/AdNavBar";
-
 import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale, Legend } from 'chart.js';
 import './AdInsight.css';
 
@@ -23,45 +22,31 @@ const AdInsight = () => {
   });
   const [pendingReportsByMonth, setPendingReportsByMonth] = useState([]);
 
-  const decrementYear = () => {
-    setCurrentYear(prev => prev - 1);
-  };
+  const decrementYear = () => setCurrentYear(prev => prev - 1);
+  const incrementYear = () => setCurrentYear(prev => prev + 1);
+  const toggleFeedback = () => setFeedbackVisible(prev => !prev);
 
-  const incrementYear = () => {
-    setCurrentYear(prev => prev + 1);
-  };
+  const totalReports = Object.values(reportStatusCounts).reduce((a, b) => a + b, 0);
 
-  const toggleFeedback = () => {
-    setFeedbackVisible(prev => !prev);
-  };
-
-  const totalReports = 
-    (reportStatusCounts.pending || 0) + 
-    (reportStatusCounts.acknowledged || 0) + 
-    (reportStatusCounts.ongoing || 0) + 
-    (reportStatusCounts.resolved || 0);
-
-  const percentages = {
-    pending: totalReports > 0 ? ((reportStatusCounts.pending || 0) / totalReports * 100).toFixed(1) : 0,
-    acknowledged: totalReports > 0 ? ((reportStatusCounts.acknowledged || 0) / totalReports * 100).toFixed(1) : 0,
-    ongoing: totalReports > 0 ? ((reportStatusCounts.ongoing || 0) / totalReports * 100).toFixed(1) : 0,
-    resolved: totalReports > 0 ? ((reportStatusCounts.resolved || 0) / totalReports * 100).toFixed(1) : 0,
-  };
+  const percentages = Object.fromEntries(
+    Object.entries(reportStatusCounts).map(([key, value]) => [
+      key,
+      totalReports > 0 ? ((value / totalReports) * 100).toFixed(1) : 0
+    ])
+  );
 
   const data = {
     labels: ['Pending', 'Acknowledged', 'On-going', 'Resolved'],
-    datasets: [
-      {
-        data: [
-          reportStatusCounts.pending || 0,
-          reportStatusCounts.acknowledged || 0,
-          reportStatusCounts.ongoing || 0,
-          reportStatusCounts.resolved || 0,
-        ],
-        backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
-        hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
-      },
-    ],
+    datasets: [{
+      data: [
+        reportStatusCounts.pending || 0,
+        reportStatusCounts.acknowledged || 0,
+        reportStatusCounts.ongoing || 0,
+        reportStatusCounts.resolved || 0,
+      ],
+      backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+      hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+    }],
   };
 
   const options = {
@@ -77,16 +62,10 @@ const AdInsight = () => {
       datalabels: {
         formatter: (value, ctx) => {
           const percentage = totalReports > 0 ? (value / totalReports) * 100 : 0;
-          if (ctx.dataIndex === 0 && value > 0) {
-            return `${percentage.toFixed(1)}%`;
-          }
-          return '';
+          return percentage > 0 ? `${percentage.toFixed(1)}%` : '';
         },
         color: '#000',
-        font: {
-          size: 14,
-          weight: 'bold',
-        },
+        font: { size: 14, weight: 'bold' },
         align: 'center',
       },
     },
@@ -97,15 +76,13 @@ const AdInsight = () => {
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ],
-    datasets: [
-      {
-        label: "Pending Reports",
-        data: pendingReportsByMonth,
-        backgroundColor: "#F6C301",
-        borderColor: "#F6C301",
-        borderWidth: 1,
-      },
-    ],
+    datasets: [{
+      label: "Pending Reports",
+      data: pendingReportsByMonth,
+      backgroundColor: "#F6C301",
+      borderColor: "#F6C301",
+      borderWidth: 1,
+    }],
   };
 
   const barOptions = {
@@ -137,38 +114,40 @@ const AdInsight = () => {
   };
 
   useEffect(() => {
-    const fetchReportStatusCounts = async () => {
-      try {
-        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
-        if (!userId) return;
-
-        const response = await axios.get(`/api/user/reports/reportStatusCounts/${userId}`);
-        console.log("Report Status Counts Response:", response.data);
-        setReportStatusCounts({
-          pending: response.data.pending || 0,
-          acknowledged: response.data.acknowledged || 0,
-          ongoing: response.data.in_progress || 0,
-          resolved: response.data.resolved || 0
-        });
-      } catch (error) {
-        console.error("Failed to fetch report status counts:", error);
-      }
-    };
-
-    fetchReportStatusCounts();
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
-        if (!userId) return;
+        const reportsResponse = await axios.get('/api/user/reports');
+        const reports = reportsResponse.data;
+        
+        const counts = {
+          pending: 0,
+          acknowledged: 0,
+          ongoing: 0,
+          resolved: 0
+        };
 
-        // Fetch user's reports
-        const reportsResponse = await axios.get(`/api/user/reports/user/${userId}`);
-        console.log("User Reports Response:", reportsResponse.data);
-        setFeedbackList(reportsResponse.data);
-        setFetchedTotalReports(reportsResponse.data.length);
+        reports.forEach(report => {
+          switch (report.status) {
+            case 'PENDING': counts.pending++; break;
+            case 'ACKNOWLEDGED': counts.acknowledged++; break;
+            case 'IN_PROGRESS': counts.ongoing++; break;
+            case 'RESOLVED': counts.resolved++; break;
+          }
+        });
+
+        setReportStatusCounts(counts);
+        setFeedbackList(reports);
+        setFetchedTotalReports(reports.length);
+
+        // Calculate monthly data
+        const monthlyData = Array(12).fill(0);
+        reports.forEach(report => {
+          const date = new Date(report.submittedAt);
+          if (date.getFullYear() === currentYear && report.status === 'PENDING') {
+            monthlyData[date.getMonth()]++;
+          }
+        });
+        setPendingReportsByMonth(monthlyData);
 
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -176,28 +155,7 @@ const AdInsight = () => {
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchPendingReports = async () => {
-      try {
-        const response = await axios.get("/api/user/reports/pending/monthly");
-        console.log("Pending Reports by Month:", response.data);
-
-        // Map the response data to an array of counts
-        const monthlyData = Array(12).fill(0);
-        response.data.forEach(item => {
-          monthlyData[item.month - 1] = item.count;
-        });
-
-        setPendingReportsByMonth(monthlyData);
-      } catch (error) {
-        console.error("Error fetching pending reports by month:", error);
-      }
-    };
-
-    fetchPendingReports();
-  }, []);
+  }, [currentYear]);
 
   return (
     <div className={`AdInsight_AdInsight ${isFeedbackVisible ? 'expanded' : 'minimized'}`}>
@@ -219,13 +177,9 @@ const AdInsight = () => {
 
       <div className="AdBarGraphContainer">
         <div className="AdBarBox" />
-        <span className='AdMonthlyAccidentEventStats'>Reports Resolved vs. Unresolved by Month<br /> </span>
+        <span className='AdMonthlyAccidentEventStats'>Reports Resolved vs. Unresolved by Month</span>
         <div className="AdBarGraph" style={{ height: '340px', width: '90%' }}>
-          <Bar data={barData} options={{
-            ...barOptions,
-            maintainAspectRatio: false,
-            responsive: true,
-          }} />
+          <Bar data={barData} options={{ ...barOptions, maintainAspectRatio: false, responsive: true }} />
         </div>
       </div>
 
@@ -279,7 +233,7 @@ const AdInsight = () => {
                       <tr key={index}>
                         <td>{format(new Date(report.submittedAt), 'yyyy-MM-dd')}</td>
                         <td>{report.location}</td>
-                        <td>{report.reportCategory}</td>
+                        <td>{report.reportType}</td>
                         <td style={{
                           color: report.status === 'PENDING' ? '#F6C301'
                             : report.status === 'ACKNOWLEDGED' ? '#F97304'

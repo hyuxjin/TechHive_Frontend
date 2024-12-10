@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Pie, Bar } from 'react-chartjs-2';
 import axios from "../../services/axiosInstance";
 import { format } from 'date-fns';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SUNavBar from "../../components/SUNavBar";
-
 import { Chart, ArcElement, BarElement, Tooltip, CategoryScale, LinearScale, Legend } from 'chart.js';
+import { Pie, Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import './SUInsight.css';
 
 Chart.register(ArcElement, Tooltip, BarElement, CategoryScale, LinearScale, ChartDataLabels, Legend);
@@ -21,50 +20,31 @@ const SUInsight = () => {
     ongoing: 0,
     resolved: 0,
   });
-  const [pendingReportsByMonth, setPendingReportsByMonth] = useState([]);
+  const [pendingReportsByMonth, setPendingReportsByMonth] = useState(Array(12).fill(0));
 
-  const decrementYear = () => {
-    setCurrentYear(prev => prev - 1);
-  };
+  const decrementYear = () => setCurrentYear(prev => prev - 1);
+  const incrementYear = () => setCurrentYear(prev => prev + 1);
+  const toggleFeedback = () => setFeedbackVisible(prev => !prev);
 
-  const incrementYear = () => {
-    setCurrentYear(prev => prev + 1);
-  };
+  const totalReports = Object.values(reportStatusCounts).reduce((a, b) => a + b, 0);
 
-  const toggleFeedback = () => {
-    setFeedbackVisible(prev => !prev);
-  };
+  const percentages = Object.fromEntries(
+    Object.entries(reportStatusCounts).map(([key, value]) => [
+      key,
+      totalReports > 0 ? ((value || 0) / totalReports * 100).toFixed(1) : 0
+    ])
+  );
 
-  const totalReports = 
-    (reportStatusCounts.pending || 0) + 
-    (reportStatusCounts.acknowledged || 0) + 
-    (reportStatusCounts.ongoing || 0) + 
-    (reportStatusCounts.resolved || 0);
-
-  const percentages = {
-    pending: totalReports > 0 ? ((reportStatusCounts.pending || 0) / totalReports * 100).toFixed(1) : 0,
-    acknowledged: totalReports > 0 ? ((reportStatusCounts.acknowledged || 0) / totalReports * 100).toFixed(1) : 0,
-    ongoing: totalReports > 0 ? ((reportStatusCounts.ongoing || 0) / totalReports * 100).toFixed(1) : 0,
-    resolved: totalReports > 0 ? ((reportStatusCounts.resolved || 0) / totalReports * 100).toFixed(1) : 0,
-  };
-
-  const data = {
+  const pieChartData = {
     labels: ['Pending', 'Acknowledged', 'On-going', 'Resolved'],
-    datasets: [
-      {
-        data: [
-          reportStatusCounts.pending || 0,
-          reportStatusCounts.acknowledged || 0,
-          reportStatusCounts.ongoing || 0,
-          reportStatusCounts.resolved || 0,
-        ],
-        backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
-        hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
-      },
-    ],
+    datasets: [{
+      data: Object.values(reportStatusCounts),
+      backgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+      hoverBackgroundColor: ['#F6C301', '#F97304', '#FF4B5C', '#FF69B4'],
+    }],
   };
 
-  const options = {
+  const pieChartOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -77,10 +57,7 @@ const SUInsight = () => {
       datalabels: {
         formatter: (value, ctx) => {
           const percentage = totalReports > 0 ? (value / totalReports) * 100 : 0;
-          if (ctx.dataIndex === 0 && value > 0) {
-            return `${percentage.toFixed(1)}%`;
-          }
-          return '';
+          return ctx.dataIndex === 0 && value > 0 ? `${percentage.toFixed(1)}%` : '';
         },
         color: '#000',
         font: {
@@ -92,23 +69,21 @@ const SUInsight = () => {
     },
   };
 
-  const barData = {
+  const barChartData = {
     labels: [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ],
-    datasets: [
-      {
-        label: "Pending Reports",
-        data: pendingReportsByMonth,
-        backgroundColor: "#F6C301",
-        borderColor: "#F6C301",
-        borderWidth: 1,
-      },
-    ],
+    datasets: [{
+      label: "Pending Reports",
+      data: pendingReportsByMonth,
+      backgroundColor: "#F6C301",
+      borderColor: "#F6C301",
+      borderWidth: 1,
+    }],
   };
 
-  const barOptions = {
+  const barChartOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -137,66 +112,43 @@ const SUInsight = () => {
   };
 
   useEffect(() => {
-    const fetchReportStatusCounts = async () => {
+    const fetchAllData = async () => {
       try {
-        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
-        if (!userId) return;
+        const [reportsResponse, monthlyResponse] = await Promise.all([
+          axios.get('/api/user/reports'),
+          axios.get("/api/user/reports/pending/monthly")
+        ]);
 
-        const response = await axios.get(`/api/user/reports/reportStatusCounts/${userId}`);
-        console.log("Report Status Counts Response:", response.data);
-        setReportStatusCounts({
-          pending: response.data.pending || 0,
-          acknowledged: response.data.acknowledged || 0,
-          ongoing: response.data.in_progress || 0,
-          resolved: response.data.resolved || 0
+        const allReports = reportsResponse.data;
+        
+        const counts = allReports.reduce((acc, report) => {
+          const status = report.status.toLowerCase();
+          const statusKey = status === 'in_progress' ? 'ongoing' : status;
+          acc[statusKey] = (acc[statusKey] || 0) + 1;
+          return acc;
+        }, {
+          pending: 0,
+          acknowledged: 0,
+          ongoing: 0,
+          resolved: 0
         });
-      } catch (error) {
-        console.error("Failed to fetch report status counts:", error);
-      }
-    };
 
-    fetchReportStatusCounts();
-  }, []);
+        setReportStatusCounts(counts);
+        setFeedbackList(allReports);
+        setFetchedTotalReports(allReports.length);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = JSON.parse(localStorage.getItem("loggedInUser"))?.userId;
-        if (!userId) return;
-
-        // Fetch user's reports
-        const reportsResponse = await axios.get(`/api/user/reports/user/${userId}`);
-        console.log("User Reports Response:", reportsResponse.data);
-        setFeedbackList(reportsResponse.data);
-        setFetchedTotalReports(reportsResponse.data.length);
+        const monthlyData = Array(12).fill(0);
+        monthlyResponse.data.forEach(item => {
+          monthlyData[item.month - 1] = item.count;
+        });
+        setPendingReportsByMonth(monthlyData);
 
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchPendingReports = async () => {
-      try {
-        const response = await axios.get("/api/user/reports/pending/monthly");
-        console.log("Pending Reports by Month:", response.data);
-
-        // Map the response data to an array of counts
-        const monthlyData = Array(12).fill(0);
-        response.data.forEach(item => {
-          monthlyData[item.month - 1] = item.count;
-        });
-
-        setPendingReportsByMonth(monthlyData);
-      } catch (error) {
-        console.error("Error fetching pending reports by month:", error);
-      }
-    };
-
-    fetchPendingReports();
+    fetchAllData();
   }, []);
 
   return (
@@ -210,55 +162,72 @@ const SUInsight = () => {
 
       <div className="SUYearContainer">
         <div className="SUYearBox" />
-        <span className='SUYear'>Year</span>
+        <span className="SUYear">Year</span>
         <img className="SUCalendar" alt="" src="/WSInsight_Calendar.png" />
-        <img className="SUarrow_left" alt="" src="/WsInsight_Leftbtn.png" onClick={decrementYear} />
-        <span className='SU_2024'>{currentYear}</span>
-        <img className="SUarrow_right" alt="" src="/WsInsight_Rightbtn.png" onClick={incrementYear} />
+        <img 
+          className="SUarrow_left" 
+          alt="" 
+          src="/WsInsight_Leftbtn.png" 
+          onClick={decrementYear} 
+        />
+        <span className="SU_2024">{currentYear}</span>
+        <img 
+          className="SUarrow_right" 
+          alt="" 
+          src="/WsInsight_Rightbtn.png" 
+          onClick={incrementYear} 
+        />
       </div>
 
       <div className="SUBarGraphContainer">
         <div className="SUBarBox" />
-        <span className='SUMonthlyAccidentEventStats'>Reports Resolved vs. Unresolved by Month<br /> </span>
+        <span className="SUMonthlyAccidentEventStats">
+          Reports Resolved vs. Unresolved by Month
+        </span>
         <div className="SUBarGraph" style={{ height: '340px', width: '90%' }}>
-          <Bar data={barData} options={{
-            ...barOptions,
-            maintainAspectRatio: false,
-            responsive: true,
-          }} />
+          <Bar 
+            data={barChartData} 
+            options={{
+              ...barChartOptions,
+              maintainAspectRatio: false,
+              responsive: true,
+            }} 
+          />
         </div>
       </div>
 
-      <div className="SUPieBackground"></div>
+      <div className="SUPieBackground" />
       <div className="SUPieChartContainer">
         <h3>Report Distribution by Status</h3>
-        <Pie data={data} options={options} />
+        <Pie data={pieChartData} options={pieChartOptions} />
         <div className="SUcustom-legend">
-          <div className="SUlegend-item">
-            <span className="SUlegend-color" style={{ backgroundColor: '#F6C301' }}></span>
-            <span>Pending: {reportStatusCounts.pending || 0} ({percentages.pending}%)</span>
-          </div>
-          <div className="SUlegend-item">
-            <span className="SUlegend-color" style={{ backgroundColor: '#F97304' }}></span>
-            <span>Acknowledged: {reportStatusCounts.acknowledged || 0} ({percentages.acknowledged}%)</span>
-          </div>
-          <div className="SUlegend-item">
-            <span className="SUlegend-color" style={{ backgroundColor: '#FF4B5C' }}></span>
-            <span>On-going: {reportStatusCounts.ongoing || 0} ({percentages.ongoing}%)</span>
-          </div>
-          <div className="SUlegend-item">
-            <span className="SUlegend-color" style={{ backgroundColor: '#FF69B4' }}></span>
-            <span>Resolved: {reportStatusCounts.resolved || 0} ({percentages.resolved}%)</span>
-          </div>
+          {[
+            { key: 'pending', color: '#F6C301', label: 'Pending' },
+            { key: 'acknowledged', color: '#F97304', label: 'Acknowledged' },
+            { key: 'ongoing', color: '#FF4B5C', label: 'On-going' },
+            { key: 'resolved', color: '#FF69B4', label: 'Resolved' }
+          ].map(({ key, color, label }) => (
+            <div key={key} className="SUlegend-item">
+              <span 
+                className="SUlegend-color" 
+                style={{ backgroundColor: color }} 
+              />
+              <span>
+                {label}: {reportStatusCounts[key] || 0} ({percentages[key]}%)
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
       {isFeedbackVisible && (
         <>
-          <div className={`SUFeedbackSection ${isFeedbackVisible ? 'visible' : 'hidden'}`}></div>
+          <div className="SUFeedbackSection" />
           <div className="SUInsightBox2">
             <div className="SUTableContainer">
-              <span className="SUTOTALREPORTSSUBMITTED">TOTAL REPORTS SUBMITTED</span>
+              <span className="SUTOTALREPORTSSUBMITTED">
+                TOTAL REPORTS SUBMITTED
+              </span>
               <div className="SUTotalWrapper">
                 <div className="SUTotal1" />
                 <span className="SUTotalNumber1">{fetchedTotalReports}</span>
@@ -279,18 +248,19 @@ const SUInsight = () => {
                       <tr key={index}>
                         <td>{format(new Date(report.submittedAt), 'yyyy-MM-dd')}</td>
                         <td>{report.location}</td>
-                        <td>{report.reportCategory}</td>
+                        <td>{report.reportType}</td>
                         <td style={{
-                          color: report.status === 'PENDING' ? '#F6C301'
-                            : report.status === 'ACKNOWLEDGED' ? '#F97304'
-                            : report.status === 'IN_PROGRESS' ? '#FF4B5C'
-                            : report.status === 'RESOLVED' ? '#FF69B4'
-                            : '#000'
+                          color: {
+                            'PENDING': '#F6C301',
+                            'ACKNOWLEDGED': '#F97304',
+                            'IN_PROGRESS': '#FF4B5C',
+                            'RESOLVED': '#FF69B4'
+                          }[report.status] || '#000'
                         }}>
                           {report.status}
                         </td>
                         <td>
-                          {report.resolvedAt
+                          {report.resolvedAt 
                             ? format(new Date(report.resolvedAt), 'yyyy-MM-dd')
                             : '-'}
                         </td>
@@ -304,8 +274,8 @@ const SUInsight = () => {
         </>
       )}
 
-      <div className='SUReportFeedbackContainer'>
-        <span className='SUReportFeedback'>Report Feedback</span>
+      <div className="SUReportFeedbackContainer">
+        <span className="SUReportFeedback">All Reports</span>
         <img
           className="SUToggle"
           alt=""
