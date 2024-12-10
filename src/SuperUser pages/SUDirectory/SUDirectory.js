@@ -22,6 +22,8 @@ import SUNavBar from "../../components/SUNavBar";
 import './SUDirectory.css';
 
 const SUDirectory = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState('SuperUser');  // Default category
   const [statusFilter, setStatusFilter] = useState('All');
   const [tableData, setTableData] = useState([]);
@@ -130,41 +132,44 @@ const SUDirectory = () => {
     }
   };
 
+
   const fetchAdminData = async () => {
     try {
       const response = await fetch('http://localhost:8080/admin/getAllAdmins');
       const data = await response.json();
   
       const formattedData = data.map(admin => ({
-        name: admin.fullName,           // Changed from admin.fullName
-        idNumber: admin.idNumber,       // Changed from admin.idNumber
+        name: admin.fullName,
+        idNumber: admin.idNumber,
         email: admin.email,
-        username: admin.adminname,      // Changed from admin.adminname to match backend
+        username: admin.adminname,
         status: admin.status,
       }));
   
       setTableData(formattedData);
     } catch (error) {
       console.error('Error fetching admin data:', error);
+      setTableData([]);
     }
   };
-
+  
   const fetchSuperUserData = async () => {
     try {
       const response = await fetch('http://localhost:8080/superuser/getAllSuperUsers');
       const data = await response.json();
-  
+      
       const formattedData = data.map(superuser => ({
         name: superuser.fullName,
-        idNumber: superuser.superUserIdNumber,  // Changed to match backend entity
+        idNumber: superuser.superUserIdNumber,
         email: superuser.email,
-        username: superuser.superUsername,      // Changed to match backend entity
+        username: superuser.superUsername,
         status: superuser.status,
       }));
-  
+
       setTableData(formattedData);
     } catch (error) {
       console.error('Error fetching superuser data:', error);
+      setTableData([]);
     }
   };
 
