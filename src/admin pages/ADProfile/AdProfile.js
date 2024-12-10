@@ -66,6 +66,7 @@ const AdProfile = () => {
       }, 3000);
     }
   };
+  
 
   // Rest of the component remains the same...
   const handleEditClick = () => {
@@ -82,31 +83,37 @@ const AdProfile = () => {
       }, 3000);
       return;
     }
-
+  
     try {
       const response = await fetch(`http://localhost:8080/admin/updatePassword?adminId=${admin.adminId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          // Add credentials to maintain session
+          credentials: 'include'
         },
         body: JSON.stringify({
           currentPassword,
           newPassword,
         }),
       });
-
+  
+      const data = await response.json();
+  
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(data.message || 'Error updating password');
       }
-
-      const result = await response.json();
-      console.log("Password updated successfully:", result);
-
+  
       setIsEditable(false);
       setShowSuccessMessage(true);
       setTimeout(() => {
         setShowSuccessMessage(false);
       }, 3000);
+      
+      // Clear the password fields after successful update
+      setCurrentPassword("");
+      setNewPassword("");
+      
     } catch (error) {
       console.error("Error updating password:", error);
       setShowErrorMessage(true);

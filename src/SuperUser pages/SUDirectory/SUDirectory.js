@@ -365,7 +365,7 @@ const SUDirectory = () => {
     if (category === 'Admin') {
       newEntry = {
         fullName: newAccount.fullName,
-        adminname: newAccount.username,    // Changed to match backend entity
+        adminname: newAccount.username,    // Match backend entity
         email: newAccount.email,
         idNumber: newAccount.idNumber,
         password: newAccount.password,
@@ -375,10 +375,10 @@ const SUDirectory = () => {
     } else if (category === 'SuperUser') {
       newEntry = {
         fullName: newAccount.fullName,
-        superUsername: newAccount.username,    // Changed to match backend entity
+        superUsername: newAccount.username,
         email: newAccount.email,
-        superUserIdNumber: newAccount.idNumber,  // Changed to match backend entity
-        superUserPassword: newAccount.password,  // Changed to match backend entity
+        superUserIdNumber: newAccount.idNumber,
+        superUserPassword: newAccount.password,
         status: true,
       };
       endpoint = 'http://localhost:8080/superuser/insertSuperUser';
@@ -388,12 +388,15 @@ const SUDirectory = () => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newEntry),
+        body: JSON.stringify(newEntry)
       });
   
       if (response.ok) {
+        // Show success message
+        alert(`${category} account created successfully!`);
+        
         // Refresh the data after successful creation
         if (category === 'Admin') {
           fetchAdminData();
@@ -401,10 +404,23 @@ const SUDirectory = () => {
           fetchSuperUserData();
         }
         setShowForm(false);
+        
+        // Clear form
+        setNewAccount({
+          fullName: '',
+          email: '',
+          username: '',
+          idNumber: '',
+          password: '',
+          confirmPassword: '',
+        });
       } else {
-        console.error(`Failed to create ${category} in the backend.`);
+        const errorData = await response.text();
+        alert(`Failed to create ${category} account: ${errorData}`);
+        console.error(`Failed to create ${category} in the backend:`, errorData);
       }
     } catch (error) {
+      alert(`Error creating ${category} account. Please try again.`);
       console.error(`Error creating ${category}:`, error);
     }
   };

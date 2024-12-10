@@ -1,3 +1,4 @@
+/* Main form styling */
 .signin-form {
   display: flex;
   flex-direction: column;
@@ -11,7 +12,7 @@
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  position: relative; /* Added for absolute positioning context */
+  position: relative;
 }
 
 .signin-form label {
@@ -41,14 +42,19 @@
   border: none;
   cursor: pointer;
   margin: 10px 0;
+  transition: background-color 0.3s ease;
 }
 
-/* Updated Forgot Password positioning */
+.signin-form button[type="submit"]:hover {
+  background-color: #6d1d22;
+}
+
+/* Forgot Password Link */
 .signin-form .adforgot-password {
-  position: absolute; /* Change to absolute positioning */
-  right: 10px; /* Position from the right */
-  top: 50%; /* Position vertically */
-  transform: translateY(25px); /* Fine-tune vertical position */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(25px);
   font-size: 12px;
   font-style: italic;
   color: #8A252C;
@@ -57,16 +63,14 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 1; /* Ensure it's above other elements */
+  z-index: 1;
 }
 
-/* Create a wrapper for the password input field */
-.password-field-wrapper {
-  position: relative;
-  width: 100%;
+.signin-form .adforgot-password:hover {
+  text-decoration: underline;
 }
 
-/* Rest of the styles remain the same */
+/* Popup Styles */
 .adforgot-password-popup,
 .verification-popup,
 .reset-password-popup {
@@ -84,65 +88,177 @@
 
 .adpopup-content {
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 300px;
+  padding: 30px;
+  border-radius: 10px;
+  width: 350px;
   text-align: center;
   position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.adpopup-content label {
-  display: block;
-  margin-bottom: 10px;
+.adpopup-content h2 {
+  color: #8A252C;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.adpopup-content p {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Email input specific styling */
+.adpopup-content .email-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
   color: #8A252C;
   font-weight: 500;
+  text-align: center;
 }
 
-.adpopup-content input {
-  width: calc(100% - 20px);
+.adpopup-content .email-label span {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.adpopup-content .email-label input {
+  width: 90%;
   height: 35px;
   border-radius: 20px;
   border: 2px solid #8A252C;
-  padding-left: 10px;
-  outline-style: none;
-  margin-top: 5px;
+  padding: 0 15px;
+  outline: none;
+  text-align: center;
+  font-size: 14px;
 }
 
-.adpopup-content button {
-    display: flex;
-    justify-content: flex-end;
+.adpopup-content .email-label input:focus {
+  border-color: #6d1d22;
 }
 
-.adpopup-content button:disabled {
+/* Close Button */
+.adclose-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.adclose-button:hover {
+  background-color: #6d1d22;
+}
+
+/* Send Code Button */
+.adsendcode {
+  width: 180px;
+  height: 35px;
+  border-radius: 20px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.adsendcode:hover {
+  background-color: #6d1d22;
+}
+
+/* Verification Popup Specific Styles */
+.verification-popup .adpopup-content input {
+  letter-spacing: 2px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.verification-popup .adpopup-content button {
+  width: 180px;
+  height: 35px;
+  border-radius: 20px;
+  background-color: #8A252C;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.verification-popup .adpopup-content button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-.adclose-button {
-  width: 30px;
-  height: 30px;
-  border-radius: 20px;
-  background-color: #8A252C;
-  color: #FFFFFF;
-  font-weight: 300;
-  font-size: 15px;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-left: 88%;
+.verification-popup .adpopup-content button:hover:not(:disabled) {
+  background-color: #6d1d22;
 }
 
-.adsendcode {
-  width: 170px;
-  height: 30px;
+/* Reset Password Popup Specific Styles */
+.reset-password-popup .popup-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 350px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reset-password-popup .popup-content label {
+  display: block;
+  margin-bottom: 20px;
+  color: #8A252C;
+  font-weight: 500;
+  text-align: left;
+}
+
+.reset-password-popup .popup-content input {
+  width: 100%;
+  height: 35px;
+  border-radius: 20px;
+  border: 2px solid #8A252C;
+  padding: 0 15px;
+  outline: none;
+  margin-top: 8px;
+  box-sizing: border-box;
+}
+
+.reset-password-popup .popup-content button {
+  width: 180px;
+  height: 35px;
   border-radius: 20px;
   background-color: #8A252C;
   color: #FFFFFF;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 15px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.reset-password-popup .popup-content button:hover {
+  background-color: #6d1d22;
 }
 
 /* Modal Styles */
@@ -169,11 +285,11 @@
 
 @keyframes fadeIn {
   from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
+      opacity: 0;
+      transform: translate(-50%, 20px);
   }
   to {
-    opacity: 1;
-    transform: translate(-50%, 0);
+      opacity: 1;
+      transform: translate(-50%, 0);
   }
 }
