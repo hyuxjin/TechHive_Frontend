@@ -2,16 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import Loadable from 'react-loadable';
 import moment from 'moment';
 import SUNavBar from "../../components/SUNavBar";
 import "./SUHome.css";
 import TrafficLights from "../../components/TrafficLights";
-
-const SUComment = Loadable({
-    loader: () => import('./SUComment'),
-    loading: () => <div>Loading...</div>,
-});
 
 const SUHome = () => {
     const navigate = useNavigate();
@@ -31,7 +25,7 @@ const SUHome = () => {
     const [itemToDelete, setItemToDelete] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
     const [superuserProfilePictures, setSuperUserProfilePictures] = useState({});
-    const defaultProfile = '/dp.png';
+    const defaultProfile = '/default.png';
     const [inputHasContent, setInputHasContent] = useState(false);
     const [showCancelButton, setShowCancelButton] = useState(false);
     const [showCloseButton, setShowCloseButton] = useState(false);
@@ -56,23 +50,31 @@ const SUHome = () => {
         };
         fetchLoggedInSuperUser();    
     }, []);
-  
 
     const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
-      try {
-          const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
-          if (response.ok) {
-              const imageBlob = await response.blob();
-              const imageUrl = URL.createObjectURL(imageBlob);
-              setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: imageUrl }));
-          } else {
-              setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
-          }
-      } catch (error) {
-          console.error('Failed to fetch superuser profile picture:', error);
-          setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
-      }
-  }, []);
+        // Ensure superuserId is valid before making the request
+        if (!superuserId || superuserId <= 0) {
+            console.warn(`Invalid superuserId: ${superuserId}. Using default profile.`);
+            setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
+            if (response.ok) {
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: imageUrl }));
+            } else {
+                console.warn(`Profile picture not found for superuserId: ${superuserId}. Using default profile.`);
+                setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
+            }
+        } catch (error) {
+            console.error(`Failed to fetch superuser profile picture for ID: ${superuserId}`, error);
+            setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
+        }
+    }, []);
+    
 
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
@@ -392,42 +394,46 @@ const handleRemoveDislike = async (postId, userId, isReport) => {
 };
 
 const handleAddComment = async () => {
-    if (newComment.trim() === '') return;
-
-    if (!loggedInSuperUser || !loggedInSuperUser.superuserId) {
-        alert("SuperUser must be logged in to comment.");
+    if (newComment.trim() === '' || !loggedInSuperUser) {
+        alert("Please log in to add a comment");
         return;
     }
+
+    // Get the correct ID number
+    const idNumber = loggedInSuperUser.superuseridNumber || '21-1047-222';
 
     const comment = {
         content: newComment,
         postId: currentPostId,
-        superUserId: loggedInSuperUser.superuserId,  // Ensure this is set
+        superUserId: loggedInSuperUser.superuserId,
         fullName: loggedInSuperUser.fullName,
-        idNumber: loggedInSuperUser.idNumber,  // Correct the id number field
-        timestamp: new Date().toISOString()  // Ensure correct timestamp format
+        idNumber: idNumber,  // Use the extracted ID number
+        userRole: "SUPERUSER",
+        visible: true,
+        userId: null,
+        adminId: null,
+        isDeleted: false
     };
 
-    console.log("Comment Data:", comment);  // Log the comment data before sending it
+    console.log("Sending comment data:", comment);
 
     try {
         const response = await axios.post('http://localhost:8080/comments/add', comment);
-        const newCommentWithRelativeTime = {
-            ...response.data,
-            relativeTime: moment(response.data.timestamp).fromNow()
-        };
-        setComments(prevComments => [newCommentWithRelativeTime, ...prevComments]);
-        setNewComment('');
+        if (response.data) {
+            console.log("Comment response:", response.data);
+            const processedComment = {
+                ...response.data,
+                relativeTime: moment(response.data.timestamp).fromNow()
+            };
+            setComments(prevComments => [processedComment, ...prevComments]);
+            setNewComment('');
+        }
     } catch (error) {
         console.error("Error adding comment:", error);
-        if (error.response) {
-            console.error("Response data:", error.response.data);
-            console.error("Response status:", error.response.status);
-        }
+        console.error("Error details:", error.response?.data);
+        alert("Failed to add comment. Please try again.");
     }
 };
-
-
 
 const handleDeletePost = (postId) => {
     if (!loggedInSuperUser) {
@@ -439,18 +445,17 @@ const handleDeletePost = (postId) => {
 };
 
 
-    const handleDeleteComment = (commentId, commentSuperUserId) => {
-        if (!loggedInSuperUser) {
-            alert("Please log in to delete comments.");
-            return;
-        }
-        if (loggedInSuperUser.superuserId === commentSuperUserId || loggedInSuperUser.superuserId === currentPostOwner) {
-            setItemToDelete(commentId);
-            setIsDeleteCommentDialogOpen(true);
-        } else {
-            alert("You don't have permission to delete this comment.");
-        }
-    };
+// Update the handleDeleteComment function to allow superusers to delete any comment
+const handleDeleteComment = (commentId) => {
+    if (!loggedInSuperUser) {
+        alert("Please log in to delete comments.");
+        return;
+    }
+    
+    // SuperUser can delete any comment, so we don't need to check ownership
+    setItemToDelete(commentId);
+    setIsDeleteCommentDialogOpen(true);
+};
 
     const confirmDeletePost = async () => {
         try {
@@ -465,17 +470,23 @@ const handleDeletePost = (postId) => {
     
 
     const confirmDeleteComment = async () => {
+        if (!loggedInSuperUser?.superuserId) {
+            alert("Superuser ID is missing. Unable to delete comment.");
+            return;
+        }
+
         try {
-            await axios.delete(`http://localhost:8080/comments/${itemToDelete}`, {
-                params: {
-                    superuserId: loggedInSuperUser.superuserId
-                }
-            });
+            // Make the DELETE request to the backend
+            await axios.delete(
+                `http://localhost:8080/comments/${itemToDelete}/superuser/${loggedInSuperUser.superuserId}`
+            );
+
+            // Update the frontend to reflect the deleted comment
             setComments(comments.filter(comment => comment.commentId !== itemToDelete));
             setIsDeleteCommentDialogOpen(false);
         } catch (error) {
             console.error("Error deleting comment:", error);
-            alert("Failed to delete comment. You may not have permission.");
+            alert("Failed to delete comment. Please try again.");
         }
     };
 
@@ -600,7 +611,8 @@ const handleDeletePost = (postId) => {
             />
         </div>
     )}
-                            <div className="name-container">
+                           {/* Replace the delete icon section in the name-container with this code */}
+<div className="name-container">
     <img src={superuserProfilePictures[post.superUserId] || defaultProfile} alt="SuperUser Avatar" />
     <h5>
         {post.fullName || post.fullname} 
@@ -613,7 +625,14 @@ const handleDeletePost = (postId) => {
             alt="Delete"
             className="delete-icon"
             onClick={() => handleDeletePost(post.postId)}
-            style={{ cursor: 'pointer', width: '20px', height: '20px', marginLeft: 'auto' }}
+            style={{ 
+                cursor: 'pointer', 
+                width: '20px', 
+                height: '20px',
+                position: 'absolute',
+                right: '15px',
+                top: '15px'
+            }}
         />
     )}
 </div>
@@ -683,63 +702,71 @@ const handleDeletePost = (postId) => {
                             <div className="comment-header">
                                 <div className="superuser-info-container">
                                     <span className="superuser-info">
-                                        {comment.fullName} ({comment.superuseridNumber})
+                                        {comment.fullName} 
+                                        {comment.idNumber && ` (${comment.idNumber})`}
                                     </span>
-                                    {(loggedInSuperUser && (loggedInSuperUser.superuserId === comment.superuserId || loggedInSuperUser.superuserId === currentPostOwner)) && (
+                                    {/* Show delete button for all comments if user is logged in */}
+                                    {loggedInSuperUser && (
                                         <img
                                             src="/delete.png"
                                             alt="Delete"
                                             className="delete-icon"
-                                            onClick={() => handleDeleteComment(comment.commentId, comment.superuserId)}
+                                            onClick={() => handleDeleteComment(comment.commentId)}
                                         />
                                     )}
                                 </div>
                                 <div className="timestamp-container">
-                                    <span className="formatted-time">
-                                        {formatTimestamp(comment.timestamp)}
-                                    </span>
-                                    <span className="relative-time">
-                                        {comment.relativeTime}
-                                    </span>
+                                    {comment.timestamp && (
+                                        <>
+                                            <span className="formatted-time">
+                                                {moment(comment.timestamp)
+                                                    .utcOffset('+08:00')
+                                                    .format('dddd, MMMM D, YYYY [at] h:mm A')}
+                                            </span>
+                                            <span className="relative-time">
+                                                {moment(comment.timestamp).utcOffset('+08:00').fromNow()}
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             <p>{comment.content}</p>
                         </div>
                     ))}
                 </DialogContent>
-                <DialogActions>
-                    <div className="add-comment" style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <input
-                            type="text"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="Add a comment..."
-                            style={{ 
-                                flexGrow: 1, 
-                                marginRight: '10px', 
-                                padding: '8px', 
-                                border: '1px solid #ccc', 
-                                borderRadius: '4px' 
-                            }}
-                        />
-                        <Button 
-                            onClick={handleAddComment}
-                            variant="contained"
-                            sx={{ 
-                                backgroundColor: '#8A252C', 
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: '#f9d67b',
-                                    color: 'black'
-                                },
-                                transition: 'all 0.3s ease'
-                            }}
-                        >
-                            Comment
-                        </Button>
-                    </div>
-                </DialogActions>
-            </Dialog>
+    <DialogActions>
+        <div className="add-comment" style={{ display: 'flex', width: '100%', padding: '10px' }}>
+            <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                style={{ 
+                    flexGrow: 1, 
+                    marginRight: '10px', 
+                    padding: '8px', 
+                    border: '1px solid #ccc', 
+                    borderRadius: '4px' 
+                }}
+            />
+           <Button 
+    onClick={() => handleAddComment()} // Changed this line
+    variant="contained"
+    sx={{ 
+        backgroundColor: '#8A252C', 
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#f9d67b',
+            color: 'black'
+        },
+        transition: 'all 0.3s ease'
+    }}
+>
+    Comment
+</Button>
+        </div>
+    </DialogActions>
+</Dialog>
 
             <Dialog open={isDeletePostDialogOpen} onClose={() => setIsDeletePostDialogOpen(false)}>
                 <DialogTitle>Confirm Delete</DialogTitle>

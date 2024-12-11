@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import moment from 'moment';
 import AdNavBar from "../../components/AdNavBar";
 import "./AdHome.css";
 import TrafficLights from "../../components/TrafficLights";
+import moment from 'moment-timezone';
 
 const AdHome = () => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -254,17 +254,17 @@ const AdHome = () => {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!newPostContent && !imagePreview) {
       alert("Please enter a post or select a picture before submitting.");
       return;
     }
-
+  
     if (!loggedInAdmin) {
       alert("Please log in to post.");
       return;
     }
-
+  
     const newPost = {
       content: newPostContent,
       image: imagePreview,
@@ -276,19 +276,21 @@ const AdHome = () => {
       dislikes: 0,
       userRole: "ADMIN"
     };
-
+  
     try {
       const response = await axios.post("http://localhost:8080/posts/add", newPost, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-
+  
+      // Process the timestamp before adding to state
       const createdPost = {
         ...response.data,
-        image: response.data.image ? getPostImage(response.data) : null
+        image: response.data.image ? getPostImage(response.data) : null,
+        timestamp: moment(response.data.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS')
       };
-
+  
       setPosts(prevPosts => [createdPost, ...prevPosts]);
       setNewPostContent("");
       setSelectedFile(null);
@@ -403,18 +405,35 @@ const AdHome = () => {
         axios.get(`http://localhost:8080/comments/${postId}`),
         axios.get(`http://localhost:8080/posts/${postId}`)
       ]);
-      const sortedComments = commentsResponse.data
+  
+      console.log('Comments received:', commentsResponse.data); // Debug log
+  
+      const activeComments = commentsResponse.data
+        .filter(comment => !comment.isDeleted)
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
         .map(comment => ({
           ...comment,
+          // Ensure these fields are properly mapped
+          fullname: comment.fullname,
+          idnumber: comment.idnumber,
+          timestamp: comment.timestamp,
           relativeTime: moment(comment.timestamp).fromNow()
         }));
-      setComments(sortedComments);
+  
+      console.log('Processed comments:', activeComments); // Debug log
+  
+      setComments(activeComments);
       setCurrentPostOwner(postResponse.data.adminId);
+      setIsCommentDialogOpen(true);
     } catch (error) {
       console.error("Error fetching comments or post details:", error);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data);
+      }
+      setIsCommentDialogOpen(false);
+      alert("Error loading comments. Please try again.");
     }
-    setIsCommentDialogOpen(true);
   };
 
   const handleCloseComments = () => {
@@ -424,25 +443,37 @@ const AdHome = () => {
 
   const handleAddComment = async () => {
     if (newComment.trim() === '') return;
-
+  
+    if (!loggedInAdmin) {
+      alert("Please log in to comment.");
+      return;
+    }
+  
+    // Don't send timestamp from frontend, let backend handle it
     const comment = {
       content: newComment,
       postId: currentPostId,
       adminId: loggedInAdmin.adminId,
-      fullname: loggedInAdmin.fullname,
-      idnumber: loggedInAdmin.idnumber,
+      fullName: loggedInAdmin.fullname,
+      idNumber: loggedInAdmin.idnumber,
+      userRole: "ADMIN"
     };
-
+  
     try {
       const response = await axios.post('http://localhost:8080/comments/add', comment);
-      const newCommentWithRelativeTime = {
+      console.log('Server response:', response.data);
+  
+      const processedComment = {
         ...response.data,
-        relativeTime: moment(response.data.timestamp).fromNow()
+        timestamp: response.data.timestamp,
+        relativeTime: moment(response.data.timestamp).format('MMMM D YYYY, h:mm A')
       };
-      setComments(prevComments => [newCommentWithRelativeTime, ...prevComments]);
+  
+      setComments(prevComments => [processedComment, ...prevComments]);
       setNewComment('');
     } catch (error) {
       console.error("Error adding comment:", error);
+      alert("Failed to add comment. Please try again.");
     }
   };
 
@@ -494,19 +525,35 @@ const AdHome = () => {
   };
 
   // Update timestamp formatting functions
-const formatTimestamp = (timestamp) => {
-  const momentDate = moment(timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
-  return momentDate.isValid() 
-    ? momentDate.format('dddd, MMMM D, YYYY [at] h:mm A')
-    : 'Invalid date';
-};
-
-const getRelativeTime = (timestamp) => {
-  const momentDate = moment(timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
-  return momentDate.isValid() 
-    ? momentDate.fromNow()
-    : 'Invalid date';
-};
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return 'No date';
+    
+    // Try parsing with moment
+    const momentDate = moment(timestamp);
+    if (!momentDate.isValid()) {
+      // If moment parsing fails, try as ISO string
+      const date = new Date(timestamp);
+      if (isNaN(date.getTime())) {
+        return 'Invalid date';
+      }
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      });
+    }
+    return momentDate.format('dddd, MMMM D, YYYY [at] h:mm A');
+  };
+  
+  const getRelativeTime = (timestamp) => {
+    if (!timestamp) return '';
+    const momentDate = moment(timestamp);
+    return momentDate.isValid() ? momentDate.fromNow() : '';
+  };
 
   const handleClosePost = () => {
     setNewPostContent('');
@@ -738,31 +785,42 @@ const getRelativeTime = (timestamp) => {
           />
         </DialogTitle>
         <DialogContent>
-          {comments.map((comment) => (
-            <div key={comment.commentId} className="comment">
-              <div className="comment-header">
-                <div className="admin-info-container">
-                  <span className="admin-info">
-                    {comment.fullname} ({comment.idnumber})
-                  </span>
-                  {(loggedInAdmin && (loggedInAdmin.adminId === comment.adminId || loggedInAdmin.adminId === currentPostOwner)) && (
-                    <img
-                      src="/delete.png"
-                      alt="Delete"
-                      className="delete-icon"
-                      onClick={() => handleDeleteComment(comment.commentId, comment.adminId)}
-                    />
-                  )}
-                </div>
-                <div className="timestamp-container">
-                  <span className="formatted-time">{formatTimestamp(comment.timestamp)}</span>
-                  <span className="relative-time">{comment.relativeTime}</span>
-                </div>
-              </div>
-              <p>{comment.content}</p>
-            </div>
-          ))}
-        </DialogContent>
+        {comments.map((comment) => (
+  <div key={comment.commentId} className="comment">
+    <div className="comment-header">
+      <div className="admin-info-container">
+        <span className="admin-info">
+          {comment.fullName} 
+          {comment.idNumber && ` (${comment.idNumber})`}
+        </span>
+        {(loggedInAdmin && (loggedInAdmin.adminId === comment.adminId || loggedInAdmin.adminId === currentPostOwner)) && (
+          <img
+            src="/delete.png"
+            alt="Delete"
+            className="delete-icon"
+            onClick={() => handleDeleteComment(comment.commentId, comment.adminId)}
+          />
+        )}
+      </div>
+      <div className="timestamp-container" style={{ fontSize: '12px', color: '#666' }}>
+  {comment.timestamp && (
+    <>
+      <div style={{ marginBottom: '2px' }}>
+        {moment(comment.timestamp)
+          .utcOffset(480) // +8 hours for Manila
+          .format('dddd, MMMM D, YYYY [at] h:mm A')}
+      </div>
+      <div style={{ color: '#888' }}>
+        ({moment(comment.timestamp).utcOffset(480).fromNow()})
+      </div>
+    </>
+  )}
+</div>
+    </div>
+    <p>{comment.content}</p>
+  </div>
+))}
+</DialogContent>
         <DialogActions>
           <div className="add-comment" style={{ display: 'flex', width: '100%', padding: '10px' }}>
             <input

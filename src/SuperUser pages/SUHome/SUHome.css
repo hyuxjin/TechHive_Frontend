@@ -606,4 +606,199 @@
     padding: 10px;
     margin-bottom: 20px;
   }
+
+  /* Keep your existing SUHome.css styles and add these comment styles */
+.ws-comment {
+  width: 648px;
+  height: 534px;
+  background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  position: relative;
+  z-index: 1001;
+  text-align: left;
+  color: #8a252c;
+  font-family: var(--font-montserrat);
+}
+
+.Comment-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b);
+  width: 648px;
+  height: 534px;
+}
+
+.Comment-exit {
+  position: absolute;
+  top: 19px;
+  left: 580px;
+  border-radius: 50%;
+  background-color: #8a252c;
+  width: 47px;
+  height: 47px;
+  cursor: pointer;
+}
+
+.x {
+  position: absolute;
+  top: 20px;
+  left: 595px;
+  font-size: 30px;
+  display: inline-block;
+  color: white;
+  width: 20px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.Comment1-Container {
+  position: absolute;
+  top: 102px;
+  left: 31px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: white;
+  width: 586px;
+  height: 111px;
+}
+
+.CUser1 {
+  position: absolute;
+  top: 12px;
+  left: 21px;
+  font-weight: 600;
+  display: inline-block;
+  width: 122px;
+  height: 16px;
+}
+
+.CUser1-badge {
+  position: absolute;
+  top: 15px;
+  left: 135px;
+  width: 18px;
+  height: 17px;
+  object-fit: cover;
+}
+
+.CUser1-text {
+  position: absolute;
+  top: 56px;
+  left: 45px;
+  font-size: 20px;
+  font-weight: 600;
+  display: inline-block;
+  width: 123px;
+  height: 25px;
+}
+
+/* Comment Dialog Styles */
+.MuiDialog-paper {
+  width: 648px !important;
+  height: 534px !important;
+  background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b) !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 10px !important;
+  position: relative !important;
+  color: #8a252c !important;
+}
+
+.MuiDialogTitle-root {
+  padding: 20px !important;
+  color: #8a252c !important;
+  font-weight: bold !important;
+  position: relative !important;
+}
+
+.exit-icon {
+  position: absolute !important;
+  top: 19px !important;
+  right: 21px !important;
+  background-color: #8a252c !important;
+  border-radius: 50% !important;
+  width: 47px !important;
+  height: 47px !important;
+  padding: 10px !important;
+  cursor: pointer !important;
+  filter: invert(1);
+}
+
+.comment {
+  position: relative !important;
+  margin-top: 10px !important;
+  margin-left: 31px !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 10px !important;
+  background-color: white !important;
+  width: 586px !important;
+  height: 111px !important;
+}
+
+
+.comment-header {
+  margin-bottom: 10px;
+}
+
+.superuser-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.superuser-info {
+  position: absolute !important;
+  top: 12px !important;
+  left: 21px !important;
+  font-weight: 600 !important;
+  width: 122px !important;
+  height: 16px !important;
+}
+
+.timestamp-container {
+  position: absolute !important;
+  bottom: 12px !important;
+  left: 21px !important;
+  font-size: 12px !important;
+  color: #666 !important;
+}
+
+.comment p {
+  position: absolute !important;
+  top: 56px !important;
+  left: 45px !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+.delete-icon {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.MuiDialogActions-root {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 31px !important;
+  right: 31px !important;
+  padding: 0 !important;
+}
+
+.add-comment input {
+  flex: 1 !important;
+  padding: 8px !important;
+  border-radius: 5px !important;
+  border: 1px solid #8A252C !important;
+}
+
+.add-comment button {
+  margin-left: 10px !important;
+  background-color: #8A252C !important;
+  color: white !important;
+}
 }
