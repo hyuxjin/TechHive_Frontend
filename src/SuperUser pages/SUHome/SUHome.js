@@ -41,46 +41,41 @@ const SUHome = () => {
             if (storedSuperUser && storedSuperUser.superusername) {
                 try {
                     const response = await axios.get(`http://localhost:8080/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
-                    if (response.data) {
-                        setLoggedInSuperUser(response.data);
-                        console.log("Fetched superuser data:", response.data);
-                    }
+                    setLoggedInSuperUser(response.data);
+                    console.log("Fetched superuser data:", response.data);
                 } catch (error) {
                     console.error("Error fetching superuser data:", error);
-                    // Set default values to prevent undefined
-                    setLoggedInSuperUser({
-                        superuserId: 0,
-                        fullName: "Default User",
-                        superuseridNumber: "00-0000-000"
-                    });
                 }
             }
         };
         fetchLoggedInSuperUser();    
     }, []);
 
- // Update the fetchSuperUserProfilePicture function
-const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
-    // Skip fetching if superuserId is invalid
-    if (!superuserId || superuserId === 0 || isNaN(superuserId)) {
-        return; // Simply return without setting anything in state
-    }
+    const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
+        // Ensure superuserId is valid before making the request
+        if (!superuserId || superuserId <= 0) {
+            console.warn(`Invalid superuserId: ${superuserId}. Using default profile.`);
+            setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
+            return;
+        }
     
-    try {
-        const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
-        if (response.ok) {
-            const imageBlob = await response.blob();
-            const imageUrl = URL.createObjectURL(imageBlob);
-            setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: imageUrl }));
-        } else {
+        try {
+            const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
+            if (response.ok) {
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: imageUrl }));
+            } else {
+                console.warn(`Profile picture not found for superuserId: ${superuserId}. Using default profile.`);
+                setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
+            }
+        } catch (error) {
+            console.error(`Failed to fetch superuser profile picture for ID: ${superuserId}`, error);
             setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
         }
-    } catch (error) {
-        console.error(`Failed to fetch superuser profile picture for ID: ${superuserId}`, error);
-        setSuperUserProfilePictures(prev => ({ ...prev, [superuserId]: defaultProfile }));
-    }
-}, [defaultProfile]);
+    }, []);
     
+
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
         try {
@@ -98,6 +93,8 @@ const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
     };
     fetchPostsAndPictures();
 }, [fetchSuperUserProfilePicture]);
+
+
 
     useEffect(() => {
         if (currentPostId) {
