@@ -3,7 +3,6 @@ import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import AdNavBar from "../../components/AdNavBar";
 import "./AdHome.css";
-import TrafficLights from "../../components/TrafficLights";
 import moment from 'moment-timezone';
 
 const AdHome = () => {
@@ -26,7 +25,6 @@ const AdHome = () => {
   const [showCloseButton, setShowCloseButton] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);  // Add this line
   const defaultProfile = '/dp.png';
-  const [reportStatuses, setReportStatuses] = useState({});
 
   const fileInputRef = useRef(null);
 
@@ -158,12 +156,7 @@ const AdHome = () => {
           console.log('Fetched posts:', response.data);
           const processedPosts = response.data.map(post => {
             const timestamp = moment(post.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
-            
-            // Debug log
-            if (post.isSubmittedReport) {
-              console.log('Found submitted report post:', post.postId);
-              fetchReportStatus(post.postId);
-            }
+ 
   
             return {
               ...post,
@@ -183,21 +176,6 @@ const AdHome = () => {
     };
     fetchPostsAndReports();
   }, []);
-
-  useEffect(() => {
-    console.log('Report statuses updated:', reportStatuses);
-  }, [reportStatuses]);
-
-  const getTrafficLightStatus = (status) => {
-    console.log('Converting status:', status);
-    const statusMap = {
-      'PENDING': 'pending',
-      'ACKNOWLEDGED': 'acknowledged',
-      'IN_PROGRESS': 'in-progress',
-      'RESOLVED': 'resolved'
-    };
-    return statusMap[status] || 'pending';
-  };
 
   const handlePostInputChange = (e) => {
     const content = e.target.value;
@@ -564,23 +542,6 @@ const AdHome = () => {
     }
   };
 
-  const fetchReportStatus = async (postId) => {
-    try {
-      console.log(`Fetching report status for post ${postId}`);
-      // Since this is a user's report post, we should look up by report ID, not post ID
-      const response = await axios.get(`http://localhost:8080/api/user/reports/byPost/${postId}`);
-      console.log('Report status response:', response.data);
-      if (response.data) {
-        setReportStatuses(prev => ({
-          ...prev,
-          [postId]: response.data.status
-        }));
-      }
-    } catch (error) {
-      console.error(`Error fetching report status for post ${postId}:`, error);
-    }
-  };
-
   return (
     <div className="adhome">
       <AdNavBar />
@@ -670,22 +631,6 @@ const AdHome = () => {
           <div key={post.postId} className="post-card">
             <div className="card-container" style={{ position: 'relative' }}>
               {console.log('Post data:', post)}
-              {post.isSubmittedReport && post.status && (
-  <div className="adhometraffic-light-container" style={{
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    zIndex: 10,
-    display: 'flex'
-  }}>
-    {console.log('Rendering traffic light for post:', post.postId, 'Status:', post.status)}
-    <TrafficLights 
-      status={getTrafficLightStatus(post.status)}
-      isClickable={false}
-      onChange={() => {}}
-    />
-  </div>
-)}
 
 <div className="name-container">
           <img
