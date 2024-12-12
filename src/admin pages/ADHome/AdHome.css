@@ -83,15 +83,6 @@
   text-align: center;
 }
 
-.adhometraffic-light-container {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  z-index: 10 !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
 /* Post Container */
 .post-container {
   position: relative;
