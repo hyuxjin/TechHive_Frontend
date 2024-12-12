@@ -205,34 +205,6 @@ const WSHomepage = () => {
     }
   }, [currentPostId, fetchUserProfilePicture]);
 
-  const renderTrafficLights = (status) => { 
-    console.log('Rendering traffic lights for status:', status); // Debug log 
-    const trafficLights = [ 
-        { color: 'maroon', label: 'Pending' }, 
-        { color: 'white', label: 'Acknowledged' }, 
-        { color: 'yellow', label: 'On-going' }, 
-        { color: 'green', label: 'Resolved' }, 
-    ]; 
- 
-    const currentStatus = status || "Pending";  
-    return ( 
-        <div className="traffic-lights-container"> 
-            {trafficLights.map((light, index) => ( 
-                <div 
-                    key={index} 
-                    className="traffic-light-circle" 
-                    style={{ 
-                        backgroundColor: currentStatus === light.label ? 
-light.color : 'transparent', 
-                        border: `2px solid ${light.color}`, 
-                    }} 
-                /> 
-            ))} 
-        </div> 
-    ); 
-}; 
-
-
   const fetchLoggedInUsers = useCallback(() => {
     const user = JSON.parse(localStorage.getItem("loggedInUser")) || null;
     setLoggedInUser(user);
@@ -721,11 +693,7 @@ light.color : 'transparent',
         </div>
         <div className="post-list">
           {posts.map((post) => (
-            <div key={post.postId} className="post-card"style={{ backgroundColor: post.isSubmittedReport ? '#f9d67b' : 'transparent' }}>
-
-              {/* Render traffic lights only for submitted reports */} 
-              {post.isSubmittedReport && renderTrafficLights(post.status)}
-
+            <div key={post.postId} className="post-card">
               <div className="card-container">
                 <div className="name-container">
                   <img src={userProfilePictures[post.userId] || defaultProfile} alt="User Avatar" />

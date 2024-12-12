@@ -228,22 +228,6 @@ body {
   padding: 20px;
 }
 
-/* Traffic lights container */ 
-.traffic-lights-container { 
-  display: flex; 
-  gap: 8px; 
-  position: relative;  
-  top: 0;   
-  left: 520px;  
-} 
- 
-/* Traffic light circles */ 
-.traffic-light-circle { 
-  width: 15px; 
-  height: 15px; 
-  border-radius: 50%; 
-}
-
 /* Card Container */
 .card-container {
   display: flex;
@@ -692,9 +676,5 @@ body {
   .close-button {
     position: relative;
     left: -110px;
-  }
-
-  .traffic-lights-container{
-    left: 75%;
   }
 }

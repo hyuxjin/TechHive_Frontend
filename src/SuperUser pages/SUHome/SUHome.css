@@ -20,14 +20,6 @@
   margin: 30px auto; /* Center the image horizontally and add margin at the top/bottom */
 }
 
-.sutraffic-light-container {
-  position: absolute;
-  top: 27px;
-  right: 60px;
-  z-index: 1;
-}
-
-
 /* Navbar */
 .WSNavbar {
   position: fixed;

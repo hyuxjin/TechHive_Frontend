@@ -5,7 +5,6 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/
 import moment from 'moment';
 import SUNavBar from "../../components/SUNavBar";
 import "./SUHome.css";
-import TrafficLights from "../../components/TrafficLights";
 
 const SUHome = () => {
     const navigate = useNavigate();
@@ -601,16 +600,6 @@ const handleDeleteComment = (commentId) => {
                     {posts.map((post) => (
                         <div key={post.postId} className="post-card">
                             <div className="card-container" style={{ position: 'relative' }}>
-    {post.isSubmittedReport && post.status && (loggedInSuperUser) && (
-        <div className="sutraffic-light-container">
-            <TrafficLights
-                className="sutrafficlights"
-                status={post.status}
-                isClickable={false}
-                onChange={() => {}}
-            />
-        </div>
-    )}
                            {/* Replace the delete icon section in the name-container with this code */}
 <div className="name-container">
     <img src={superuserProfilePictures[post.superUserId] || defaultProfile} alt="SuperUser Avatar" />
