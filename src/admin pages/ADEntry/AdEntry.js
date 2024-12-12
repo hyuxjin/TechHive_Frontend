@@ -3,7 +3,7 @@ import AdNavBar from '../../components/AdNavBar';
 import './AdEntry.css';
 import TrafficLights from '../../components/TrafficLights';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://techhivebackend-production-86d4.up.railway.app';
 
 const AdEntry = () => {
   const [reports, setReports] = useState([]);

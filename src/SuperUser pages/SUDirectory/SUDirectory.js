@@ -45,7 +45,7 @@ const SUDirectory = () => {
 
   const fetchCommentData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/comments'); // Adjust based on your API
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/comments'); // Adjust based on your API
       const data = await response.json();
 
       const formattedData = data.map(comment => ({
@@ -65,7 +65,7 @@ const SUDirectory = () => {
   
   const fetchPostData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/posts');
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/posts');
       const data = await response.json();
 
       const formattedData = data.map(post => ({
@@ -86,7 +86,7 @@ const SUDirectory = () => {
   // Fetch User Data
   const fetchUserData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/user/getAllUsers');
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/user/getAllUsers');
       const data = await response.json();
   
       const formattedData = data.map(user => ({
@@ -110,7 +110,7 @@ const SUDirectory = () => {
     const newStatus = !user.status;
   
     try {
-      const response = await fetch('http://localhost:8080/user/updateStatus', {
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/user/updateStatus', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ const SUDirectory = () => {
 
   const fetchAdminData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/admin/getAllAdmins');
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/admin/getAllAdmins');
       const data = await response.json();
   
       const formattedData = data.map(admin => ({
@@ -155,7 +155,7 @@ const SUDirectory = () => {
   
   const fetchSuperUserData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/superuser/getAllSuperUsers');
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/superuser/getAllSuperUsers');
       const data = await response.json();
       
       const formattedData = data.map(superuser => ({
@@ -176,7 +176,7 @@ const SUDirectory = () => {
   // Fetch Office Data
   const fetchOfficeData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/office/getAllOffices');
+      const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/office/getAllOffices');
       if (!response.ok) {
         throw new Error('Failed to fetch office data');
       }
@@ -236,29 +236,29 @@ const SUDirectory = () => {
       let requestBody = {};
   
       if (category === 'Admin') {
-        endpoint = `http://localhost:8080/admin/updateStatus`;
+        endpoint = `https://techhivebackend-production-86d4.up.railway.app/admin/updateStatus`;
         requestBody = {
           idNumber: item.idNumber,
           status: newStatus
         };
       } else if (category === 'SuperUser') {
-        endpoint = `http://localhost:8080/superuser/updateStatus`;
+        endpoint = `https://techhivebackend-production-86d4.up.railway.app/superuser/updateStatus`;
         requestBody = {
           superUserIdNumber: item.idNumber,
           status: newStatus
         };
       } else if (category === 'Office') {
-        endpoint = `http://localhost:8080/office/updateStatus/${item.id}`;
+        endpoint = `https://techhivebackend-production-86d4.up.railway.app/office/updateStatus/${item.id}`;
         requestBody = { 
           status: newStatus 
         };
       } else if (category === 'Post') {
-        endpoint = `http://localhost:8080/posts/${item.postId}/visibility`; // Post-specific endpoint
+        endpoint = `https://techhivebackend-production-86d4.up.railway.app/posts/${item.postId}/visibility`; // Post-specific endpoint
         requestBody = {
           visible: newVisibility // Updating visibility for Post
         };
       } else if (category === 'Comment') {
-        endpoint = `http://localhost:8080/comments/${item.commentId}/visibility`;
+        endpoint = `https://techhivebackend-production-86d4.up.railway.app/comments/${item.commentId}/visibility`;
         requestBody = {
           visible: newVisibility
         } 
@@ -290,7 +290,7 @@ const SUDirectory = () => {
     const newVisibility = !item.visible;  // Toggle current visibility
   
     try {
-      const endpoint = `http://localhost:8080/comments/${item.commentId}/visibility`;
+      const endpoint = `https://techhivebackend-production-86d4.up.railway.app/comments/${item.commentId}/visibility`;
       const requestBody = {
         visible: newVisibility // Set the new visibility
       };
@@ -371,7 +371,7 @@ const SUDirectory = () => {
         password: newAccount.password,
         status: true,
       };
-      endpoint = 'http://localhost:8080/admin/insertAdmin';
+      endpoint = 'https://techhivebackend-production-86d4.up.railway.app/admin/insertAdmin';
     } else if (category === 'SuperUser') {
       newEntry = {
         fullName: newAccount.fullName,
@@ -381,7 +381,7 @@ const SUDirectory = () => {
         superUserPassword: newAccount.password,
         status: true,
       };
-      endpoint = 'http://localhost:8080/superuser/insertSuperUser';
+      endpoint = 'https://techhivebackend-production-86d4.up.railway.app/superuser/insertSuperUser';
     }
   
     try {
@@ -436,7 +436,7 @@ const SUDirectory = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:8080/office/addOffice`, {
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/office/addOffice`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

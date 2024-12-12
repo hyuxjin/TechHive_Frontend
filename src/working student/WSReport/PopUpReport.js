@@ -25,7 +25,7 @@ const PopUpReport = () => {
       const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
       if (storedUser && storedUser.username) {
         try {
-          const response = await axios.get(`http://localhost:8080/user/getByUsername?username=${storedUser.username}`);
+          const response = await axios.get(`https://techhivebackend-production-86d4.up.railway.app/user/getByUsername?username=${storedUser.username}`);
           setLoggedInUser(response.data);
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -61,7 +61,7 @@ const PopUpReport = () => {
         formData.append('type', selectedType);
         formData.append('photo', blob, 'image.jpg');
   
-        const submitResponse = await axios.post('http://localhost:8080/entries', formData, {
+        const submitResponse = await axios.post('https://techhivebackend-production-86d4.up.railway.app/entries', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

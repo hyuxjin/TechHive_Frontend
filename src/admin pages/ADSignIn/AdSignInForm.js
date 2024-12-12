@@ -34,7 +34,7 @@ export default function AdSignInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/admin/signin", {
+      const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/admin/signin", {
         method: "POST",
         credentials: 'include',  // Add this line
         headers: { 
@@ -82,7 +82,7 @@ export default function AdSignInForm() {
             return;
         }
 
-        const response = await fetch("http://localhost:8080/admin/requestPasswordReset", {
+        const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/admin/requestPasswordReset", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email.trim() }),
@@ -120,7 +120,7 @@ export default function AdSignInForm() {
             return;
         }
 
-        const response = await fetch("http://localhost:8080/admin/verifyResetCode", {
+        const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/admin/verifyResetCode", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
@@ -163,7 +163,7 @@ const handleResetPassword = async () => {
           return;
       }
 
-      const response = await fetch("http://localhost:8080/admin/resetPassword", {
+      const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/admin/resetPassword", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 

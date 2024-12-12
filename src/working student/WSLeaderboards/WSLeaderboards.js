@@ -10,7 +10,7 @@ const WSLeaderboards = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:8080/user/getAllUsers");
+      const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/user/getAllUsers");
       const data = await response.json();
       // Sort users by points, then by pointsAchievedAt
       const sortedUsers = data.sort((a, b) => {
@@ -31,7 +31,7 @@ const WSLeaderboards = () => {
   // Fetch leaderboard rankings from /api/leaderboard/rankings endpoint
   const fetchLeaderboard = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/leaderboard/rankings");
+      const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/api/leaderboard/rankings");
       const data = await response.json();
       setLeaderboard(data);
       console.log("Fetched leaderboard data:", data); // Log leaderboard to avoid unused warning

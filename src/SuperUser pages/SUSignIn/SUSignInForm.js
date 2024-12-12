@@ -47,7 +47,7 @@ export default function SUSignInForm() {
     // Send reset code
     const handleSendCode = async () => {
         try {
-            const response = await fetch('http://localhost:8080/superuser/requestPasswordReset', {
+            const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/superuser/requestPasswordReset', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -79,7 +79,7 @@ export default function SUSignInForm() {
     // Verify reset code
     const handleVerifyCode = async () => {
         try {
-            const response = await fetch('http://localhost:8080/superuser/validateResetCode', {
+            const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/superuser/validateResetCode', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, resetCode: verificationCode }),
@@ -107,7 +107,7 @@ export default function SUSignInForm() {
             return;
         }
         try {
-            const response = await fetch('http://localhost:8080/superuser/resetPassword', {
+            const response = await fetch('https://techhivebackend-production-86d4.up.railway.app/superuser/resetPassword', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, newPassword }),
@@ -134,7 +134,7 @@ export default function SUSignInForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-          const response = await fetch("http://localhost:8080/superuser/signin", {
+          const response = await fetch("https://techhivebackend-production-86d4.up.railway.app/superuser/signin", {
             method: "POST",
             credentials: 'include',  // Important for session cookies
             headers: { 

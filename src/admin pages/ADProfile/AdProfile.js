@@ -21,7 +21,7 @@ const AdProfile = () => {
     console.log("Logged in admin:", loggedInAdmin);
     if (loggedInAdmin) {
       setAdmin(loggedInAdmin);
-      fetch(`http://localhost:8080/api/profile/admin/getProfilePicture/${loggedInAdmin.adminId}`, {
+      fetch(`https://techhivebackend-production-86d4.up.railway.app/api/profile/admin/getProfilePicture/${loggedInAdmin.adminId}`, {
         credentials: 'include'
       })
         .then(response => response.blob())
@@ -51,7 +51,7 @@ const AdProfile = () => {
     formData.append("id", admin.adminId);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/profile/admin/uploadProfilePicture`, {
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/api/profile/admin/uploadProfilePicture`, {
         method: "POST",
         credentials: 'include',
         body: formData,
@@ -65,7 +65,7 @@ const AdProfile = () => {
       console.log("Profile picture updated successfully:", result);
       
       const pictureResponse = await fetch(
-        `http://localhost:8080/api/profile/admin/getProfilePicture/${admin.adminId}`,
+        `https://techhivebackend-production-86d4.up.railway.app/api/profile/admin/getProfilePicture/${admin.adminId}`,
         { credentials: 'include' }
       );
       const pictureBlob = await pictureResponse.blob();
@@ -109,7 +109,7 @@ const AdProfile = () => {
   
       console.log("Sending update request for admin ID:", admin.adminId);
   
-      const response = await fetch(`http://localhost:8080/admin/updatePassword?adminId=${admin.adminId}`, {
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/admin/updatePassword?adminId=${admin.adminId}`, {
         method: "PUT",
         credentials: 'include',
         headers: {

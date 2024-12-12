@@ -59,7 +59,7 @@ function EditCategoryModal({ onClose }) {
 
   useEffect(() => {
     // Fetch the enabled offices from the backend
-    fetch("http://localhost:8080/office/getOfficesByStatus?status=true")
+    fetch("https://techhivebackend-production-86d4.up.railway.app/office/getOfficesByStatus?status=true")
       .then((response) => response.json())
       .then((data) => setOffices(data))
       .catch((error) => console.error("Error fetching offices:", error));

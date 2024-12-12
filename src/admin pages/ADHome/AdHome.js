@@ -39,13 +39,13 @@ const AdHome = () => {
       return post.image;
     }
     
-    return `http://localhost:8080${post.image}`;
+    return `https://techhivebackend-production-86d4.up.railway.app${post.image}`;
   };
 
   const fetchProfilePicture = useCallback(async (adminId) => {
     if (!adminId) return;
     try {
-      const response = await fetch(`http://localhost:8080/admin/profile/getProfilePicture/${adminId}`);
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/admin/profile/getProfilePicture/${adminId}`);
       if (response.ok) {
         const imageBlob = await response.blob();
         if (imageBlob.size > 0) {
@@ -76,7 +76,7 @@ const AdHome = () => {
         setLoggedInAdmin(storedAdmin);
         
         // Then fetch fresh data from the server
-        const response = await axios.get(`http://localhost:8080/admin/getByAdminname?adminname=${storedAdmin.adminname}`);
+        const response = await axios.get(`https://techhivebackend-production-86d4.up.railway.app/admin/getByAdminname?adminname=${storedAdmin.adminname}`);
         const adminData = response.data;
         if (adminData?.adminId) {
           setLoggedInAdmin(adminData);
@@ -99,7 +99,7 @@ const AdHome = () => {
       const storedSuperUser = JSON.parse(localStorage.getItem("loggedInSuperUser"));
       if (storedSuperUser?.superusername) {
         try {
-          const response = await axios.get(`http://localhost:8080/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
+          const response = await axios.get(`https://techhivebackend-production-86d4.up.railway.app/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
           setLoggedInSuperUser(response.data);
         } catch (error) {
           console.error("Error fetching superuser data:", error);
@@ -112,7 +112,7 @@ const AdHome = () => {
   const fetchAdminProfilePicture = useCallback(async (adminId) => {
     if (!adminId) return;
     try {
-      const response = await fetch(`http://localhost:8080/admin/profile/getProfilePicture/${adminId}`);
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/admin/profile/getProfilePicture/${adminId}`);
       const imageBlob = response.ok ? await response.blob() : null;
       setAdminProfilePictures(prev => ({ 
         ...prev, 
@@ -127,7 +127,7 @@ const AdHome = () => {
   const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
     if (!superuserId) return;
     try {
-      const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
+      const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/superuser/profile/getProfilePicture/${superuserId}`);
       const imageBlob = response.ok ? await response.blob() : null;
       setSuperUserProfilePictures(prev => ({ 
         ...prev, 
@@ -151,7 +151,7 @@ const AdHome = () => {
   useEffect(() => {
     const fetchPostsAndReports = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/posts/visible");
+        const response = await axios.get("https://techhivebackend-production-86d4.up.railway.app/posts/visible");
         if (response.data) {
           console.log('Fetched posts:', response.data);
           const processedPosts = response.data.map(post => {
@@ -256,7 +256,7 @@ const AdHome = () => {
     };
   
     try {
-      const response = await axios.post("http://localhost:8080/posts/add", newPost, {
+      const response = await axios.post("https://techhivebackend-production-86d4.up.railway.app/posts/add", newPost, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -292,7 +292,7 @@ const AdHome = () => {
       console.log("Sending like request with:", { postId, userId, userRole }); // Debug log
   
       const response = await axios.post(
-        `http://localhost:8080/posts/${postId}/like`,
+        `https://techhivebackend-production-86d4.up.railway.app/posts/${postId}/like`,
         {},  // Empty body
         {
           headers: {
@@ -341,7 +341,7 @@ const AdHome = () => {
       console.log("Sending dislike request with:", { postId, userId, userRole }); // Debug log
   
       const response = await axios.post(
-        `http://localhost:8080/posts/${postId}/dislike`,
+        `https://techhivebackend-production-86d4.up.railway.app/posts/${postId}/dislike`,
         {},  // Empty body
         {
           headers: {
@@ -380,8 +380,8 @@ const AdHome = () => {
     setCurrentPostId(postId);
     try {
       const [commentsResponse, postResponse] = await Promise.all([
-        axios.get(`http://localhost:8080/comments/${postId}`),
-        axios.get(`http://localhost:8080/posts/${postId}`)
+        axios.get(`https://techhivebackend-production-86d4.up.railway.app/comments/${postId}`),
+        axios.get(`https://techhivebackend-production-86d4.up.railway.app/posts/${postId}`)
       ]);
   
       console.log('Comments received:', commentsResponse.data); // Debug log
@@ -438,7 +438,7 @@ const AdHome = () => {
     };
   
     try {
-      const response = await axios.post('http://localhost:8080/comments/add', comment);
+      const response = await axios.post('https://techhivebackend-production-86d4.up.railway.app/comments/add', comment);
       console.log('Server response:', response.data);
   
       const processedComment = {
@@ -479,7 +479,7 @@ const AdHome = () => {
 
   const confirmDeletePost = async () => {
     try {
-      await axios.delete(`http://localhost:8080/posts/${itemToDelete}`);
+      await axios.delete(`https://techhivebackend-production-86d4.up.railway.app/posts/${itemToDelete}`);
       setPosts(posts.filter(post => post.postId !== itemToDelete));
       setIsDeletePostDialogOpen(false);
     } catch (error) {
@@ -489,7 +489,7 @@ const AdHome = () => {
 
   const confirmDeleteComment = async () => {
     try {
-      await axios.delete(`http://localhost:8080/comments/${itemToDelete}`, {
+      await axios.delete(`https://techhivebackend-production-86d4.up.railway.app/comments/${itemToDelete}`, {
         params: {
           adminId: loggedInAdmin.adminId
         }

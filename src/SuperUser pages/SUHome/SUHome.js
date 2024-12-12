@@ -39,7 +39,7 @@ const SUHome = () => {
             
             if (storedSuperUser && storedSuperUser.superusername) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
+                    const response = await axios.get(`https://techhivebackend-production-86d4.up.railway.app/superuser/getBySuperUsername?superusername=${storedSuperUser.superusername}`);
                     setLoggedInSuperUser(response.data);
                     console.log("Fetched superuser data:", response.data);
                 } catch (error) {
@@ -59,7 +59,7 @@ const SUHome = () => {
         }
     
         try {
-            const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
+            const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/superuser/profile/getProfilePicture/${superuserId}`);
             if (response.ok) {
                 const imageBlob = await response.blob();
                 const imageUrl = URL.createObjectURL(imageBlob);
@@ -78,7 +78,7 @@ const SUHome = () => {
   useEffect(() => {
     const fetchPostsAndPictures = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/posts/visible");
+            const response = await axios.get("https://techhivebackend-production-86d4.up.railway.app/posts/visible");
             console.log("Fetched visible posts data:", response.data);  // Log fetched data
             const sortedPosts = response.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             console.log("Sorted posts:", sortedPosts);  // Log sorted data
@@ -100,8 +100,8 @@ const SUHome = () => {
             const fetchCommentsAndPictures = async () => {
                 try {
                     const [commentsResponse, postResponse] = await Promise.all([
-                        axios.get(`http://localhost:8080/comments/${currentPostId}`),
-                        axios.get(`http://localhost:8080/posts/${currentPostId}`)
+                        axios.get(`https://techhivebackend-production-86d4.up.railway.app/comments/${currentPostId}`),
+                        axios.get(`https://techhivebackend-production-86d4.up.railway.app/posts/${currentPostId}`)
                     ]);
                     const sortedComments = commentsResponse.data
                         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -148,7 +148,7 @@ const SUHome = () => {
 
     const fetchProfilePicture = useCallback(async (superuserId) => {
         try {
-            const response = await fetch(`http://localhost:8080/superuser/profile/getProfilePicture/${superuserId}`);
+            const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/superuser/profile/getProfilePicture/${superuserId}`);
             if (response.ok) {
                 const imageBlob = await response.blob();
                 if (imageBlob.size > 0) {
@@ -221,7 +221,7 @@ const SUHome = () => {
       console.log("Post Data:", newPost); // Log the data to be sent
   
       try {
-        const response = await axios.post("http://localhost:8080/posts/add", newPost, {
+        const response = await axios.post("https://techhivebackend-production-86d4.up.railway.app/posts/add", newPost, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -248,7 +248,7 @@ const SUHome = () => {
     }
     try {
         // First handle the post like
-        const response = await axios.post(`http://localhost:8080/posts/${postId}/like`, {}, {
+        const response = await axios.post(`https://techhivebackend-production-86d4.up.railway.app/posts/${postId}/like`, {}, {
             params: {
                 userId: loggedInSuperUser.superuserId,
                 userRole: "SUPERUSER"
@@ -298,7 +298,7 @@ const handleDislike = async (postId) => {
     }
     try {
         // First handle the post dislike
-        const response = await axios.post(`http://localhost:8080/posts/${postId}/dislike`, {}, {
+        const response = await axios.post(`https://techhivebackend-production-86d4.up.railway.app/posts/${postId}/dislike`, {}, {
             params: {
                 userId: loggedInSuperUser.superuserId,
                 userRole: "SUPERUSER"
@@ -370,8 +370,8 @@ const handleRemoveDislike = async (postId, userId, isReport) => {
       setCurrentPostId(postId);
       try {
           const [commentsResponse, postResponse] = await Promise.all([
-              axios.get(`http://localhost:8080/comments/${postId}`),
-              axios.get(`http://localhost:8080/posts/${postId}`)
+              axios.get(`https://techhivebackend-production-86d4.up.railway.app/comments/${postId}`),
+              axios.get(`https://techhivebackend-production-86d4.up.railway.app/posts/${postId}`)
           ]);
           const sortedComments = commentsResponse.data
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -417,7 +417,7 @@ const handleAddComment = async () => {
     console.log("Sending comment data:", comment);
 
     try {
-        const response = await axios.post('http://localhost:8080/comments/add', comment);
+        const response = await axios.post('https://techhivebackend-production-86d4.up.railway.app/comments/add', comment);
         if (response.data) {
             console.log("Comment response:", response.data);
             const processedComment = {
@@ -458,7 +458,7 @@ const handleDeleteComment = (commentId) => {
 
     const confirmDeletePost = async () => {
         try {
-            await axios.delete(`http://localhost:8080/posts/${itemToDelete}`);
+            await axios.delete(`https://techhivebackend-production-86d4.up.railway.app/posts/${itemToDelete}`);
             // Update frontend to remove the deleted post
             setPosts(posts.filter(post => post.postId !== itemToDelete));
             setIsDeletePostDialogOpen(false);
@@ -477,7 +477,7 @@ const handleDeleteComment = (commentId) => {
         try {
             // Make the DELETE request to the backend
             await axios.delete(
-                `http://localhost:8080/comments/${itemToDelete}/superuser/${loggedInSuperUser.superuserId}`
+                `https://techhivebackend-production-86d4.up.railway.app/comments/${itemToDelete}/superuser/${loggedInSuperUser.superuserId}`
             );
 
             // Update the frontend to reflect the deleted comment
