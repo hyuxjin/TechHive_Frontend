@@ -500,7 +500,7 @@ const handleDeleteComment = (commentId) => {
             return post.image;
         }
         
-        return `http://localhost:8080${post.image}`;
+        return `https://techhivebackend-production-86d4.up.railway.app${post.image}`;
     };
 
     const formatTimestamp = (timestamp) => {

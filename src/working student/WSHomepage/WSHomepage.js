@@ -251,25 +251,17 @@ const WSHomepage = () => {
   const getPostImage = (post) => {
     if (!post.image) return null;
     
-    // If the image path is already a relative URL (starts with '/'), use it as is
-    if (post.image.startsWith('/')) {
-      return post.image;
-    }
-    
-    // For backward compatibility with existing posts
     if (post.image.startsWith('data:')) {
       return post.image;
     }
     
-    // If it's a full system path, convert it to relative URL
-    // This is a fallback for any existing data in the database
-    if (post.image.includes('\\Upload_report\\')) {
-      const parts = post.image.split('\\Upload_report\\');
-      return `/Upload_report/${parts[1]}`;
+    if (post.image.startsWith('http')) {
+      return post.image;
     }
     
-    return post.image;
+    return `https://techhivebackend-production-86d4.up.railway.app${post.image}`;
   };
+
 
   const handlePostInputChange = (e) => {
     const content = e.target.value;
