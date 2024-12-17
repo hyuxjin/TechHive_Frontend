@@ -5,7 +5,6 @@ import { Radio, RadioGroup, FormControlLabel, FormControl } from "@mui/material"
 import moment from 'moment';
 import "./WSHomepage.css";
 import WSNavBar from './WSNavBar';
-import deleteImage from '../assets/image/Delete.png';
 
 
 const WSHomepage = () => {
@@ -53,25 +52,36 @@ const WSHomepage = () => {
     fetchLoggedInUser();
   }, []);
 
+
+
   const fetchUserProfilePicture = useCallback(async (userId) => {
+    if (!userId) return; // Ensure userId is provided
+    
     try {
-      // Use the exact endpoint from the backend
-      const userRole = loggedInUser?.role?.toLowerCase() || 'user'; // default to 'user' if no role
-      const response = await axios.get(`/api/profile/${userRole}/getProfilePicture/${userId}`, { 
-        responseType: 'blob' 
-      }); 
-  
-      if (response.status === 200 && response.data) {
-        const imageUrl = URL.createObjectURL(response.data);
-        setUserProfilePictures(prev => ({ ...prev, [userId]: imageUrl }));
+      // Construct the full URL using a base URL for your backend
+      const userRole = loggedInUser?.role?.toLowerCase() || 'user'; // Default to 'user' if no role is available
+      const url = `https://techhivebackend-production-86d4.up.railway.app/${userRole}/profile/getProfilePicture/${userId}`;
+      
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const imageBlob = await response.blob(); // Get the image as a blob
+        
+        if (imageBlob.size > 0) {
+          const imageUrl = URL.createObjectURL(imageBlob); // Create object URL for the image
+          setUserProfilePictures(prev => ({ ...prev, [userId]: imageUrl }));
+        } else {
+          setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile })); // Fallback to default profile
+        }
       } else {
-        setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile }));
+        setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile })); // If not successful, fallback to default
       }
     } catch (error) {
-      console.error('Failed to fetch user profile picture:', error);
-      setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile }));
+      console.error('Failed to fetch user profile picture:', error); // Log error if request fails
+      setUserProfilePictures(prev => ({ ...prev, [userId]: defaultProfile })); // Fallback to default profile
     }
   }, [loggedInUser]);
+  
 
   useEffect(() => {
     console.log("Permissions check useEffect triggered");
@@ -693,7 +703,7 @@ const WSHomepage = () => {
                   <h5>{post.fullName} ({post.idNumber})</h5>
                   {loggedInUser && loggedInUser.userId === post.userId && !post.isSubmittedReport && (
                     <img
-                      src={deleteImage}
+                      src="/Delete.png"
                       alt="Delete"
                       className="delete-icon"
                       onClick={() => handleDeletePost(post.postId)}
@@ -821,7 +831,7 @@ const WSHomepage = () => {
                   </span>
                   {(loggedInUser && (loggedInUser.userId === comment.userId || loggedInUser.userId === currentPostOwner)) && (
                     <img
-                      src={deleteImage}
+                      src="/Delete.png"
                       alt="Delete"
                       className="delete-icon"
                       onClick={() => handleDeleteComment(comment.commentId, comment.userId)}
