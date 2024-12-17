@@ -60,7 +60,7 @@ const SUHome = () => {
 
     const fetchSuperUserProfilePicture = useCallback(async (superuserId) => {
       try {
-          const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app//superuser/profile/getProfilePicture/${superuserId}`);
+          const response = await fetch(`https://techhivebackend-production-86d4.up.railway.app/superuser/profile/getProfilePicture/${superuserId}`);
           if (response.ok) {
               const imageBlob = await response.blob();
               const imageUrl = URL.createObjectURL(imageBlob);
