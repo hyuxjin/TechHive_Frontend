@@ -1,0 +1,128 @@
+/* WSComment.css */
+.ws-comment {
+    width: 648px; /* Adjusted to match the Comment-box width */
+    height: 534px; /* Adjusted to match the Comment-box height */
+    background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    position: relative;
+    z-index: 1001; /* Ensure this is above other elements within the overlay */
+    text-align: left;
+    color: #8a252c;
+    font-family: var(--font-montserrat);
+  }
+  
+.Comment-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fdfbc9 54%, #f9d67b);
+    width: 648px;
+    height: 534px;
+  }
+  .Comment-exit {
+    position: absolute;
+    top: 19px;
+    left: 580px;
+    border-radius: 50%;
+    background-color: #8a252c;
+    width: 47px;
+    height: 47px;
+    cursor: pointer;
+  }
+  .x {
+    position: absolute;
+    top: 20px;
+    left: 595px;
+    font-size: 30px;
+    display: inline-block;
+    color: white;
+    width: 20px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+.Comment1-Container {
+    position: absolute;
+    top: 102px;
+    left: 31px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius:10px;
+    background-color: white;
+    width: 586px;
+    height: 111px;
+}
+ 
+  .CUser1 {
+    position: absolute;
+    top: 12px;
+    left: 21px;
+    font-weight: 600;
+    display: inline-block;
+    width: 122px;
+    height: 16px;
+}
+.CUser1-badge {
+    position: absolute;
+    top: 15px;
+    left: 135px;
+    width: 18px;
+    height: 17px;
+    object-fit: cover;
+}
+.CUser1-text {
+    position: absolute;
+    top: 56px;
+    left: 45px;
+    font-size: 20px;
+    font-weight: 600;
+    display: inline-block;
+    width: 123px;
+    height: 25px;
+}
+
+.Comment2-Container {
+    position: absolute;
+    top: 244px;
+    left: 31px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius:10px;
+    background-color: white;
+    width: 586px;
+    height: 111px;
+}
+.CUser2-text {
+    position: absolute;
+    top: 56px;
+    left: 45px;
+    font-size: 20px;
+    font-weight: 600;
+    display: inline-block;
+    width: 189px;
+    height: 25px;
+}
+
+
+.Comment3-Container {
+    position: absolute;
+    top: 386px;
+    left: 31px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius:10px;
+    background-color: white;
+    width: 586px;
+    height: 111px;
+}
+.CUser3-text {
+    position: absolute;
+    top: 56px;
+    left: 45px;
+    font-size: 20px;
+    font-weight: 600;
+    display: inline-block;
+    width: 197px;
+    height: 25px;
+  }
+    
