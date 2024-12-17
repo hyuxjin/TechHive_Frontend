@@ -5,6 +5,7 @@ import { Radio, RadioGroup, FormControlLabel, FormControl } from "@mui/material"
 import moment from 'moment';
 import "./WSHomepage.css";
 import WSNavBar from './WSNavBar';
+import deleteImage from '../assets/image/Delete.png';
 
 
 const WSHomepage = () => {
@@ -692,7 +693,7 @@ const WSHomepage = () => {
                   <h5>{post.fullName} ({post.idNumber})</h5>
                   {loggedInUser && loggedInUser.userId === post.userId && !post.isSubmittedReport && (
                     <img
-                      src="/delete.png"
+                      src={deleteImage}
                       alt="Delete"
                       className="delete-icon"
                       onClick={() => handleDeletePost(post.postId)}
@@ -820,7 +821,7 @@ const WSHomepage = () => {
                   </span>
                   {(loggedInUser && (loggedInUser.userId === comment.userId || loggedInUser.userId === currentPostOwner)) && (
                     <img
-                      src="/delete.png"
+                      src={deleteImage}
                       alt="Delete"
                       className="delete-icon"
                       onClick={() => handleDeleteComment(comment.commentId, comment.userId)}

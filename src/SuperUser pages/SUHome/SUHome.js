@@ -7,6 +7,7 @@ import moment from 'moment';
 import TrafficLights from '../../components/TrafficLights';
 import SUNavBar from "../../components/SUNavBar";
 import "./SUHome.css";
+import deleteImage from '../assets/image/Delete.png';
 
 const SUComment = Loadable({
     loader: () => import('./SUComment'),
@@ -492,7 +493,7 @@ const handleDeletePost = (postId) => {
     {/* Remove ownership check here, allowing all SuperUsers to see delete icon */}
     {loggedInSuperUser && (
         <img
-            src="/delete.png"
+            src={deleteImage}
             alt="Delete"
             className="delete-icon"
             onClick={() => handleDeletePost(post.postId)}
@@ -563,7 +564,7 @@ const handleDeletePost = (postId) => {
                                     </span>
                                     {(loggedInSuperUser && (loggedInSuperUser.superuserId === comment.superuserId || loggedInSuperUser.superuserId === currentPostOwner)) && (
                                         <img
-                                            src="/delete.png"
+                                            src={deleteImage}
                                             alt="Delete"
                                             className="delete-icon"
                                             onClick={() => handleDeleteComment(comment.commentId, comment.superuserId)}

@@ -4,6 +4,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/
 import AdNavBar from "../../components/AdNavBar";
 import "./AdHome.css";
 import moment from 'moment-timezone';
+import deleteImage from '../assets/image/Delete.png';
 
 const AdHome = () => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -156,7 +157,6 @@ const AdHome = () => {
           console.log('Fetched posts:', response.data);
           const processedPosts = response.data.map(post => {
             const timestamp = moment(post.timestamp, 'YYYY-MM-DD HH:mm:ss.SSSSSS');
- 
   
             return {
               ...post,
@@ -649,7 +649,7 @@ const AdHome = () => {
           </h5>
           {loggedInAdmin && loggedInAdmin.adminId === post.adminId && (
             <img
-              src="/delete.png"
+              src={deleteImage}
               alt="Delete"
               className="delete-icon"
               onClick={() => handleDeletePost(post.postId)}
@@ -740,7 +740,7 @@ const AdHome = () => {
         </span>
         {(loggedInAdmin && (loggedInAdmin.adminId === comment.adminId || loggedInAdmin.adminId === currentPostOwner)) && (
           <img
-            src="/delete.png"
+            src={deleteImage}
             alt="Delete"
             className="delete-icon"
             onClick={() => handleDeleteComment(comment.commentId, comment.adminId)}
